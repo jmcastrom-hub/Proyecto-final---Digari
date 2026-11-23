@@ -2,9 +2,16 @@
 
 Prototipo académico de asesoría, catálogo demo y seguimiento inspirado en Digari Music Store, Costa Rica. No es un sistema oficial ni está conectado a la empresa.
 
+## Problema y propuesta
+
+Quien compra equipo musical debe combinar presupuesto, tipo de producto, uso y compatibilidad. Digari Studio propone un prototipo académico local que conecta catálogo, comparación, asesoría, estudio 3D/audio y seguimiento demo. No está conectado a Digari ni procesa compras reales.
+
+Autor estudiante: José Manuel Castro Moya. Implementación asistida con Codex; las decisiones de alcance, revisión final y aprobación corresponden al estudiante.
+
+
 ## Estado actual
 
-P1 implementa tienda y seguimiento demo; P2 añade un estudio 3D procedural y audio sintético; P3 añade asesoría con filtro local y Gemini opcional. La revisión manual P2 en navegador sigue pendiente.
+P1 implementa tienda y seguimiento demo; P2 añade un estudio 3D procedural y audio sintético; P3 añade asesoría con filtro local y Gemini opcional. Chrome headless verificó rutas, comparación, audio y WebGL en P4; la revisión humana, la escucha física y la prueba táctil en teléfono siguen pendientes.
 
 Los 15 productos, precios CRC, existencias, compatibilidad, contacto y pedidos de prueba no deben interpretarse como inventario/oferta vigente. Las opciones de retiro/envío no se ejecutan. No se solicitan tarjetas ni se hacen reservas, compras o envíos reales.
 
@@ -63,7 +70,10 @@ P2 incorpora estudio 3D y audio sintético; P3 añade asesoría determinista/Gem
 
 - [`intent.md`](intent.md), [`spec.md`](spec.md) y [`plan.md`](plan.md): intención, reglas y trazabilidad.
 - [`docs/auditoria-digari.md`](docs/auditoria-digari.md): hechos reportados, alcance y validaciones del sitio pendientes.
-- [`docs/uso-ia.md`](docs/uso-ia.md): ciclos P1/P2/P3; revisión humana del estudiante pendiente.
+- [`docs/uso-ia.md`](docs/uso-ia.md): ciclos P1/P2/P3/P4 y revisión humana pendiente.
+- [`docs/negocio.md`](docs/negocio.md): caso medible, supuestos, costos y plan piloto.
+- [`docs/demo.md`](docs/demo.md): guion de 12 minutos y preguntas.
+- [`docs/validacion-p4.md`](docs/validacion-p4.md): instalación, pruebas y evidencia verificable.
 
 ## Privacidad y límites
 
@@ -74,3 +84,8 @@ No capturar datos personales reales. El código privado se genera aleatoriamente
 Abre `/estudio` o la ficha de cualquier producto y activa el visor o el audio de forma explícita. El catálogo enlaza cada una de sus 15 fichas a una geometría Three.js procedural; todas son maquetas ilustrativas, no réplicas exactas. El motor 3D y el componente de audio se cargan al activar cada panel. El visor acepta arrastre con ratón/tacto, botones y flechas/+/−/R al enfocar el canvas; ante error WebGL presenta una ilustración alternativa claramente identificada.
 
 Los tonos y acordes son síntesis Web Audio iniciada por el usuario. Los perfiles A/B de equipo usan una misma señal sintética; B simula un realce EQ y compensa su RMS calculado localmente. No son grabaciones ni mediciones de productos reales. Cuerdas, cable y caña se identifican como accesorios pasivos sin timbre ficticio. Repite las comprobaciones manuales de escritorio/móvil y escucha antes de presentar; la revisión visual/auditiva y la revisión del estudiante aún están pendientes.
+
+
+## CI y revisión P4
+
+GitHub Actions ejecuta `npm ci`, `npm test`, lint, build y smoke API local usando SQLite temporal y sin clave Gemini. Repite las pruebas en PowerShell con los comandos anteriores. Los resultados observados y sus límites están en [docs/validacion-p4.md](docs/validacion-p4.md); el guion completo está en [docs/demo.md](docs/demo.md) y el caso de negocio en [docs/negocio.md](docs/negocio.md). La revisión manual del estudiante no se considera aprobada por la ejecución automática.

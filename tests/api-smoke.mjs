@@ -30,10 +30,16 @@ const order = await orderResponse.json();
 assert(orderResponse.status === 201 && order.trackingCode === trackingCode, 'No se creó pedido demo.');
 const retry = await fetch(base + '/api/orders', json(orderPayload));
 assert(retry.status === 200 && (await retry.json()).duplicate, 'La confirmación repetida no fue idempotente.');
+const badVariant = await fetch(base + '/api/orders', json({ ...orderPayload, idempotencyKey: randomUUID(), trackingCode: randomBytes(24).toString('base64url'), items: [{ productId: 'acustica-luz', variant: 'Missing demo variant', quantity: 1 }] }));
+assert(badVariant.status === 400, 'The API must reject an unknown variant.');
 const wrongRetry = await fetch(base + '/api/orders', json({ ...orderPayload, trackingCode: randomBytes(24).toString('base64url') }));
 assert(wrongRetry.status === 409, 'Una clave repetida no debe revelar otro código de seguimiento.');
 const lookup = await fetch(base + '/api/orders/lookup', json({ trackingCode })).then((response) => response.json());
 assert(lookup.status === 'recibido', 'No se encontró el pedido por su código privado.');
+const invalidToken = await fetch(base + '/api/operator/status', json({ kind: 'pedido', trackingCode, nextStatus: 'en preparaci\u00f3n', operatorToken: 'invalid-token' }));
+assert(invalidToken.status === 400, 'The API must reject an invalid operator token.');
+const unchangedOrder = await fetch(base + '/api/orders/lookup', json({ trackingCode })).then((response) => response.json());
+assert(unchangedOrder.status === 'recibido', 'An invalid token must not advance the order.');
 const orderStatus = await fetch(base + '/api/operator/status', json({ kind: 'pedido', trackingCode, nextStatus: 'en preparación', operatorToken })).then((response) => response.json());
 assert(orderStatus.status === 'en preparación', 'No se actualizó el estado del pedido.');
 

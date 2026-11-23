@@ -25,9 +25,9 @@ Digari Studio será un prototipo académico de asesoría y seguimiento, no un si
 
 Meta sugerida: completar el caso principal en **≤5 minutos**. Medir en una prueba moderada con el mismo caso, instrucciones y punto de inicio en el sitio actual y en el prototipo: mediana del tiempo de tarea y tasa de éxito (casos completados correctamente / intentos). Registrar muestra, dispositivo, fechas, abandonos y errores. No existe línea base medida; cualquier tiempo o mejora previa a la medición es hipótesis, no resultado.
 
-## Alcance P0
+## Alcance y estado P0–P4
 
-Definir requisitos, arquitectura candidata, datos, interfaces, verificaciones, auditoría y plan antes de construir. El prototipo futuro tendrá catálogo sintético, asesoría con contingencia local, estudio 3D/audio demostrativo, pedido/pago simulado, seguimiento y solicitudes de servicio.
+P0 definió el caso y los requisitos antes de construir. P1–P3 implementan catálogo, pedidos y servicios; estudio 3D/audio; y asesoría local con Gemini opcional. P2.1 corrigió el trabajo de arrastre y los perfiles de audio. P4 agrega instalación limpia, CI, trazabilidad, pruebas y guion. El prototipo sigue siendo local y académico.
 
 ## Exclusiones y límites
 
@@ -36,3 +36,7 @@ Sin compra, pago, reserva, despacho, contacto ni solicitud real; sin integrar st
 ## Aprobación pendiente
 
 Revisión humana del estudiante y eventual validación de pertinencia por Digari quedan pendientes. El prototipo no está autorizado para uso productivo.
+
+## Validación P4 y pendientes
+
+El caso comparable es una persona principiante que busca guitarra para practicar en casa con un máximo de ₡180,000 para el instrumento (accesorios fuera del caso), y compara dos modelos acústico/eléctrico. La meta continúa siendo mediana ≤5 minutos y se medirá también tasa de éxito con instrucciones equivalentes en el sitio actual y el prototipo. No hay línea base ni prueba moderada medida; las cifras de navegación de `docs/medicion-p2.1.md` no son una métrica de éxito de tarea. La revisión del estudiante, escucha en equipo real, tacto en teléfono y validación con Digari siguen pendientes.

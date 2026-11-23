@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { spawnSync } from 'node:child_process';
 import { beforeEach, describe, it } from 'node:test';
 import { db, listProducts } from '../lib/db';
 import { _resetForTests, advanceStatus, ConflictError, createOrder, createService, InputError, lookupOrder, lookupService } from '../lib/orders';
@@ -22,6 +23,12 @@ describe('catálogo y pedidos demo', () => {
     assert.equal(order.totalCrc, 149800); assert.ok('trackingCode' in order && order.trackingCode);
     const tracked = lookupOrder('trackingCode' in order ? order.trackingCode : '');
     assert.equal(tracked?.status, 'recibido'); assert.equal(tracked?.lines[0].quantity, 2);
+  });
+  it('mantiene el pedido consultable desde un proceso nuevo de SQLite', () => {
+    const trackingCode = 'P'.repeat(32);
+    createOrder({ items: [{ productId: 'acustica-luz', variant: 'Natural', quantity: 1 }], fulfillment: 'retiro demo', idempotencyKey: '42a3f1cc-23b6-45e8-87cd-f129e75a12d9', trackingCode });
+    const reopened = spawnSync(process.execPath, ['-e', "const {lookupOrder}=require('./.test-dist/lib/orders.js');const r=lookupOrder(process.env.DIGARI_TEST_TRACKING);if(!r)process.exit(2);process.stdout.write(r.status)"], { encoding: 'utf8', env: { ...process.env, DIGARI_TEST_TRACKING: trackingCode } });
+    assert.equal(reopened.status, 0, reopened.stderr); assert.equal(reopened.stdout, 'recibido');
   });
   it('rechaza cantidad inválida y stock insuficiente sin alterar stock', () => {
     assert.throws(() => createOrder({ items: [{ productId: 'acustica-luz', quantity: 0 }], fulfillment: 'retiro demo', idempotencyKey: '41a3f1cc-23b6-45e8-87cd-f129e75a12d8', trackingCode:'A'.repeat(32) }), InputError);

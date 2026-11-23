@@ -84,3 +84,18 @@ Minimización de datos; códigos de seguimiento no enumerables generados con Web
 ## Verificación y demo
 
 Pruebas planeadas: flujo de búsqueda/filtro/comparación; presupuesto sin resultados y respuesta IA inválida/proveedor caído; total servidor, variante/cantidad/stock inválidos e idempotencia; seguimiento válido/token inválido/transición inválida; servicio, persistencia tras recarga/reinicio; accesibilidad básica, teclado, móvil, fallback WebGL/audio. Demo de 12 minutos y 3 de preguntas: contexto/caso, buscar recomendación con límite CRC, comparar dos productos y probar estudio, confirmar pedido demo y consultar después de recargar, servicio y avance de estado, entrada inválida, pruebas/documentos/supuestos. No presentar pruebas todavía no ejecutadas como completadas.
+
+
+## Verificación P4 y alcance operativo
+
+La instalación usa `npm ci`, Node 22.13 o superior y SQLite local. `DIGARI_DB_PATH` opcional permite aislar una base temporal; por defecto se usa `data/digari.sqlite`. El seed crea 15 productos sintéticos al iniciar una base nueva. No se requiere cuenta de nube ni API key.
+
+| Requisito | Aceptación automatizada / observable | Estado y evidencia |
+|---|---|---|
+| RF-01 Catálogo | Búsqueda, presupuesto/rango, familias, comparación de 2–3 fichas, datos de compatibilidad; variante inválida rechazada | `tests/orders.test.ts`, `tests/advisor.test.ts`, `tests/api-smoke.mjs`; interfaz en `docs/validacion-p4.md` |
+| RF-02 Estudio | Three.js bajo demanda, 15 geometrías, controles de giro, audio por acción y vista alternativa | `tests/models.test.ts`, `tests/audio-profiles.test.ts`, evidencia P2.1/P4; tacto y escucha física pendientes |
+| RF-03 Asesoría | Fake provider valida IDs; presupuesto insuficiente/inválido; clave vacía usa modo local | `tests/advisor.test.ts` y smoke API; llamada autenticada Gemini pendiente |
+| RF-04 Pedido y seguimiento | Total/stock recalculados, variante/cantidad validadas, confirmación idempotente, código hash y lectura tras reiniciar proceso | `tests/orders.test.ts`, `tests/api-smoke.mjs` |
+| RF-05 Servicio/contacto | Solicitud, consulta, evento, transición secuencial, token inválido sin cambiar estado; contacto no envía | `tests/orders.test.ts`, `tests/api-smoke.mjs`; contacto externo no se ejecuta |
+
+GitHub Actions (`.github/workflows/ci.yml`) repite `npm ci`, tests, lint, build y smoke del servidor. Los datos y códigos demo son locales; no migrar el token de operador, base SQLite ni credenciales al navegador/CI. No se considera el prototipo listo para producción o para operar datos de clientes.

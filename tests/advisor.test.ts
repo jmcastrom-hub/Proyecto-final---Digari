@@ -24,6 +24,11 @@ describe('asesoría determinista y privacidad', () => {
     assert.equal(result.mode, 'local'); assert.ok(result.recommendations.length > 0 && result.recommendations.length <= 3);
     assert.ok(result.recommendations.every((item) => item.href.startsWith('/productos/') && item.compareHref.startsWith('/tienda?compare=') && item.reason.includes('sintéticos')));
   });
+  it('mantiene compatibilidad declarada al filtrar la recomendación por uso', async () => {
+    const result = await buildAdvice(completeInput, products);
+    assert.deepEqual(result.recommendations.map((item) => item.productId), ['acustica-luz']);
+    assert.ok(result.recommendations[0].compatible.includes('principiante'));
+  });
   it('acepta IDs candidatos de un proveedor simulado y mantiene precio/stock del servidor', async () => {
     let received: unknown;
     const provider = async (context: unknown) => { received = context; const candidate = (context as { candidates: { id: string }[] }).candidates[0]; return { recommendations: [{ productId: candidate.id, reason: 'Su estilo folk coincide con tu búsqueda y el resumen indica práctica cómoda.' }], question: null }; };

@@ -1,11 +1,12 @@
 import { mkdirSync } from 'node:fs';
-import { join } from 'node:path';
+import { dirname, join, resolve } from 'node:path';
 import { DatabaseSync } from 'node:sqlite';
 import { products, type Product } from './catalog';
 
 const directory = join(process.cwd(), 'data');
-mkdirSync(directory, { recursive: true });
-const db = new DatabaseSync(join(directory, 'digari.sqlite'));
+const databasePath = process.env.DIGARI_DB_PATH ? resolve(process.env.DIGARI_DB_PATH) : join(directory, 'digari.sqlite');
+mkdirSync(dirname(databasePath), { recursive: true });
+const db = new DatabaseSync(databasePath);
 db.exec(`
   PRAGMA journal_mode = WAL;
   PRAGMA busy_timeout = 5000;

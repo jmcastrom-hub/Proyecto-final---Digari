@@ -1,0 +1,39 @@
+name: Digari Studio CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22.13.0
+          cache: npm
+      - run: npm ci
+      - run: npm test
+      - run: npm run lint
+      - run: npm run build
+      - name: Smoke the local demo API
+        env:
+          DIGARI_DB_PATH: ${{ runner.temp }}/digari-ci.sqlite
+          DIGARI_DEMO_OPERATOR_TOKEN: ci-demo-only
+        run: |
+          npm run start -- --hostname 127.0.0.1 > "$RUNNER_TEMP/digari-next.log" 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          for attempt in $(seq 1 40); do
+            if curl --fail --silent http://127.0.0.1:3000/ >/dev/null; then break; fi
+            sleep 1
+          done
+          curl --fail --silent http://127.0.0.1:3000/ >/dev/null
+          npm run test:api
