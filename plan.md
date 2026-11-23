@@ -16,8 +16,8 @@ Estados: **Completada** solo con evidencia verificable; **En curso** si hay camb
 | P1-03 | Pedido demo, idempotencia, transiciones y seguimiento | P1-02 | Agente | Completada técnicamente | RF-04 total del servidor, descuento de stock demo, WebCrypto/hash y eventos SQLite | Unit tests y smoke API: cantidad/stock inválidos, reintento, código privado y cambio de estado | Commit P1 |
 | P1-04 | Servicios y contacto | P1-01 | Agente | Implementada; verificación manual de enlaces pendiente | RF-05 registro/consulta/avance demo; contactos reportados con enlaces oficiales identificables | Unit tests y smoke API de servicio/transición; confirmar canales originales antes de presentar | Commit P1 |
 | P1-05 | Primer ciclo IA documentado | P1-02…P1-04 | Agente; revisión estudiante | Ciclo documentado; revisión humana pendiente | `docs/uso-ia.md` registra tarea, extracto, resultado, correcciones y pruebas | Revisión humana del estudiante pendiente; no se registra aprobación de UI/datos en su nombre | Commit P1 |
-| P2-01 | Estudio Three.js/modelos por familia y fallback | P1-02 | Agente | Pendiente | RF-02 3D útil y etiquetado ilustrativo | Navegación escritorio/móvil/teclado y modo sin WebGL | Pendiente |
-| P2-02 | Audio sintético y comparador A/B | P2-01 | Agente | Pendiente | Audio bajo demanda y advertencias de simulación | Reproducción manual, octavas/tonalidades; no autoplay | Pendiente |
+| P2-01 | Estudio Three.js/modelos por familia y fallback | P1-02 | Agente | Implementada; revisión navegador pendiente | 15 fichas mapeadas a geometría procedural; visor bajo demanda, control 360°/elevación/zoom, teclado, tacto, fallback y limpieza de recursos | 12 pruebas, lint, build y smoke API pasaron; Chrome/Edge headless fallaron antes de capturar por GPU no disponible. Falta verificación visual de tacto/teclado/fallback en escritorio y móvil | `Implementar estudio 3D y audio demo` |
+| P2-02 | Audio sintético y comparador A/B | P2-01 | Agente | Implementada; escucha manual pendiente | Notas y escalas de 12 tonalidades, triadas y progresiones; Web Audio bajo demanda; A/B con búfer común y nivel B corregido por RMS | Suite valida notas, E♯/F y B♯/C, 12 escalas y progresiones; escuchar manualmente cuando navegador esté disponible. Sin medición física | `Implementar estudio 3D y audio demo` |
 | P3-01 | Asesoría contextual Gemini y alternativa determinista | P1-02 | Agente | Pendiente | RF-03 útil con o sin clave | Agente simulado: inválido, candidatos, fuera de catálogo, timeout | Pendiente |
 | P4-01 | Suite automatizada, build, rendimiento, accesibilidad y móvil | P1…P3 | Agente + revisión estudiante | Pendiente | Comandos reproducibles y hallazgos corregidos/documentados | Flujo completo, errores, persistencia, ruta catálogo y carga 3D medidas | Pendiente |
 | P4-02 | Negocio, uso de IA, demo y ensayo | P4-01 | Estudiante + agente | Pendiente | `docs/negocio.md`, `docs/uso-ia.md` con ≥3 ciclos reales y `docs/demo.md` | Ensayo de 12 min + 3 min preguntas; revisión humana explícita | Pendiente |
@@ -28,7 +28,7 @@ Estados: **Completada** solo con evidencia verificable; **En curso** si hay camb
 | Requisito | Tareas | Comprobación de cierre |
 |---|---|---|
 | RF-01 | P1-02, P4-01 | Buscar/filtrar, ficha/variantes, comparar 2–3, favorito tras recarga y entrada inválida |
-| RF-02 | P2-01, P2-02, P4-01 | Rotación 3D real/procedural, controles accesibles, reproducción iniciada por usuario y fallbacks |
+| RF-02 | P2-01, P2-02, P4-01 | Suite valida 15 mallas y datos musicales; falta revisión visual/auditiva real en navegador, tacto, teclado y fallback WebGL |
 | RF-03 | P3-01, P4-01 | Presupuesto insuficiente/entrada inválida, solo IDs candidatos y fallback sin proveedor |
 | RF-04 | P1-03, P4-01 | Total servidor, stock y cantidad inválidos, idempotencia, token, persistencia y transición |
 | RF-05 | P1-04, P4-01 | Solicitar, consultar, transición permitida/rechazada y contacto externo sin envío |
@@ -38,3 +38,7 @@ Estados: **Completada** solo con evidencia verificable; **En curso** si hay camb
 ## Demo prevista
 
 Caso: músico principiante busca guitarra bajo un presupuesto CRC dado para tocar en casa; elige por tipo/uso/estilo, compara dos opciones demo, gira el modelo y escucha sonido sintético; confirma pedido de demostración, recarga y consulta el código; después registra una solicitud demo de afinación y muestra seguimiento/actualización. Incluir cantidad inválida y stock insuficiente, prueba automatizada, instrucciones para instalación, límites y contingencia sin Gemini/WebGL/audio. Duración objetivo 12 minutos de operación y 3 de preguntas. Caso y precios sintéticos, no oferta de Digari.
+
+### Revisión P2 pendiente
+
+En `/estudio`, elegir y activar un producto de cada familia registrada, arrastrar 360° y cambiar elevación/zoom con ratón, tacto y teclado; restablecer; probar el fallback con WebGL deshabilitado. Activar cada nota manualmente; verificar que no haya autoplay; escuchar las dos progresiones y A/B en un equipo de audio real sin presentar la simulación como medición. Chrome y Edge headless no llegaron a capturar la ruta: ambos informaron que el proceso GPU no estaba disponible. Medir carga o FPS solo con herramienta/equipo identificado y anotar versión, dispositivo y método; no hay mediciones de runtime. La revisión del estudiante queda pendiente.

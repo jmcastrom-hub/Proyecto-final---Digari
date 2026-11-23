@@ -11,6 +11,8 @@ for (const route of ['/', '/tienda', '/productos/acustica-luz', '/carrito', '/se
   assert(response.status === 200, `${route}: HTTP ${response.status}`);
 }
 const catalog = await fetch(base + '/api/products').then((response) => response.json());
+assert(catalog.items.every((item) => item.modelRef && item.modelRef !== 'generic'), 'Faltan referencias 3D en el catálogo público.');
+assert(catalog.items.find((item) => item.id === 'monitor-alfar')?.audioNotes?.connections?.length, 'Faltan notas de uso/conexión para equipo de audio.');
 assert(catalog.total === 15, 'El catálogo no devolvió 15 fichas.');
 const filterError = await fetch(base + '/api/products?minPrice=90000&maxPrice=10000');
 assert(filterError.status === 400, 'El API debe rechazar un rango CRC imposible.');

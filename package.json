@@ -2,24 +2,28 @@
   "name": "digari-studio",
   "version": "0.1.0",
   "private": true,
-  "engines": { "node": ">=22.13.0" },
+  "engines": {
+    "node": ">=22.13.0"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",
-    "test": "tsc --module commonjs --moduleResolution node --esModuleInterop --strict --target ES2022 --skipLibCheck --outDir .test-dist tests/orders.test.ts && node --test .test-dist/tests/*.test.js",
+    "test": "tsc --module commonjs --moduleResolution node --esModuleInterop --strict --target ES2022 --skipLibCheck --outDir .test-dist tests/orders.test.ts tests/models.test.ts && node --test .test-dist/tests/*.test.js",
     "test:api": "node tests/api-smoke.mjs"
   },
   "dependencies": {
     "next": "^15.5.12",
     "react": "^19.1.1",
-    "react-dom": "^19.1.1"
+    "react-dom": "^19.1.1",
+    "three": "^0.187.0"
   },
   "devDependencies": {
     "@types/node": "^22.19.0",
     "@types/react": "^19.1.16",
     "@types/react-dom": "^19.1.9",
+    "@types/three": "^0.187.0",
     "eslint": "^9.39.1",
     "eslint-config-next": "^15.5.12",
     "typescript": "^5.9.3"

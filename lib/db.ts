@@ -14,7 +14,8 @@ db.exec(`
     id TEXT PRIMARY KEY, name TEXT NOT NULL, family TEXT NOT NULL, category TEXT NOT NULL,
     price_crc INTEGER NOT NULL CHECK(price_crc >= 0), stock INTEGER NOT NULL CHECK(stock >= 0),
     style_json TEXT NOT NULL, compatible_json TEXT NOT NULL, summary TEXT NOT NULL,
-    variant_label TEXT, variants_json TEXT NOT NULL, visual TEXT NOT NULL, icon TEXT NOT NULL
+    variant_label TEXT, variants_json TEXT NOT NULL, visual TEXT NOT NULL, icon TEXT NOT NULL,
+    model_ref TEXT NOT NULL DEFAULT 'generic', audio_json TEXT NOT NULL DEFAULT 'null'
   );
   CREATE TABLE IF NOT EXISTS orders (
     id TEXT PRIMARY KEY, tracking_hash TEXT NOT NULL UNIQUE, idempotency_key TEXT NOT NULL UNIQUE,
@@ -38,6 +39,10 @@ db.exec(`
     from_status TEXT, to_status TEXT NOT NULL, actor TEXT NOT NULL, created_at TEXT NOT NULL
   );
 `);
+// Additive migration for databases created by P1; no orders, stock or events are replaced.
+const productColumns = db.prepare('PRAGMA table_info(products)').all() as { name: string }[];
+if (!productColumns.some((column) => column.name === 'model_ref')) db.exec("ALTER TABLE products ADD COLUMN model_ref TEXT NOT NULL DEFAULT 'generic'");
+if (!productColumns.some((column) => column.name === 'audio_json')) db.exec("ALTER TABLE products ADD COLUMN audio_json TEXT NOT NULL DEFAULT 'null'");
 
 export function withTransaction<T>(work: () => T): T {
   db.exec('BEGIN IMMEDIATE');
@@ -53,12 +58,14 @@ export function withTransaction<T>(work: () => T): T {
 
 const count = db.prepare('SELECT COUNT(*) AS count FROM products').get() as { count: number };
 if (count.count === 0) {
-  const insert = db.prepare(`INSERT INTO products VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`);
+  const insert = db.prepare(`INSERT INTO products (id,name,family,category,price_crc,stock,style_json,compatible_json,summary,variant_label,variants_json,visual,icon,model_ref,audio_json) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`);
   const seed = (items: Product[]) => withTransaction(() => {
-    for (const p of items) insert.run(p.id, p.name, p.family, p.category, p.priceCrc, p.stock, JSON.stringify(p.style), JSON.stringify(p.compatible), p.summary, p.variantLabel ?? null, JSON.stringify(p.variants), p.visual, p.icon);
+    for (const p of items) insert.run(p.id, p.name, p.family, p.category, p.priceCrc, p.stock, JSON.stringify(p.style), JSON.stringify(p.compatible), p.summary, p.variantLabel ?? null, JSON.stringify(p.variants), p.visual, p.icon, p.modelRef, JSON.stringify(p.audioNotes ?? null));
   });
   seed(products);
 }
+const updateModel = db.prepare('UPDATE products SET model_ref=?, audio_json=? WHERE id=?');
+for (const item of products) updateModel.run(item.modelRef, JSON.stringify(item.audioNotes ?? null), item.id);
 
 function mapProduct(row: Record<string, unknown>): Product {
   return {
@@ -66,7 +73,7 @@ function mapProduct(row: Record<string, unknown>): Product {
     priceCrc: Number(row.price_crc), stock: Number(row.stock), style: JSON.parse(String(row.style_json)),
     compatible: JSON.parse(String(row.compatible_json)), summary: String(row.summary),
     variantLabel: row.variant_label ? String(row.variant_label) : undefined,
-    variants: JSON.parse(String(row.variants_json)), visual: String(row.visual), icon: String(row.icon),
+    variants: JSON.parse(String(row.variants_json)), visual: String(row.visual), icon: String(row.icon), modelRef: String(row.model_ref), audioNotes: JSON.parse(String(row.audio_json || 'null')) ?? undefined,
   };
 }
 

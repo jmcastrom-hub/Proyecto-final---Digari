@@ -1,4 +1,16 @@
-# Uso de IA — ciclo P1
+# Uso de IA — ciclos P1 y P2
+
+## Ciclo 2 · Estudio 3D y herramientas de audio (P2)
+
+- **Tarea:** asociar modelos 3D procedurales a las 15 fichas, activar el visor/audio bajo demanda, incluir controles accesibles, contenidos musicales y comparación A/B simulada; mantener catálogo, SQLite y flujos demo de P1.
+- **Extracto del prompt:** “Implementa el estudio 3D y el audio sin romper el catálogo, el carrito ni el seguimiento. Comprueba que las 15 fichas tengan un modelo 3D asociado, que el visor y el audio carguen bajo demanda y que las simulaciones estén identificadas.”
+- **Resultado:** registro de 15 referencias de geometría real Three.js (guitarras acústica/eléctrica, bajo, teclado, ukelele, flauta, cuerdas, cable, caña, micrófono, monitor, parlante, DJ, audífonos e interfaz); migración aditiva de SQLite; controles táctiles y de teclado; alternativas gráficas sin WebGL; audio Web Audio con notas, escalas/triadas, progresiones y perfiles A/B.
+- **Límites y supuestos:** todos los modelos son ilustrativos, no reproducciones de productos comerciales. Los perfiles A/B son una transformación digital sobre un búfer común y sintetizado, con corrección RMS calculada en el navegador; no simulan especificaciones o mediciones físicas. No se disponen de muestras grabadas identificadas/autorizadas. Accesorios pasivos no producen tonos atribuidos.
+- **Verificación automatizada:** `npm test` pasó 12 pruebas, incluyendo geometría no vacía para cada referencia, las 15 asociaciones 3D, notas/enarmonías, 12 escalas mayores/menores, triadas/progresiones y reglas de pedidos/servicios; `npm run lint`, `npm run build` y `npm run test:api` pasaron. El reporte de build dio `/estudio` 3.07 kB de ruta, 109 kB de carga inicial y 103 kB compartidos; es tamaño del bundle, no tiempo de carga ni FPS.
+- **Revisión manual:** pendiente abrir `/estudio` en navegador de escritorio y móvil, comprobar WebGL y fallback, tacto, teclado, activación/pausa, notas/progresiones y escucha A/B. Se intentó Chrome y Edge headless con perfiles temporales aislados; ambos finalizaron antes de capturar la página con `gpu_data_manager_impl_private` (GPU process isn't usable). No se pudo observar el producto en navegador. No se registran mediciones de FPS, tiempos, latencia o nivel físico porque aún no se midieron. La revisión y aceptación del estudiante también están pendientes.
+- **Para retomar la revisión:** iniciar `npm run dev` o `npm start`, abrir `http://localhost:3000/estudio` en Chrome/Edge con aceleración gráfica disponible, activar el visor/audio y repetir en viewport móvil; apagar WebGL para verificar la ilustración alternativa. Verificar controles de puntero/tacto, flechas/+/−/R, no autoplay y la comparación A/B por acción explícita.
+- **Revisión humana del estudiante:** **pendiente**. Evaluar calidad/identificación de modelos, ergonomía móvil, escritura musical y etiquetas de simulación. No se atribuye aprobación.
+- **Commit asociado:** `Implementar estudio 3D y audio demo` (P2, separado de P1).
 
 ## Ciclo 1 · Catálogo y seguimiento de pedidos demo
 

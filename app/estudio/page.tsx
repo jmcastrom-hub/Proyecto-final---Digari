@@ -1,2 +1,3 @@
-import Link from 'next/link';
-export default function StudioPage(){return <div className="container studio-placeholder"><div className="eyebrow">DIGARI STUDIO / ESTUDIO</div><span className="studio-symbol">◉</span><h1>Un espacio para probar con calma.</h1><p>El visor 3D y el audio interactivo forman parte de la siguiente fase. Desde aquí podés explorar productos e iniciar una comparación demo.</p><Link className="button" href="/tienda">Elegir un producto</Link><p className="micro-copy">Los modelos de catálogo actuales son ilustraciones gráficas originales, no representaciones 3D exactas.</p></div>;}
+import StudioShell from '@/components/studio-shell';
+
+export default function StudioPage() { return <StudioShell />; }

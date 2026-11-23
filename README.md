@@ -55,14 +55,20 @@ La suite HTTP prueba diez páginas, filtros, idempotencia, consulta y actualizac
 4. En Seguimiento, consulta el código. Después en Servicios crea una afinación demo, consulta su código y usa el panel local de operador para moverla a diagnóstico.
 5. Usa cantidad/stock inválidos para ver la validación. No se transmite información a Digari.
 
-La demo P1 no incluye todavía estudio 3D/audio ni Gemini. Contactos y enlaces a asesoría/financiamiento apuntan a páginas públicas originales y deben verificarse al presentar la aplicación.
+P2 incorpora estudio 3D y audio sintético; Gemini permanece para P3. Contactos y enlaces a asesoría/financiamiento apuntan a páginas públicas originales y deben verificarse al presentar la aplicación.
 
 ## Documentación
 
 - [`intent.md`](intent.md), [`spec.md`](spec.md) y [`plan.md`](plan.md): intención, reglas y trazabilidad.
 - [`docs/auditoria-digari.md`](docs/auditoria-digari.md): hechos reportados, alcance y validaciones del sitio pendientes.
-- [`docs/uso-ia.md`](docs/uso-ia.md): ciclo P1; revisión humana del estudiante pendiente.
+- [`docs/uso-ia.md`](docs/uso-ia.md): ciclos P1/P2; revisión humana del estudiante pendiente.
 
 ## Privacidad y límites
 
 No capturar datos personales reales. El código privado se genera aleatoriamente, se persiste como hash y solo se presenta al crear la solicitud. El operador demo usa un token solo de desarrollo. Esta app local y SQLite no tienen controles para producción, personal multiusuario o datos comerciales.
+
+## Estudio 3D y audio (P2)
+
+Abre `/estudio` o la ficha de cualquier producto y activa el visor o el audio de forma explícita. El catálogo enlaza cada una de sus 15 fichas a una geometría Three.js procedural; todas son maquetas ilustrativas, no réplicas exactas. El motor 3D y el componente de audio se cargan al activar cada panel. El visor acepta arrastre con ratón/tacto, botones y flechas/+/−/R al enfocar el canvas; ante error WebGL presenta una ilustración alternativa claramente identificada.
+
+Los tonos y acordes son síntesis Web Audio iniciada por el usuario. Los perfiles A/B de equipo usan una misma señal sintética; B simula un realce EQ y compensa su RMS calculado localmente. No son grabaciones ni mediciones de productos reales. Cuerdas, cable y caña se identifican como accesorios pasivos sin timbre ficticio. Repite las comprobaciones manuales de escritorio/móvil y escucha antes de presentar; la revisión visual/auditiva y la revisión del estudiante aún están pendientes.

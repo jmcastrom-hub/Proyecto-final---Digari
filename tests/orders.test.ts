@@ -9,6 +9,8 @@ describe('catálogo y pedidos demo', () => {
     const items = listProducts(); assert.equal(items.length, 15);
     assert.ok(items.some((item) => item.family === 'Guitarra acústica'));
     assert.ok(items.some((item) => item.family === 'Parlante'));
+    assert.ok(items.every((item) => item.modelRef && item.modelRef !== 'generic'));
+    assert.ok(items.find((item) => item.id === 'monitor-alfar')?.audioNotes?.connections.length);
   });
   it('filtra catálogo por presupuesto y estilo', () => {
     const results = listProducts({ minPrice: 30000, maxPrice: 80000, style: 'folk' });
