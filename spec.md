@@ -61,11 +61,11 @@ JSON, rutas Next.js `/api`; códigos 200/201 para éxito, 400 entrada inválida,
 | `GET /api/products?q&family&minPrice&maxPrice&inStock&style` | filtros acotados | `{items: ProductSummary[], total}` |
 | `GET /api/products/:id` | ID/slug | `ProductDetail` con variantes demo |
 | `POST /api/advice` | `{budgetCrc, family, style, use, question?}` | `{mode, recommendations:[{productId, reason}]}` |
-| `POST /api/orders` | `{items, fulfillmentDemo, idempotencyKey}` | `201 {orderId, trackingCode, totalCrc, status}`; clave repetida devuelve mismo resultado |
+| `POST /api/orders` | `{items, fulfillment, idempotencyKey, trackingCode}` | `201 {duplicate:false, trackingCode, totalCrc, status}`; repetición con la misma clave/código responde `200` con `duplicate:true` sin crear otro pedido |
 | `POST /api/orders/lookup` | `{trackingCode}` | `{status, events, summary}` mínimo |
-| `POST /api/services` | `{type, description}` | `201 {requestId, trackingCode, status}` |
+| `POST /api/services` | `{type, description}` | `201 {serviceId, trackingCode, status}` |
 | `POST /api/services/lookup` | `{trackingCode}` | `{status, events, summary}` mínimo |
-| `POST /api/operator/status` | `{kind, id, nextStatus, operatorDemoToken}` | `{status, eventId}`; token solo en demo/local |
+| `POST /api/operator/status` | `{kind, trackingCode, nextStatus, operatorToken}` | `{status}`; token solo en demo/local |
 
 Validación de esquema en servidor; límites de frecuencia y tamaño en endpoints públicos. Nunca incluir `operatorDemoToken` en consultas/respuestas ni registrar secretos.
 
@@ -75,7 +75,7 @@ Next.js + TypeScript (interfaz y rutas de servidor), SQLite (persistencia local 
 
 ## Privacidad, seguridad y límites
 
-Minimización de datos; códigos de seguimiento no enumerables (generados con CSPRNG, solo hash guardado si es viable); no PII real; token de operador exclusivamente local y nunca `NEXT_PUBLIC_*`; limitación básica de tasa/longitud. No enviar historial o identificadores al proveedor Gemini. No prometer pagos, stock, disponibilidad de taller, recomendación profesional ni sonido/modelos exactos. Revisión humana requerida antes de cualquier adaptación al negocio. SQLite/local demo no es despliegue multiusuario robusto.
+Minimización de datos; códigos de seguimiento no enumerables generados con Web Crypto (pedido) o `randomBytes` (servicio), guardando solo su hash; el código del pedido se mantiene en el navegador hasta recibir confirmación para sostener reintentos idempotentes. No PII real; token de operador exclusivamente local y nunca `NEXT_PUBLIC_*`; límites básicos de tamaño/longitud. No enviar historial o identificadores al proveedor Gemini. No prometer pagos, stock, disponibilidad de taller, recomendación profesional ni sonido/modelos exactos. Revisión humana requerida antes de cualquier adaptación al negocio. SQLite/local demo no es despliegue multiusuario robusto.
 
 ## Verificación y demo
 

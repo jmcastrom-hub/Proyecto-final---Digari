@@ -1,0 +1,3 @@
+export function SiteFooter() {
+  return <footer className="site-footer"><div className="container footer-inner"><div><span className="eyebrow">PROYECTO ACADÉMICO</span><p>Digari Studio es una experiencia de demostración independiente. Productos, precios y existencias son sintéticos.</p></div><div><a href="https://www.digaricr.com/servicios" target="_blank" rel="noreferrer">Asesoría técnica original ↗</a><a href="https://www.digaricr.com/creditos" target="_blank" rel="noreferrer">Financiamiento original ↗</a><a href="https://www.digaricr.com/contactenos" target="_blank" rel="noreferrer">Sitio oficial de Digari ↗</a></div><small>Sin compras, cobros, reservas ni mensajes reales.</small></div></footer>;
+}

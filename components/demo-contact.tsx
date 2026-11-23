@@ -1,0 +1,3 @@
+'use client';
+import { useState } from 'react';
+export function DemoContact(){const [sent,setSent]=useState(false);return sent?<div className="notice notice-success" role="status"><b>Mensaje guardado solo en esta pantalla.</b><p>No se envió correo ni se guardó información en un servidor.</p><button className="text-button" onClick={()=>setSent(false)}>Escribir otro</button></div>:<form onSubmit={(e)=>{e.preventDefault();setSent(true);}}><label htmlFor="demo-message">Mensaje de prueba</label><textarea id="demo-message" maxLength={300} required placeholder="Escribí una pregunta sintética (no incluyas datos personales)."/><button className="button button-small">Confirmar localmente</button></form>;}
