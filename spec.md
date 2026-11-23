@@ -60,7 +60,7 @@ JSON, rutas Next.js `/api`; códigos 200/201 para éxito, 400 entrada inválida,
 |---|---|---|
 | `GET /api/products?q&family&minPrice&maxPrice&inStock&style` | filtros acotados | `{items: ProductSummary[], total}` |
 | `GET /api/products/:id` | ID/slug | `ProductDetail` con variantes demo |
-| `POST /api/advice` | `{budgetCrc, family, style, use, question?}` | `{mode, recommendations:[{productId, reason}]}` |
+| `POST /api/advice` | `{budgetCrc?, family?, style?, use?, question?}`; cuerpo hasta 4 KB | 200 `{mode, message, question, recommendations:[{productId, name, family, priceCrc, stockDemo, style, compatible, reason, href, compareHref}]}`; 400 entrada inválida; 413 cuerpo largo; 429 límite local |
 | `POST /api/orders` | `{items, fulfillment, idempotencyKey, trackingCode}` | `201 {duplicate:false, trackingCode, totalCrc, status}`; repetición con la misma clave/código responde `200` con `duplicate:true` sin crear otro pedido |
 | `POST /api/orders/lookup` | `{trackingCode}` | `{status, events, summary}` mínimo |
 | `POST /api/services` | `{type, description}` | `201 {serviceId, trackingCode, status}` |
@@ -68,6 +68,10 @@ JSON, rutas Next.js `/api`; códigos 200/201 para éxito, 400 entrada inválida,
 | `POST /api/operator/status` | `{kind, trackingCode, nextStatus, operatorToken}` | `{status}`; token solo en demo/local |
 
 Validación de esquema en servidor; límites de frecuencia y tamaño en endpoints públicos. Nunca incluir `operatorDemoToken` en consultas/respuestas ni registrar secretos.
+
+### P3 — contrato implementado de asesoría
+
+`/asesoria` conserva preferencias y hasta 24 turnos en `localStorage`; el cliente no reenvía el historial. `question` solo se usa en el servidor para clasificar una intención controlada (recomendar, comparar, alternativas) y no se incluye en la llamada al proveedor. Gemini recibe preferencias seleccionadas y, como máximo, tres candidatos del catálogo demo. La salida estructurada solo propone `{productId, reason}` y pregunta opcional; el servidor valida cada ID contra esos candidatos y agrega precio/stock/enlaces de su propia lectura SQLite. Con `GEMINI_API_KEY` ausente o un error/cuota/timeout/ID inválido, responde con las mismas reglas deterministas. El proveedor REST Interactions opera con `store:false`; no se usa estado conversacional remoto. Límite implementado: cuerpo 4 KB, texto 240 caracteres, 12 solicitudes/minuto por dirección de cliente, salida hasta 420 tokens y timeout 8 s. Los límites en memoria son adecuados solo para el prototipo local.
 
 ## Arquitectura y tecnología
 

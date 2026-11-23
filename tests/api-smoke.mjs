@@ -6,13 +6,19 @@ if (!operatorToken) throw new Error('Define DIGARI_DEMO_OPERATOR_TOKEN en esta t
 const assert = (condition, message) => { if (!condition) throw new Error(message); };
 const json = (body) => ({ method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) });
 
-for (const route of ['/', '/tienda', '/productos/acustica-luz', '/carrito', '/seguimiento', '/servicios', '/contacto', '/favoritos', '/promos', '/estudio']) {
+for (const route of ['/', '/tienda', '/productos/acustica-luz', '/carrito', '/seguimiento', '/servicios', '/contacto', '/favoritos', '/promos', '/estudio', '/asesoria']) {
   const response = await fetch(base + route);
   assert(response.status === 200, `${route}: HTTP ${response.status}`);
 }
 const catalog = await fetch(base + '/api/products').then((response) => response.json());
 assert(catalog.items.every((item) => item.modelRef && item.modelRef !== 'generic'), 'Faltan referencias 3D en el catálogo público.');
 assert(catalog.items.find((item) => item.id === 'monitor-alfar')?.audioNotes?.connections?.length, 'Faltan notas de uso/conexión para equipo de audio.');
+const advice = await fetch(base + '/api/advice', json({ budgetCrc: 80000, family: 'Guitarra acústica', style: 'folk', use: 'iniciacion', question: '¿Cuál me recomiendas?' })).then((response) => response.json());
+assert(advice.mode === 'local' && advice.recommendations.length <= 3 && advice.recommendations.every((item) => item.productId === 'acustica-luz'), 'La asesoría local no filtró el catálogo correctamente.');
+const insufficientAdvice = await fetch(base + '/api/advice', json({ budgetCrc: 1000, family: 'Guitarra acústica', use: 'iniciacion' })).then((response) => response.json());
+assert(insufficientAdvice.mode === 'local' && insufficientAdvice.recommendations.length === 0 && insufficientAdvice.question, 'La asesoría no preguntó ante presupuesto insuficiente.');
+const invalidAdvice = await fetch(base + '/api/advice', json({ budgetCrc: -1, family: 'Guitarra acústica', use: 'iniciacion' }));
+assert(invalidAdvice.status === 400, 'La asesoría debe rechazar un presupuesto inválido.');
 assert(catalog.total === 15, 'El catálogo no devolvió 15 fichas.');
 const filterError = await fetch(base + '/api/products?minPrice=90000&maxPrice=10000');
 assert(filterError.status === 400, 'El API debe rechazar un rango CRC imposible.');
@@ -40,4 +46,4 @@ assert(serviceStatus.status === 'diagnóstico', 'No se actualizó el estado del 
 
 const stockError = await fetch(base + '/api/orders', json({ items: [{ productId: 'acustica-luz', quantity: 20 }], fulfillment: 'retiro demo', idempotencyKey: randomUUID(), trackingCode: randomBytes(24).toString('base64url') }));
 assert(stockError.status === 409, 'El API debe rechazar stock demo insuficiente.');
-console.log('API smoke OK: 10 páginas, catálogo/filtros, pedido idempotente, código privado, servicio y transiciones, stock insuficiente.');
+console.log('API smoke OK: 11 páginas, catálogo/filtros, asesoría local/validación, pedido idempotente, código privado, servicio y transiciones, stock insuficiente.');

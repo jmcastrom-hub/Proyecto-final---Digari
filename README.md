@@ -4,7 +4,7 @@ Prototipo académico de asesoría, catálogo demo y seguimiento inspirado en Dig
 
 ## Estado actual
 
-P1 implementa tienda sintética, búsqueda/filtros, fichas, favoritos y comparación; carrito y creación de pedidos demo con total recalculado y clave idempotente; consulta privada de pedido; solicitudes de taller sintéticas con seguimiento y avance local; y página de contacto informativa. El estudio 3D/audio sigue planificado para P2; la asesoría Gemini para P3.
+P1 implementa tienda y seguimiento demo; P2 añade un estudio 3D procedural y audio sintético; P3 añade asesoría con filtro local y Gemini opcional. La revisión manual P2 en navegador sigue pendiente.
 
 Los 15 productos, precios CRC, existencias, compatibilidad, contacto y pedidos de prueba no deben interpretarse como inventario/oferta vigente. Las opciones de retiro/envío no se ejecutan. No se solicitan tarjetas ni se hacen reservas, compras o envíos reales.
 
@@ -22,6 +22,8 @@ npm run dev
 ```
 
 Abrí http://localhost:3000. En el primer uso, SQLite crea `data/digari.sqlite` y precarga 15 fichas sintéticas. La base queda fuera de Git. En desarrollo, el panel local admite `local-demo-only` como código de demostración; la app completa no está preparada para uso productivo, aunque se configure otro token.
+
+La ruta `/asesoria` funciona sin clave con filtro local. Para habilitar Gemini, copia `.env.example` como `.env.local` y completa allí tu clave propia de Gemini AI Studio; deja ese archivo fuera de Git. El modelo predeterminado es `gemini-3.8-flash`. El proveedor usa Interactions API con `store:false`, recibe selecciones estructuradas y candidatos demo, no el texto libre ni el historial local. Si falta la clave o el proveedor falla, el modo local sigue disponible.
 
 ## Pruebas
 
@@ -45,7 +47,7 @@ $env:DIGARI_DEMO_OPERATOR_TOKEN = 'local-demo-only'
 npm run test:api
 ```
 
-La suite HTTP prueba diez páginas, filtros, idempotencia, consulta y actualización de pedido/servicio, y stock insuficiente. La verificación visual manual y la revisión del estudiante deben registrarse por separado.
+La suite HTTP prueba once páginas, el filtro local de asesoría y su validación, filtros de catálogo, idempotencia, consulta/actualización de pedido/servicio y stock insuficiente. La verificación visual manual y la revisión del estudiante deben registrarse por separado.
 
 ## Recorrido breve de demo
 
@@ -55,13 +57,13 @@ La suite HTTP prueba diez páginas, filtros, idempotencia, consulta y actualizac
 4. En Seguimiento, consulta el código. Después en Servicios crea una afinación demo, consulta su código y usa el panel local de operador para moverla a diagnóstico.
 5. Usa cantidad/stock inválidos para ver la validación. No se transmite información a Digari.
 
-P2 incorpora estudio 3D y audio sintético; Gemini permanece para P3. Contactos y enlaces a asesoría/financiamiento apuntan a páginas públicas originales y deben verificarse al presentar la aplicación.
+P2 incorpora estudio 3D y audio sintético; P3 añade asesoría determinista/Gemini. Contactos y enlaces a asesoría/financiamiento apuntan a páginas públicas originales y deben verificarse al presentar la aplicación.
 
 ## Documentación
 
 - [`intent.md`](intent.md), [`spec.md`](spec.md) y [`plan.md`](plan.md): intención, reglas y trazabilidad.
 - [`docs/auditoria-digari.md`](docs/auditoria-digari.md): hechos reportados, alcance y validaciones del sitio pendientes.
-- [`docs/uso-ia.md`](docs/uso-ia.md): ciclos P1/P2; revisión humana del estudiante pendiente.
+- [`docs/uso-ia.md`](docs/uso-ia.md): ciclos P1/P2/P3; revisión humana del estudiante pendiente.
 
 ## Privacidad y límites
 
