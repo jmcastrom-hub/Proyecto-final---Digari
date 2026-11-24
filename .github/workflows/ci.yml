@@ -22,7 +22,13 @@ jobs:
       - run: npm ci
       - run: npm test
       - run: npm run lint
+      - name: Initialize isolated build database
+        env:
+          DIGARI_DB_PATH: ${{ runner.temp }}/digari-build.sqlite
+        run: node -e "require('./.test-dist/lib/db.js')"
       - run: npm run build
+        env:
+          DIGARI_DB_PATH: ${{ runner.temp }}/digari-build.sqlite
       - name: Smoke the local demo API
         env:
           DIGARI_DB_PATH: ${{ runner.temp }}/digari-ci.sqlite
