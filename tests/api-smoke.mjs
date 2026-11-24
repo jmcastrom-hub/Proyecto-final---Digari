@@ -30,7 +30,7 @@ const filterError = await fetch(base + '/api/products?minPrice=90000&maxPrice=10
 assert(filterError.status === 400, 'El API debe rechazar un rango CRC imposible.');
 
 const trackingCode = randomBytes(24).toString('base64url');
-const orderPayload = { items: [{ productId: 'ukelele-sol', variant: 'Miel', quantity: 1 }], fulfillment: 'retiro demo', idempotencyKey: randomUUID(), trackingCode };
+const orderPayload = { items: [{ productId: 'ukelele-sol', variant: 'Rojo', quantity: 1 }], fulfillment: 'retiro demo', idempotencyKey: randomUUID(), trackingCode };
 const orderResponse = await fetch(base + '/api/orders', json(orderPayload));
 const order = await orderResponse.json();
 assert(orderResponse.status === 201 && order.trackingCode === trackingCode, 'No se creó pedido demo.');
