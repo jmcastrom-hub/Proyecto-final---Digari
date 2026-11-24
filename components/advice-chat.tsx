@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { FormEvent, useEffect, useState } from 'react';
+import { FormEvent, KeyboardEvent, useEffect, useRef, useState } from 'react';
 import { parseBudgetCrc, USE_OPTIONS, type AdviceResult, type Recommendation } from '@/lib/advisor';
 import { repairLegacyUtf8 } from '@/lib/text-encoding';
 import { ProductImage } from '@/components/product-image';
@@ -12,7 +12,8 @@ type Stored = { preferences: Preferences; turns: Turn[]; conversationId?: string
 type Props = { families: string[]; styles: string[] };
 const storageKey = 'digari-advice-chat-v1';
 const initialPreferences: Preferences = { budgetCrc: '', family: '', style: '', use: '' };
-const welcome: Turn = { role: 'assistant', text: 'Te ayudo a encontrar equipo del catálogo demo. ¿Qué presupuesto, tipo y uso o estilo tenés en mente?', mode: 'local' };
+const welcome: Turn = { role: 'assistant', text: '¡Hola! Contame qué equipo estás buscando. Podés empezar con texto libre y vamos afinando la recomendación en esta conversación.', mode: 'local' };
+const normalize = (value: string) => value.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLocaleLowerCase('es');
 
 function repairTurn(turn: Turn): Turn {
   return {
@@ -20,13 +21,30 @@ function repairTurn(turn: Turn): Turn {
     text: repairLegacyUtf8(turn.text),
     recommendations: turn.recommendations?.map((item) => ({
       ...item,
-      name: repairLegacyUtf8(item.name),
-      family: repairLegacyUtf8(item.family),
-      reason: repairLegacyUtf8(item.reason),
-      style: item.style.map(repairLegacyUtf8),
-      compatible: item.compatible.map(repairLegacyUtf8),
+      name: repairLegacyUtf8(item.name), family: repairLegacyUtf8(item.family), reason: repairLegacyUtf8(item.reason),
+      style: item.style.map(repairLegacyUtf8), compatible: item.compatible.map(repairLegacyUtf8),
     })),
   };
+}
+
+function inferPreferences(question: string, current: Preferences, families: string[], styles: string[]): Preferences {
+  const normalized = normalize(question);
+  const result = { ...current };
+  const budget = /(?:₡\s*|\bcrc\s*|(?:presupuesto(?:\s+(?:de|a|hasta))?|monto(?:\s+de)?|por|hasta|tope(?:\s+de)?|maximo(?:\s+de)?)\s*₡?\s*)(\d[\d.,' ]*)/i.exec(question);
+  if (budget) result.budgetCrc = budget[1].trim();
+  const family = families.find((item) => normalized.includes(normalize(item)));
+  if (family) result.family = family;
+  const style = styles.find((item) => new RegExp(`(?:^|[^\\p{L}\\p{N}])${normalize(item).replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}(?:$|[^\\p{L}\\p{N}])`, 'u').test(normalized));
+  if (style) result.style = style;
+  const explicitUse = USE_OPTIONS.find((option) => normalized.includes(normalize(option.id)) || normalized.includes(normalize(option.label)));
+  if (explicitUse) result.use = explicitUse.id;
+  else if (/\b(ensay|practic(?:ar|a) con la banda)\b/.test(normalized)) result.use = 'ensayo';
+  else if (/\b(grab|home studio|grabar)\b/.test(normalized)) result.use = 'grabacion';
+  else if (/\b(mezcl|monitore)\b/.test(normalized)) result.use = 'mezcla';
+  else if (/\b(presentaci|hablar en publico|microfono para voz)\b/.test(normalized)) result.use = 'voz';
+  else if (/\b(evento|actividad pequena)\b/.test(normalized)) result.use = 'eventos';
+  else if (/\b(dj|mezcla dj)\b/.test(normalized)) result.use = 'dj';
+  return result;
 }
 
 function friendlyBudgetError(value: string): string {
@@ -43,6 +61,8 @@ export default function AdviceChat({ families, styles }: Props) {
   const [error, setError] = useState('');
   const [ready, setReady] = useState(false);
   const [conversationId, setConversationId] = useState('');
+  const inFlight = useRef(false);
+  const logRef = useRef<HTMLDivElement>(null);
   const budgetError = friendlyBudgetError(preferences.budgetCrc);
 
   useEffect(() => {
@@ -70,57 +90,60 @@ export default function AdviceChat({ families, styles }: Props) {
     if (ready) localStorage.setItem(storageKey, JSON.stringify({ preferences, turns: turns.slice(-24), conversationId } satisfies Stored));
   }, [preferences, turns, conversationId, ready]);
 
+  useEffect(() => {
+    if (!logRef.current) return;
+    logRef.current.scrollTop = logRef.current.scrollHeight;
+  }, [turns, busy]);
+
   const change = (key: keyof Preferences, value: string) => setPreferences((current) => ({ ...current, [key]: value }));
 
-  function applyExample(example: { budget: string; family: string; use: string; style: string; question: string }) {
-    setPreferences({ budgetCrc: example.budget, family: example.family, use: example.use, style: example.style });
-    setComposer(example.question);
-    setError('');
+  function onComposerKeyDown(event: KeyboardEvent<HTMLTextAreaElement>) {
+    if (event.key === 'Enter' && !event.shiftKey) {
+      event.preventDefault();
+      event.currentTarget.form?.requestSubmit();
+    }
   }
 
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (busy) return;
+    if (inFlight.current || busy) return;
+    const question = composer.trim();
+    if (!question) return;
     setError('');
 
+    const nextPreferences = inferPreferences(question, preferences, families, styles);
     let budgetCrc: number | undefined;
-    try { budgetCrc = parseBudgetCrc(preferences.budgetCrc); }
+    try { budgetCrc = parseBudgetCrc(nextPreferences.budgetCrc); }
     catch { setError('Revisá el presupuesto: debe ser un monto entero entre ₡0 y ₡10 000 000.'); return; }
 
-    const question = composer.trim();
-    let activeBudget = budgetCrc;
-    const budgetUpdate = question && /presupuesto|monto|sub[ií]|aument[eé]|hasta/i.test(question) ? question.match(/₡?\s*(\d[\d.,' ]*)\s*$/)?.[1] : undefined;
-    if (budgetUpdate) {
-      try { activeBudget = parseBudgetCrc(budgetUpdate); setPreferences((current) => ({ ...current, budgetCrc: String(activeBudget ?? '') })); }
-      catch { setError('Revisá el monto que escribiste; debe ser un entero entre ₡0 y ₡10 000 000.'); return; }
-    }
-    const activeUse = question && /ensay|practic(?:ar|a)\s+con\s+(?:la\s+)?banda/i.test(question) ? 'ensayo' : preferences.use;
-    if (activeUse !== preferences.use) setPreferences((current) => ({ ...current, use: activeUse }));
-    const useLabel = USE_OPTIONS.find((option) => option.id === preferences.use)?.label.toLocaleLowerCase('es');
-    const userText = question || `Busco ${preferences.family || 'un producto'}${useLabel ? ` para ${useLabel}` : ''}${activeBudget !== undefined ? ` con un máximo de ₡${activeBudget.toLocaleString('es-CR')}` : ''}.`;
-    setTurns((current) => [...current, { role: 'user' as const, text: userText }].slice(-24));
+    const activeUse = /ensay|practic(?:ar|a)\s+con\s+(?:la\s+)?banda/i.test(question) ? 'ensayo' : nextPreferences.use;
+    const merged = { ...nextPreferences, use: activeUse };
+    setPreferences(merged);
+    setTurns((current) => [...current, { role: 'user' as const, text: question }].slice(-24));
     setComposer('');
+    inFlight.current = true;
     setBusy(true);
     try {
+      const prior = [...turns].reverse().find((turn) => turn.role === 'assistant' && turn.recommendations?.length)?.recommendations?.map((item) => item.productId) ?? [];
       const response = await fetch('/api/advice', {
-        method: 'POST',
-        headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ conversationId, previousRecommendationIds: turns.at(-1)?.role === 'assistant' ? turns.at(-1)?.recommendations?.map((item) => item.productId) ?? [] : [], budgetCrc: activeBudget, family: preferences.family || undefined, style: preferences.style || undefined, use: activeUse || undefined, question }),
+        method: 'POST', headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({
+          conversationId, previousRecommendationIds: prior, budgetCrc, family: merged.family || undefined,
+          style: merged.style || undefined, use: merged.use || undefined, question,
+        }),
       });
       const data = await response.json() as AdviceResult | { error?: string };
       if (!response.ok || !('mode' in data)) {
-        setError(response.status === 429
-          ? 'El asesor necesita un respiro. Probá de nuevo dentro de un minuto.'
-          : 'No pudimos completar la consulta. Revisá los criterios e intentá otra vez.');
-        setTurns((current) => [...current, { role: 'assistant' as const, text: 'No pude completar esta consulta ahora. Tus criterios siguen acá para que podás ajustarlos y probar de nuevo.' }].slice(-24));
+        setError(response.status === 429 ? 'La asesoría está ocupada. Probá de nuevo en un minuto; la conversación quedó guardada.' : 'No pudimos completar la consulta. Tus mensajes y preferencias siguen guardados.');
+        setTurns((current) => [...current, { role: 'assistant' as const, text: response.status === 503 ? 'Gemini no respondió. La asesoría local conserva tus criterios; podés intentar otra consulta.' : 'No pude completar esta consulta ahora. Tus criterios siguen acá para que podás volver a intentar.' }].slice(-24));
         return;
       }
       const answer = [data.message, data.question].filter(Boolean).join(' ');
       setTurns((current) => [...current, { role: 'assistant' as const, text: answer, mode: data.mode, recommendations: data.recommendations }].slice(-24));
     } catch {
-      setError('No pudimos conectar con la asesoría. Tus criterios siguen en esta página; podés volver a intentar.');
-      setTurns((current) => [...current, { role: 'assistant' as const, text: 'La conexión no está disponible. Cuando querás, probá de nuevo; no se perdió lo que escribiste en los filtros.' }].slice(-24));
-    } finally { setBusy(false); }
+      setError('No pudimos conectar con la asesoría. La conversación y tus criterios siguen guardados; podés volver a intentar.');
+      setTurns((current) => [...current, { role: 'assistant' as const, text: 'La conexión no está disponible. Cuando querás, probá de nuevo; no se perdió la conversación.' }].slice(-24));
+    } finally { inFlight.current = false; setBusy(false); }
   }
 
   function clearConversation() {
@@ -135,50 +158,53 @@ export default function AdviceChat({ families, styles }: Props) {
   return <div className="container advice-page">
     <div className="advice-intro">
       <span className="eyebrow">DIGARI STUDIO / ASESORÍA DEMO</span>
-      <h1>Encontrá una opción que encaje.</h1>
-      <p className="advice-lede">Decinos cuánto querés invertir, qué equipo buscás y para qué lo vas a usar. Te mostramos hasta tres fichas sintéticas.</p>
+      <h1>Hablemos de lo que necesitás.</h1>
+      <p className="advice-lede">Escribí con tus palabras. Vamos a mantener tus preferencias durante la conversación y ajustar solo lo que cambie.</p>
     </div>
-    <div className="advice-layout">
-      <section className="advice-panel" aria-label="Criterios para pedir una recomendación">
-        <div className="advice-panel-heading"><div><span className="eyebrow">TU CONSULTA</span><h2>¿Qué equipo estás buscando?</h2></div><button className="button button-outline button-small" type="button" onClick={clearConversation}>Borrar chat local</button></div>
-        <form className="advice-form" onSubmit={submit}>
-          <label className="chat-composer-label" htmlFor="advice-message">Tu consulta <span className="micro-copy">máximo 240 caracteres</span></label>
-          <textarea id="advice-message" maxLength={240} rows={2} value={composer} onChange={(event) => setComposer(event.target.value)} placeholder="Ej.: Quiero una guitarra para empezar a practicar en casa." />
-          {error && <p className="notice notice-error" role="alert">{error}</p>}
-          <div className="advice-form-footer"><small>Asesoría demo: no usamos datos personales ni procesamos pedidos. La respuesta local sigue disponible si Gemini no responde.</small><button className="button" type="submit" disabled={busy || Boolean(budgetError)}>{busy ? 'Buscando…' : 'Enviar consulta'}</button></div>
 
-          <div className="advice-fields">
-            <label htmlFor="advice-budget">Presupuesto máximo (CRC)<input id="advice-budget" type="text" inputMode="numeric" autoComplete="off" maxLength={16} placeholder="Ej. 80 000" aria-invalid={Boolean(budgetError)} aria-describedby="advice-budget-help advice-budget-error" value={preferences.budgetCrc} onChange={(event) => change('budgetCrc', event.target.value)} /></label>
-            <label htmlFor="advice-family">Tipo de producto<select id="advice-family" value={preferences.family} onChange={(event) => change('family', event.target.value)}><option value="">Elegí un tipo</option>{families.map((family) => <option key={family} value={family}>{family}</option>)}</select></label>
-            <label htmlFor="advice-use">Uso principal<select id="advice-use" value={preferences.use} onChange={(event) => change('use', event.target.value)}><option value="">Elegí un uso</option>{USE_OPTIONS.map((option) => <option value={option.id} key={option.id}>{option.label}</option>)}</select></label>
-            <label htmlFor="advice-style">Estilo (opcional)<select id="advice-style" value={preferences.style} onChange={(event) => change('style', event.target.value)}><option value="">Cualquier estilo</option>{styles.map((style) => <option value={style} key={style}>{style}</option>)}</select></label>
-          </div>
-          <small id="advice-budget-help" className="micro-copy">Podés usar espacios, puntos o comas para separar miles. ₡0 es válido; vacío significa que aún falta definir el monto.</small>
-          {budgetError && <small id="advice-budget-error" className="field-error" role="alert">{budgetError}</small>}
-        </form>
-      </section>
-      <aside className="advice-side"><span className="eyebrow">IDEAS PARA EMPEZAR</span><h2>Probá con un ejemplo.</h2>
-        <div className="advice-examples">
-          <button type="button" className="example-chip" onClick={() => applyExample({ budget: '80 000', family: 'Guitarra acústica', use: 'iniciacion', style: 'folk', question: 'Busco algo sencillo para empezar a practicar en casa.' })}><strong>Guitarra acústica</strong><span>Hasta ₡80 000 · empezar</span></button>
-          <button type="button" className="example-chip" onClick={() => applyExample({ budget: '250 000', family: 'Interfaz', use: 'grabacion', style: 'estudio', question: 'Quiero armar un home studio básico.' })}><strong>Home studio</strong><span>Hasta ₡250 000 · grabar en casa</span></button>
+    <section className="advice-panel advice-chat-panel" aria-label="Conversación de asesoría">
+      <div className="advice-panel-heading">
+        <div><span className="eyebrow">ASESORÍA PERSONAL</span><h2>Tu conversación</h2></div>
+        <button className="button button-outline button-small" type="button" onClick={clearConversation} disabled={busy}>Empezar de nuevo</button>
+      </div>
+
+      <details className="advice-preferences">
+        <summary>Preferencias aprendidas <span>Opcionales · se aplican al próximo mensaje</span></summary>
+        <div className="advice-fields">
+          <label htmlFor="advice-budget">Presupuesto máximo (CRC)<input id="advice-budget" type="text" inputMode="numeric" autoComplete="off" maxLength={16} placeholder="Ej. 120 000" aria-invalid={Boolean(budgetError)} aria-describedby="advice-budget-help advice-budget-error" value={preferences.budgetCrc} onChange={(event) => change('budgetCrc', event.target.value)} /></label>
+          <label htmlFor="advice-family">Tipo de equipo<select id="advice-family" value={preferences.family} onChange={(event) => change('family', event.target.value)}><option value="">Sin preferencia</option>{families.map((family) => <option key={family} value={family}>{family}</option>)}</select></label>
+          <label htmlFor="advice-use">Uso principal<select id="advice-use" value={preferences.use} onChange={(event) => change('use', event.target.value)}><option value="">Sin preferencia</option>{USE_OPTIONS.map((option) => <option value={option.id} key={option.id}>{option.label}</option>)}</select></label>
+          <label htmlFor="advice-style">Estilo musical<select id="advice-style" value={preferences.style} onChange={(event) => change('style', event.target.value)}><option value="">Cualquier estilo</option>{styles.map((style) => <option value={style} key={style}>{style}</option>)}</select></label>
         </div>
-        <p className="micro-copy">El filtro del servidor considera presupuesto, tipo, existencias demo, compatibilidad y estilo. Gemini solo explica opciones candidatas ya filtradas.</p>
-        <Link className="text-button" href="/tienda">Abrir el catálogo completo →</Link>
-      </aside>
-    </div>
-    <section className="advice-conversation" aria-label="Conversación guardada en este navegador">
-      <div className="conversation-heading"><div><span className="eyebrow">CONVERSACIÓN</span><h2>Opciones y respuestas</h2></div><span className="micro-copy">Solo visible en este navegador</span></div>
-      <div className="chat-log" aria-live="polite" aria-relevant="additions text">{turns.map((turn, index) => <article className={`chat-bubble ${turn.role === 'user' ? 'chat-user' : 'chat-assistant'}`} key={`${index}-${turn.role}`}>
-        <div className="chat-meta"><strong>{turn.role === 'user' ? 'Vos' : 'Digari Studio'}</strong>{turn.role === 'assistant' && turn.mode && <span className={`mode-chip ${turn.mode}`}>{turn.mode === 'gemini' ? 'Gemini · en línea' : 'Asesoría local'}</span>}</div>
-        <p>{turn.text}</p>
-        {turn.recommendations?.length ? <div className="advice-recommendations">{turn.recommendations.map((item) => <article className="advice-recommendation" key={item.productId}>
-          <ProductImage productId={item.productId} productName={item.name} className="advice-product-image" />
-          <span className="product-meta">{item.family} · ficha demo</span><h3><Link href={item.href}>{item.name}</Link></h3>
-          <strong>{`₡${item.priceCrc.toLocaleString('es-CR')}`}</strong><p>{item.reason}</p>
-          <p className="micro-copy">Estilos: {item.style.join(' · ') || 'No indicado'}<br />Compatible con: {item.compatible.join(' · ') || 'Sin compatibilidad indicada'}<br />Existencias de demostración: {item.stockDemo}.</p>
-          <Link className="text-button" href={item.compareHref}>Comparar en la tienda →</Link>
-        </article>)}</div> : null}
-      </article>)}</div>
+        <small id="advice-budget-help" className="micro-copy">Podés usar espacios, puntos o comas. ₡0 es válido; vacío significa que todavía no definiste el monto.</small>
+        {budgetError && <small id="advice-budget-error" className="field-error" role="alert">{budgetError}</small>}
+      </details>
+
+      <div className="chat-log" ref={logRef} aria-live="polite" aria-relevant="additions text" aria-label="Mensajes de la conversación">
+        {turns.map((turn, index) => <article className={`chat-bubble ${turn.role === 'user' ? 'chat-user' : 'chat-assistant'}`} key={`${index}-${turn.role}`}>
+          <div className="chat-meta"><strong>{turn.role === 'user' ? 'Vos' : 'Digari Studio'}</strong>{turn.role === 'assistant' && turn.mode && <span className={`mode-chip ${turn.mode}`}>{turn.mode === 'gemini' ? 'Gemini · en línea' : 'Asesoría local'}</span>}</div>
+          <p>{turn.text}</p>
+          {turn.recommendations?.length ? <div className="advice-recommendations">{turn.recommendations.map((item) => <article className="advice-recommendation" key={item.productId}>
+            <ProductImage productId={item.productId} productName={item.name} className="advice-product-image" />
+            <span className="product-meta">{item.family} · ficha demo</span><h3><Link href={item.href}>{item.name}</Link></h3>
+            <strong>{`₡${item.priceCrc.toLocaleString('es-CR')}`}</strong><p>{item.reason}</p>
+            <p className="micro-copy">Estilos: {item.style.join(' · ') || 'No indicado'}<br />Compatible con: {item.compatible.join(' · ') || 'Sin compatibilidad indicada'}<br />Existencias de demostración: {item.stockDemo}.</p>
+            <Link className="text-button" href={item.compareHref}>Comparar en la tienda →</Link>
+          </article>)}</div> : null}
+        </article>)}
+        {busy && <div className="chat-typing" role="status">Digari está revisando el catálogo demo…</div>}
+      </div>
+
+      <form className="advice-composer" onSubmit={submit}>
+        <label htmlFor="advice-message">Escribí tu mensaje</label>
+        <div className="advice-composer-row">
+          <textarea id="advice-message" maxLength={240} rows={2} value={composer} onKeyDown={onComposerKeyDown} onChange={(event) => setComposer(event.target.value)} placeholder="Ej.: Busco una guitarra eléctrica para rock por ₡120 000" aria-describedby="advice-composer-help" />
+          <button className="button" type="submit" disabled={busy || !composer.trim() || Boolean(budgetError)}>{busy ? 'Enviando…' : 'Enviar'}</button>
+        </div>
+        <div className="advice-composer-meta"><small id="advice-composer-help">Enter envía · Shift+Enter agrega una línea · máximo 240 caracteres</small><small>Un envío por mensaje. No usamos datos personales ni procesamos pedidos.</small></div>
+        {error && <p className="notice notice-error" role="alert">{error}</p>}
+      </form>
     </section>
+    <p className="advice-private-note">La conversación se guarda en este navegador. Precios, existencias y productos son de demostración.</p>
   </div>;
 }

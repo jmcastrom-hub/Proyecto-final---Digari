@@ -1,0 +1,299 @@
+[
+  {
+    "viewport": "escritorio",
+    "route": "/",
+    "width": 1440,
+    "scroll": 1425,
+    "title": "DIGARI STUDIO / EQUIPO CON INTENCIÓN\nEncontrá el sonido que ya imaginás.\n\nUn espacio para explorar i",
+    "menu": true,
+    "overflow": false
+  },
+  {
+    "viewport": "escritorio",
+    "route": "/tienda",
+    "width": 1440,
+    "scroll": 1425,
+    "title": "CATÁLOGO SINTÉTICO\nEncontrá lo que suena a vos.\n\n15 opciones demo con compatibilidad, estilo y presu",
+    "menu": true,
+    "overflow": false
+  },
+  {
+    "viewport": "escritorio",
+    "route": "/productos/acustica-luz",
+    "width": 1440,
+    "scroll": 1425,
+    "title": "Tienda\n/\nGuitarra acústica\nFOTOGRAFÍA DE REFERENCIA · DATOS Y EXISTENCIAS DEMO\nInstrumentos / Guitar",
+    "menu": true,
+    "overflow": false
+  },
+  {
+    "viewport": "escritorio",
+    "route": "/promos",
+    "width": 1440,
+    "scroll": 1440,
+    "title": "COLECCIÓN DESTACADA · DATOS DEMO\nSelección para inspirarte.\n\nUna agrupación temática del catálogo fi",
+    "menu": true,
+    "overflow": false
+  },
+  {
+    "viewport": "escritorio",
+    "route": "/favoritos",
+    "width": 1440,
+    "scroll": 1425,
+    "title": "GUARDADOS EN ESTE DISPOSITIVO\nFavoritos\n\nTu lista permanece en este navegador; no requiere una cuent",
+    "menu": true,
+    "overflow": false
+  },
+  {
+    "viewport": "escritorio",
+    "route": "/carrito",
+    "width": 1440,
+    "scroll": 1440,
+    "title": "ANTES DE CONFIRMAR\nTu carrito demo.\n\nRevisá los artículos y condiciones de demostración.\n\n◌\nTu carri",
+    "menu": true,
+    "overflow": false
+  },
+  {
+    "viewport": "escritorio",
+    "route": "/estudio",
+    "width": 1440,
+    "scroll": 1440,
+    "title": "DIGARI STUDIO / ESTUDIO DE PRUEBA\nExplora antes de decidir.\n\nUna maqueta 3D procedural y herramienta",
+    "menu": true,
+    "overflow": false
+  },
+  {
+    "viewport": "escritorio",
+    "route": "/asesoria",
+    "width": 1440,
+    "scroll": 1425,
+    "title": "DIGARI STUDIO / ASESORÍA DEMO\nHablemos de lo que necesitás.\n\nEscribí con tus palabras. Vamos a mante",
+    "menu": true,
+    "overflow": false
+  },
+  {
+    "viewport": "escritorio",
+    "route": "/servicios",
+    "width": 1440,
+    "scroll": 1425,
+    "title": "ASESORÍA Y CUIDADO\nQue el equipo siga sonando.\n\nOpciones originales de asesoría junto a un flujo aca",
+    "menu": true,
+    "overflow": false
+  },
+  {
+    "viewport": "escritorio",
+    "route": "/seguimiento",
+    "width": 1440,
+    "scroll": 1425,
+    "title": "SEGUIMIENTO PRIVADO\nConsultá el estado.\n\nPedidos y servicios creados en este prototipo.\n\nESTADO DE U",
+    "menu": true,
+    "overflow": false
+  },
+  {
+    "viewport": "escritorio",
+    "route": "/contacto",
+    "width": 1440,
+    "scroll": 1425,
+    "title": "CANALES INFORMATIVOS\nHablemos de música.\n\nLa información siguiente fue reportada en la auditoría púb",
+    "menu": true,
+    "overflow": false
+  },
+  {
+    "viewport": "móvil",
+    "route": "/",
+    "width": 390,
+    "scroll": 390,
+    "title": "DIGARI STUDIO / EQUIPO CON INTENCIÓN\nEncontrá el sonido que ya imaginás.\n\nUn espacio para explorar i",
+    "menu": true,
+    "overflow": false
+  },
+  {
+    "viewport": "móvil",
+    "route": "/tienda",
+    "width": 390,
+    "scroll": 390,
+    "title": "CATÁLOGO SINTÉTICO\nEncontrá lo que suena a vos.\n\n15 opciones demo con compatibilidad, estilo y presu",
+    "menu": true,
+    "overflow": false
+  },
+  {
+    "viewport": "móvil",
+    "route": "/productos/acustica-luz",
+    "width": 390,
+    "scroll": 390,
+    "title": "Tienda\n/\nGuitarra acústica\nFOTOGRAFÍA DE REFERENCIA · DATOS Y EXISTENCIAS DEMO\nInstrumentos / Guitar",
+    "menu": true,
+    "overflow": false
+  },
+  {
+    "viewport": "móvil",
+    "route": "/promos",
+    "width": 390,
+    "scroll": 390,
+    "title": "COLECCIÓN DESTACADA · DATOS DEMO\nSelección para inspirarte.\n\nUna agrupación temática del catálogo fi",
+    "menu": true,
+    "overflow": false
+  },
+  {
+    "viewport": "móvil",
+    "route": "/favoritos",
+    "width": 390,
+    "scroll": 390,
+    "title": "GUARDADOS EN ESTE DISPOSITIVO\nFavoritos\n\nTu lista permanece en este navegador; no requiere una cuent",
+    "menu": true,
+    "overflow": false
+  },
+  {
+    "viewport": "móvil",
+    "route": "/carrito",
+    "width": 390,
+    "scroll": 390,
+    "title": "ANTES DE CONFIRMAR\nTu carrito demo.\n\nRevisá los artículos y condiciones de demostración.\n\n◌\nTu carri",
+    "menu": true,
+    "overflow": false
+  },
+  {
+    "viewport": "móvil",
+    "route": "/estudio",
+    "width": 390,
+    "scroll": 390,
+    "title": "DIGARI STUDIO / ESTUDIO DE PRUEBA\nExplora antes de decidir.\n\nUna maqueta 3D procedural y herramienta",
+    "menu": true,
+    "overflow": false
+  },
+  {
+    "viewport": "móvil",
+    "route": "/asesoria",
+    "width": 390,
+    "scroll": 390,
+    "title": "DIGARI STUDIO / ASESORÍA DEMO\nHablemos de lo que necesitás.\n\nEscribí con tus palabras. Vamos a mante",
+    "menu": true,
+    "overflow": false
+  },
+  {
+    "viewport": "móvil",
+    "route": "/servicios",
+    "width": 390,
+    "scroll": 390,
+    "title": "ASESORÍA Y CUIDADO\nQue el equipo siga sonando.\n\nOpciones originales de asesoría junto a un flujo aca",
+    "menu": true,
+    "overflow": false
+  },
+  {
+    "viewport": "móvil",
+    "route": "/seguimiento",
+    "width": 390,
+    "scroll": 390,
+    "title": "SEGUIMIENTO PRIVADO\nConsultá el estado.\n\nPedidos y servicios creados en este prototipo.\n\nESTADO DE U",
+    "menu": true,
+    "overflow": false
+  },
+  {
+    "viewport": "móvil",
+    "route": "/contacto",
+    "width": 390,
+    "scroll": 390,
+    "title": "CANALES INFORMATIVOS\nHablemos de música.\n\nLa información siguiente fue reportada en la auditoría púb",
+    "menu": true,
+    "overflow": false
+  },
+  {
+    "viewport": "200%",
+    "route": "/",
+    "width": 720,
+    "scroll": 705,
+    "title": "DIGARI STUDIO / EQUIPO CON INTENCIÓN\nEncontrá el sonido que ya imaginás.\n\nUn espacio para explorar i",
+    "menu": true,
+    "overflow": false
+  },
+  {
+    "viewport": "200%",
+    "route": "/tienda",
+    "width": 720,
+    "scroll": 705,
+    "title": "CATÁLOGO SINTÉTICO\nEncontrá lo que suena a vos.\n\n15 opciones demo con compatibilidad, estilo y presu",
+    "menu": true,
+    "overflow": false
+  },
+  {
+    "viewport": "200%",
+    "route": "/productos/acustica-luz",
+    "width": 720,
+    "scroll": 705,
+    "title": "Tienda\n/\nGuitarra acústica\nFOTOGRAFÍA DE REFERENCIA · DATOS Y EXISTENCIAS DEMO\nInstrumentos / Guitar",
+    "menu": true,
+    "overflow": false
+  },
+  {
+    "viewport": "200%",
+    "route": "/promos",
+    "width": 720,
+    "scroll": 705,
+    "title": "COLECCIÓN DESTACADA · DATOS DEMO\nSelección para inspirarte.\n\nUna agrupación temática del catálogo fi",
+    "menu": true,
+    "overflow": false
+  },
+  {
+    "viewport": "200%",
+    "route": "/favoritos",
+    "width": 720,
+    "scroll": 705,
+    "title": "GUARDADOS EN ESTE DISPOSITIVO\nFavoritos\n\nTu lista permanece en este navegador; no requiere una cuent",
+    "menu": true,
+    "overflow": false
+  },
+  {
+    "viewport": "200%",
+    "route": "/carrito",
+    "width": 720,
+    "scroll": 705,
+    "title": "ANTES DE CONFIRMAR\nTu carrito demo.\n\nRevisá los artículos y condiciones de demostración.\n\n◌\nTu carri",
+    "menu": true,
+    "overflow": false
+  },
+  {
+    "viewport": "200%",
+    "route": "/estudio",
+    "width": 720,
+    "scroll": 705,
+    "title": "DIGARI STUDIO / ESTUDIO DE PRUEBA\nExplora antes de decidir.\n\nUna maqueta 3D procedural y herramienta",
+    "menu": true,
+    "overflow": false
+  },
+  {
+    "viewport": "200%",
+    "route": "/asesoria",
+    "width": 720,
+    "scroll": 705,
+    "title": "DIGARI STUDIO / ASESORÍA DEMO\nHablemos de lo que necesitás.\n\nEscribí con tus palabras. Vamos a mante",
+    "menu": true,
+    "overflow": false
+  },
+  {
+    "viewport": "200%",
+    "route": "/servicios",
+    "width": 720,
+    "scroll": 705,
+    "title": "ASESORÍA Y CUIDADO\nQue el equipo siga sonando.\n\nOpciones originales de asesoría junto a un flujo aca",
+    "menu": true,
+    "overflow": false
+  },
+  {
+    "viewport": "200%",
+    "route": "/seguimiento",
+    "width": 720,
+    "scroll": 705,
+    "title": "SEGUIMIENTO PRIVADO\nConsultá el estado.\n\nPedidos y servicios creados en este prototipo.\n\nESTADO DE U",
+    "menu": true,
+    "overflow": false
+  },
+  {
+    "viewport": "200%",
+    "route": "/contacto",
+    "width": 720,
+    "scroll": 705,
+    "title": "CANALES INFORMATIVOS\nHablemos de música.\n\nLa información siguiente fue reportada en la auditoría púb",
+    "menu": true,
+    "overflow": false
+  }
+]

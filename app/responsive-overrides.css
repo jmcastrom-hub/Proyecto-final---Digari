@@ -1,0 +1,14 @@
+/* Switch to the compact navigation before the desktop links can push Bag off-screen. */
+@media (max-width: 1240px) {
+  .desktop-nav { display: none; }
+  .mobile-nav { display: block; }
+  .header-inner { gap: 12px; }
+  .cart-link { margin-left: auto; flex: 0 0 auto; white-space: nowrap; }
+  .mobile-nav { flex: 0 0 auto; }
+  .mobile-nav nav { right: 0; z-index: 50; }
+}
+
+@media (max-width: 760px) {
+  .header-inner { width: calc(100% - 28px); gap: 8px; }
+  .mobile-nav nav { max-width: calc(100vw - 24px); }
+}

@@ -4,6 +4,7 @@ import './studio.css';
 import './advice.css';
 import './redesign.css';
 import './product-images.css';
+import './responsive-overrides.css';
 import { SiteHeader } from '@/components/site-header';
 import { SiteFooter } from '@/components/site-footer';
 
