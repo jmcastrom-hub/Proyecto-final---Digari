@@ -73,3 +73,7 @@ Los resultados exactos de instalacion, comandos, seed, browser y demo automatiza
 | RX-07 | Actualizar especificación y ciclos IA, guardar commit y publicar rama/PR | RX-01…RX-06 | Codex; revisión del estudiante pendiente | Rama publicada; PR #1 abierto hacia `main`; CI pendiente de resultado | `npm test`, lint, build, smoke API 11 rutas, capturas y `git diff --cached --check`; sin `.env.local`, `.env.example`, consigna/guía/PDF | 107a310 |
 
 El objetivo de cinco minutos continúa siendo hipótesis: no se han reclutado participantes ni medido una línea base comparable de tasa de éxito. La revisión manual del estudiante, tacto en un teléfono físico, escucha en equipo real y llamada Gemini con clave activa siguen pendientes salvo que una evidencia posterior los compruebe expresamente.
+
+| RX-08 | Corregir lectura y geometría del visor; comparar la rama con su base | RX-02, RX-03, RX-06 | Codex; aprobación del estudiante pendiente | Verificado con Chrome Headless 157 | 11 rutas × escritorio/móvil/viewport ampliado; 15 mallas WebGL; continuidad de chat por suite y API; `npm test` 31/31, lint, build y smoke API; antes/después y galería: `docs/evidencia-acabado/` | commit de acabado visual del PR #1 |
+
+Evidencia detallada, límites y tareas manuales vigentes: `docs/acabado-visual.md`. La comparación antes corresponde al commit base `844fc89`; los modelos, precios, pedidos y conversaciones demo existentes se conservaron.

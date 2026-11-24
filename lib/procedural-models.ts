@@ -26,7 +26,7 @@ export function createProductModel(ref: string): THREE.Group {
   const nickel = material('#bbc0c1', 0.78, 0.25);
   const rubber = material('#18191a', 0.02, 0.87);
   const screen = material('#a2b4a0', 0.08, 0.3);
-  const mesh = (geometry: THREE.BufferGeometry, mat: THREE.Material, x = 0, y = 0, z = 0) => {
+  const mesh = (geometry: THREE.BufferGeometry, mat: THREE.Material | THREE.Material[], x = 0, y = 0, z = 0) => {
     const item = new THREE.Mesh(geometry, mat); item.position.set(x, y, z); group.add(item); return item;
   };
   const box = (w: number, h: number, d: number, mat: THREE.Material, x = 0, y = 0, z = 0, bevel = 0) => {
@@ -55,21 +55,22 @@ export function createProductModel(ref: string): THREE.Group {
   const line = (points: THREE.Vector3[], radius: number, mat: THREE.Material, segments = 48) =>
     mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(points), segments, radius, 8, false), mat);
   const tuner = (x: number, y: number, z: number) => {
-    disc(0.045, 0.075, nickel, x, y, z);
-    const stem = cylinder(0.026, 0.16, nickel, x, y, z - 0.09, 12); stem.rotation.x = Math.PI / 2;
-    sphere(0.075, ivory, x + Math.sign(x) * 0.12, y, z - 0.19);
+    const side = Math.sign(x);
+    disc(0.043, 0.018, nickel, x, y, z + 0.07);
+    const stem = cylinder(0.022, 0.14, nickel, x + side * 0.055, y, z, 12); stem.rotation.z = Math.PI / 2;
+    box(0.12, 0.065, 0.085, ivory, x + side * 0.13, y, z - 0.015, 0.024);
   };
   const woodTexture = () => {
-    const width = 192; const height = 384; const data = new Uint8Array(width * height * 4);
+    const width = 256; const height = 512; const data = new Uint8Array(width * height * 4);
     for (let y = 0; y < height; y++) for (let x = 0; x < width; x++) {
-      const warp = Math.sin(y * 0.018) * 3.4 + Math.sin(y * 0.047) * 1.2;
-      const grain = Math.sin((x + warp) * 0.14) * 0.82 + Math.sin((x + warp * 0.7) * 0.58) * 0.18;
-      const pores = Math.sin((x + Math.sin(y * 0.031) * 1.2) * 0.72) * 1.2;
-      const light = 158 + grain * 8 + pores + Math.sin(y * 0.017) * 2;
+      const warp = Math.sin(y * 0.011) * 4.2 + Math.sin(y * 0.033) * 1.5;
+      const grain = Math.sin((x + warp) * 0.07) * 1.15 + Math.sin((x + warp * 0.62) * 0.29) * 0.55;
+      const pores = Math.sin((x + Math.sin(y * 0.019) * 1.4) * 0.41) * 0.7;
+      const light = 139 + grain * 23 + pores * 3 + Math.sin(y * 0.009) * 5.5;
       const i = (y * width + x) * 4;
-      data[i] = Math.max(54, Math.min(238, light * 1.08));
-      data[i + 1] = Math.max(32, Math.min(204, light * 0.73));
-      data[i + 2] = Math.max(18, Math.min(155, light * 0.47)); data[i + 3] = 255;
+      data[i] = Math.max(54, Math.min(238, light * 0.99));
+      data[i + 1] = Math.max(32, Math.min(204, light * 0.66));
+      data[i + 2] = Math.max(18, Math.min(155, light * 0.45)); data[i + 3] = 255;
     }
     const texture = new THREE.DataTexture(data, width, height, THREE.RGBAFormat);
     texture.colorSpace = THREE.SRGBColorSpace; texture.wrapS = THREE.RepeatWrapping; texture.wrapT = THREE.RepeatWrapping;
@@ -85,28 +86,33 @@ export function createProductModel(ref: string): THREE.Group {
     const grain = woodTexture(); const topWood = new THREE.MeshStandardMaterial({ map: grain, color: '#fff0dc', roughness: 0.52 });
     const neckWood = new THREE.MeshStandardMaterial({ map: grain, color: '#d6a36c', roughness: 0.58 });
     const body = new THREE.Shape();
-    body.moveTo(0, -1.04); body.bezierCurveTo(0.55, -1.02, 0.82, -0.8, 0.78, -0.43);
-    body.bezierCurveTo(0.75, -0.18, 0.56, -0.04, 0.47, 0.08); body.bezierCurveTo(0.77, 0.34, 0.74, 0.69, 0.60, 0.78);
-    body.bezierCurveTo(0.3, 0.91, 0.14, 0.70, 0, 0.68); body.bezierCurveTo(-0.14, 0.70, -0.3, 0.91, -0.60, 0.78);
-    body.bezierCurveTo(-0.74, 0.69, -0.77, 0.34, -0.47, 0.08); body.bezierCurveTo(-0.56, -0.04, -0.75, -0.18, -0.78, -0.43);
-    body.bezierCurveTo(-0.82, -0.8, -0.55, -1.02, 0, -1.04); body.closePath();
-    const bodyGeometry = new THREE.ExtrudeGeometry(body, { depth: 0.2, bevelEnabled: true, bevelSegments: 5, bevelSize: 0.045, bevelThickness: 0.035, steps: 1, curveSegments: 16 });
-    const bodyMesh = mesh(bodyGeometry, isAcoustic || isUke ? topWood : material('#453c36', 0.08, 0.48), 0, 0, -0.12); bodyMesh.scale.set(scale, scale, isUke ? 0.72 : 1);
-    // Rounded binding and a contrasting edge make the body read as a finished instrument from the side.
-    const edge = mesh(new THREE.ExtrudeGeometry(body, { depth: 0.035, bevelEnabled: false, curveSegments: 16 }), isAcoustic || isUke ? woodEdge : dark, 0, 0, -0.15); edge.scale.set(scale, scale, 1);
-    box(0.22 * scale, neckLength, 0.13 * scale, neckWood, 0, neckCenter, 0.01);
-    box(0.245 * scale, neckLength * 0.99, 0.045 * scale, dark, 0, neckCenter, 0.098 * scale);
-    box(0.27 * scale, 0.035 * scale, 0.075 * scale, ivory, 0, neckBase + neckLength + 0.01 * scale, 0.095 * scale);
+    body.moveTo(0, -1.06); body.bezierCurveTo(0.56, -1.04, 0.84, -0.85, 0.82, -0.49);
+    body.bezierCurveTo(0.80, -0.21, 0.58, -0.04, 0.50, 0.08); body.bezierCurveTo(0.78, 0.35, 0.73, 0.70, 0.55, 0.79);
+    body.bezierCurveTo(0.30, 0.92, 0.14, 0.76, 0, 0.70); body.bezierCurveTo(-0.14, 0.76, -0.30, 0.92, -0.55, 0.79);
+    body.bezierCurveTo(-0.73, 0.70, -0.78, 0.35, -0.50, 0.08); body.bezierCurveTo(-0.58, -0.04, -0.80, -0.21, -0.82, -0.49);
+    body.bezierCurveTo(-0.84, -0.85, -0.56, -1.04, 0, -1.06); body.closePath();
+    const soundY = -0.16 * scale;
+    if (isAcoustic || isUke) { const opening = new THREE.Path(); opening.absellipse(0, soundY, 0.19 * scale, 0.19 * scale, 0, Math.PI * 2, true); body.holes.push(opening); }
+    const bodyDepth = 0.28; const bodyBack = -0.16;
+    const bodyGeometry = new THREE.ExtrudeGeometry(body, { depth: bodyDepth, bevelEnabled: true, bevelSegments: 6, bevelSize: 0.055, bevelThickness: 0.045, steps: 1, curveSegments: 32 });
+    const bodyFace = isAcoustic || isUke ? topWood : material('#453c36', 0.08, 0.48);
+    const bodyMesh = mesh(bodyGeometry, [isAcoustic || isUke ? woodEdge : dark, bodyFace, bodyFace], 0, 0, bodyBack); bodyMesh.scale.set(scale, scale, isUke ? 0.72 : 1);
+    // A narrow binding follows the rounded perimeter; face, bevel and side use distinct materials.
+    const outline = body.getPoints(128).map((point) => new THREE.Vector3(point.x * scale, point.y * scale, 0.165));
+    mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(outline, true), 192, 0.012 * scale, 8, true), isAcoustic || isUke ? maple : nickel);
+    box(0.235 * scale, neckLength, 0.16 * scale, neckWood, 0, neckCenter, 0.015, 0.035 * scale);
+    box(0.245 * scale, neckLength * 0.99, 0.05 * scale, dark, 0, neckCenter, 0.118 * scale, 0.012 * scale);
+    box(0.27 * scale, 0.04 * scale, 0.085 * scale, ivory, 0, neckBase + neckLength + 0.01 * scale, 0.112 * scale, 0.012 * scale);
     // The headstock is a tapered shape with a visible front face and six (or four) individual tuner posts.
     const head = new THREE.Shape();
     head.moveTo(-0.12 * scale, headBase); head.lineTo(-0.18 * scale, headBase + 0.31 * scale); head.quadraticCurveTo(-0.2 * scale, headBase + headHeight, 0, headBase + headHeight);
     head.quadraticCurveTo(0.2 * scale, headBase + headHeight, 0.18 * scale, headBase + 0.31 * scale); head.lineTo(0.12 * scale, headBase); head.closePath();
-    mesh(new THREE.ExtrudeGeometry(head, { depth: 0.12 * scale, bevelEnabled: true, bevelSegments: 3, bevelSize: 0.025 * scale, bevelThickness: 0.02 * scale }), isAcoustic || isUke ? maple : dark, 0, 0, -0.02);
+    mesh(new THREE.ExtrudeGeometry(head, { depth: 0.14 * scale, bevelEnabled: true, bevelSegments: 5, bevelSize: 0.035 * scale, bevelThickness: 0.028 * scale, curveSegments: 16 }), isAcoustic || isUke ? maple : dark, 0, 0, -0.02);
     const nutY = neckBase + neckLength - 0.01 * scale; const endY = headBase + headHeight * 0.86;
     for (let i = 0; i < stringCount; i++) {
       const x = (i / (stringCount - 1) - 0.5) * 0.16 * scale;
       const radius = isBass ? 0.009 : 0.006;
-      const wire = cylinder(radius, endY + 0.72 * scale, nickel, x, (endY - 0.72 * scale) / 2, 0.225 * scale, 8);
+      const wire = cylinder(radius, endY + 0.72 * scale, nickel, x, (endY - 0.72 * scale) / 2, 0.26 * scale, 8);
       if (isUke) wire.material = material('#d8c9a8', 0.12, 0.55);
       disc(0.018 * scale, 0.03 * scale, nickel, x, -0.72 * scale, 0.245 * scale);
       // Short, readable fret spacing follows the equal-temperament fret formula.
@@ -127,15 +133,58 @@ export function createProductModel(ref: string): THREE.Group {
       const side = i < stringCount / 2 ? -1 : 1; const row = i % Math.ceil(stringCount / 2);
       tuner(side * 0.2 * scale, headBase + (0.12 + row * (isUke ? 0.16 : 0.13)) * scale, 0.06 * scale);
     }
-    // The bridge and saddle anchor every string at the body end.
-    box(0.48 * scale, 0.075 * scale, 0.12 * scale, isAcoustic || isUke ? woodEdge : nickel, 0, -0.72 * scale, 0.19 * scale);
-    box(0.43 * scale, 0.018 * scale, 0.035 * scale, ivory, 0, -0.67 * scale, 0.255 * scale);
+    // The shaped bridge and raised saddle anchor every string at the body end.
     if (isAcoustic || isUke) {
-      const soundY = -0.16 * scale; const soundZ = 0.095 * scale;
-      disc(0.185 * scale, 0.012 * scale, black, 0, soundY, soundZ);
-      ring(0.204 * scale, 0.016 * scale, woodEdge, 0, soundY, soundZ + 0.012 * scale);
-      ring(0.232 * scale, 0.008 * scale, brass, 0, soundY, soundZ + 0.009 * scale);
-      ring(0.25 * scale, 0.006 * scale, ivory, 0, soundY, soundZ + 0.007 * scale);
+      const bridge = new THREE.Shape();
+      bridge.moveTo(-0.22 * scale, -0.80 * scale); bridge.quadraticCurveTo(-0.29 * scale, -0.80 * scale, -0.28 * scale, -0.72 * scale);
+      bridge.lineTo(-0.23 * scale, -0.61 * scale); bridge.quadraticCurveTo(0, -0.66 * scale, 0.23 * scale, -0.61 * scale);
+      bridge.lineTo(0.28 * scale, -0.72 * scale); bridge.quadraticCurveTo(0.29 * scale, -0.80 * scale, 0.22 * scale, -0.80 * scale);
+      bridge.quadraticCurveTo(0, -0.73 * scale, -0.22 * scale, -0.80 * scale); bridge.closePath();
+      mesh(new THREE.ExtrudeGeometry(bridge, { depth: 0.12 * scale, bevelEnabled: true, bevelSegments: 5, bevelSize: 0.022 * scale, bevelThickness: 0.018 * scale }), woodEdge, 0, 0, 0.125 * scale);
+      box(0.43 * scale, 0.025 * scale, 0.05 * scale, ivory, 0, -0.66 * scale, 0.265 * scale, 0.01 * scale);
+    } else {
+      box(0.50 * scale, 0.09 * scale, 0.15 * scale, nickel, 0, -0.72 * scale, 0.20 * scale, 0.035 * scale);
+      box(0.44 * scale, 0.025 * scale, 0.045 * scale, ivory, 0, -0.67 * scale, 0.275 * scale, 0.01 * scale);
+    }
+    if (isAcoustic || isUke) {
+      const soundZ = 0.16 * scale;
+      // The soundboard has a true cut-out. This dark inner well sits well behind its rim, not on top of the face.
+      disc(0.175 * scale, 0.018 * scale, black, 0, soundY, -0.025 * scale);
+      ring(0.196 * scale, 0.012 * scale, woodEdge, 0, soundY, soundZ + 0.006 * scale);
+      ring(0.218 * scale, 0.009 * scale, maple, 0, soundY, soundZ + 0.009 * scale);
+      ring(0.239 * scale, 0.006 * scale, ivory, 0, soundY, soundZ + 0.006 * scale);
+      if (isAcoustic) {
+        // Fine hand-drawn procedural grain makes the illustrative soundboard read as wood at normal viewing size.
+        const lanes = [
+          { x: 0.29, lo: -0.98, hi: 0.68 }, { x: 0.40, lo: -0.97, hi: 0.67 },
+          { x: 0.51, lo: -0.94, hi: 0.58 }, { x: 0.61, lo: -0.91, hi: 0.35 },
+        ];
+        for (const lane of lanes) for (const side of [-1, 1]) {
+          const intervals = [[Math.max(-0.56, lane.lo), Math.min(0.56, lane.hi)]] as const;
+          for (const [from, to] of intervals) {
+            if (to <= from) continue;
+            const points: THREE.Vector3[] = [];
+            for (let step = 0; step <= 18; step++) {
+              const y = from + ((to - from) * step) / 18;
+              const x = side * lane.x + Math.sin(y * 15 + lane.x * 9) * 0.006;
+              points.push(new THREE.Vector3(x * scale, y * scale, 0.18 * scale));
+            }
+            const grain = new THREE.Line(
+              new THREE.BufferGeometry().setFromPoints(points),
+              new THREE.LineBasicMaterial({ color: lane.x > 0.4 ? '#8c5c3d' : '#a97550' }),
+            );
+            group.add(grain);
+          }
+        }
+      }
+      // A small end pin, rounded heel and center seam give the back a separate readable construction.
+      box(0.27 * scale, 0.30 * scale, 0.05 * scale, woodEdge, 0, 0.67 * scale, bodyBack - 0.075, 0.045 * scale);
+      box(0.018 * scale, 1.50 * scale, 0.012 * scale, woodEdge, 0, -0.12 * scale, bodyBack - 0.055);
+      sphere(0.075 * scale, nickel, 0, -1.00 * scale, 0.015);
+      const backWood = material('#925b3a', 0, 0.58);
+      disc(0.195 * scale, 0.02 * scale, backWood, 0, soundY, -0.207 * scale);
+      box(0.62 * scale, 0.026 * scale, 0.012 * scale, maple, 0, soundY + 0.25 * scale, bodyBack - 0.055);
+      box(0.62 * scale, 0.026 * scale, 0.012 * scale, maple, 0, soundY - 0.25 * scale, bodyBack - 0.055);
       for (let i = 0; i < 6; i++) sphere(0.021 * scale, black, -0.19 * scale + i * 0.076 * scale, -0.73 * scale, 0.25 * scale);
       // A simple striped inlay reads as figured wood without claiming a photographed grain.
       for (let i = 0; i < 3; i++) box(0.32 * scale, 0.008 * scale, 0.006 * scale, brass, 0, -0.48 * scale + i * 0.022 * scale, 0.267 * scale);
@@ -157,6 +206,8 @@ export function createProductModel(ref: string): THREE.Group {
     }
     // Strap buttons sit on both body horns/tail; the acoustic back and electric body keep real depth.
     for (const x of [-0.54, 0.54]) { sphere(0.055 * scale, nickel, x * scale, 0.45 * scale, 0.015); sphere(0.055 * scale, nickel, x * scale, -0.91 * scale, 0.015); }
+    // Guitars are presented horizontally, like an instrument on a workbench, with the neck extending right.
+    group.rotation.z = -Math.PI / 2;
   };
 
   const connector = (origin: THREE.Vector3, direction: THREE.Vector3) => {

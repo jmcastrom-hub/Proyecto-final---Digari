@@ -1,0 +1,140 @@
+{
+  "models": [
+    {
+      "id": "acustica-luz",
+      "canvas": true,
+      "width": 1104,
+      "height": 558,
+      "webgl": true,
+      "heading": "Yamaha · guitarra acústica ilustrativa",
+      "sideAndRearCanvasStable": true
+    },
+    {
+      "id": "electrica-bruma",
+      "canvas": true,
+      "width": 1104,
+      "height": 558,
+      "webgl": true,
+      "heading": "Squier · guitarra eléctrica ilustrativa",
+      "sideAndRearCanvasStable": true
+    },
+    {
+      "id": "bajo-marea",
+      "canvas": true,
+      "width": 1104,
+      "height": 558,
+      "webgl": true,
+      "heading": "Ibanez · bajo eléctrico ilustrativo",
+      "sideAndRearCanvasStable": true
+    },
+    {
+      "id": "teclado-nube",
+      "canvas": true,
+      "width": 1104,
+      "height": 558,
+      "webgl": true,
+      "heading": "Casio · teclado portátil ilustrativo",
+      "sideAndRearCanvasStable": true
+    },
+    {
+      "id": "ukelele-sol",
+      "canvas": true,
+      "width": 1104,
+      "height": 558,
+      "webgl": true,
+      "heading": "Kala · ukelele soprano ilustrativo",
+      "sideAndRearCanvasStable": true
+    },
+    {
+      "id": "flauta-rio",
+      "canvas": true,
+      "width": 1104,
+      "height": 558,
+      "webgl": true,
+      "heading": "Yamaha · flauta dulce ilustrativa",
+      "sideAndRearCanvasStable": true
+    },
+    {
+      "id": "cuerdas-onda",
+      "canvas": true,
+      "width": 1104,
+      "height": 558,
+      "webgl": true,
+      "heading": "D’Addario · juego de cuerdas ilustrativo",
+      "sideAndRearCanvasStable": true
+    },
+    {
+      "id": "cable-pulso",
+      "canvas": true,
+      "width": 1104,
+      "height": 558,
+      "webgl": true,
+      "heading": "Hosa · cable de instrumento ilustrativo",
+      "sideAndRearCanvasStable": true
+    },
+    {
+      "id": "cana-viento",
+      "canvas": true,
+      "width": 1104,
+      "height": 558,
+      "webgl": true,
+      "heading": "Vandoren · caña ilustrativa",
+      "sideAndRearCanvasStable": true
+    },
+    {
+      "id": "microfono-claro",
+      "canvas": true,
+      "width": 1104,
+      "height": 558,
+      "webgl": true,
+      "heading": "Behringer · micrófono dinámico ilustrativo",
+      "sideAndRearCanvasStable": true
+    },
+    {
+      "id": "monitor-alfar",
+      "canvas": true,
+      "width": 1104,
+      "height": 558,
+      "webgl": true,
+      "heading": "PreSonus · monitor de estudio ilustrativo",
+      "sideAndRearCanvasStable": true
+    },
+    {
+      "id": "parlante-brisa",
+      "canvas": true,
+      "width": 1104,
+      "height": 558,
+      "webgl": true,
+      "heading": "Behringer · parlante activo ilustrativo",
+      "sideAndRearCanvasStable": true
+    },
+    {
+      "id": "controlador-eco",
+      "canvas": true,
+      "width": 1104,
+      "height": 558,
+      "webgl": true,
+      "heading": "Numark · controlador DJ ilustrativo",
+      "sideAndRearCanvasStable": true
+    },
+    {
+      "id": "audifonos-senda",
+      "canvas": true,
+      "width": 1104,
+      "height": 558,
+      "webgl": true,
+      "heading": "Audio-Technica · audífonos ilustrativos",
+      "sideAndRearCanvasStable": true
+    },
+    {
+      "id": "interfaz-faro",
+      "canvas": true,
+      "width": 1104,
+      "height": 558,
+      "webgl": true,
+      "heading": "M-Audio · interfaz de audio ilustrativa",
+      "sideAndRearCanvasStable": true
+    }
+  ],
+  "heavyResourcesAfterUse": []
+}

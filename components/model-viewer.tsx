@@ -18,14 +18,14 @@ export default function ModelViewer({ modelRef, name, imageSrc }: Props) {
   const zoomRef = useRef(1);
   const [fallback, setFallback] = useState(false);
   const [zoom, setZoom] = useState(1);
-  const [angle, setAngle] = useState<Angle>({ x: 0.04, y: 0.18 });
-  const angleRef = useRef<Angle>({ x: 0.04, y: 0.18 });
+  const [angle, setAngle] = useState<Angle>({ x: 0.2, y: 0.5 });
+  const angleRef = useRef<Angle>({ x: 0.2, y: 0.5 });
   const rotationFrame = useRef(0);
   const pendingDelta = useRef({ x: 0, y: 0 });
   const pointer = useRef<{ x: number; y: number } | null>(null);
 
   const updateAngle = (next: Angle) => { angleRef.current = next; setAngle(next); };
-  const resetView = useCallback(() => { updateAngle({ x: 0.04, y: 0.18 }); setZoom(1); }, []);
+  const resetView = useCallback(() => { updateAngle({ x: 0.2, y: 0.5 }); setZoom(1); }, []);
 
   useEffect(() => {
     let stopped = false; let visible = true;
@@ -43,15 +43,16 @@ export default function ModelViewer({ modelRef, name, imageSrc }: Props) {
       try {
         scene = new THREE.Scene(); scene.background = new THREE.Color('#e8dfd2');
         camera = new THREE.PerspectiveCamera(34, 1, 0.1, 80);
-        scene.add(new THREE.HemisphereLight('#fff8ed', '#766355', 2.45));
-        const key = new THREE.DirectionalLight('#fff0dc', 2.8); key.position.set(3, 5, 5); scene.add(key);
-        const fill = new THREE.DirectionalLight('#dfc19a', 1.45); fill.position.set(-4, 1, -3); scene.add(fill);
+        scene.add(new THREE.HemisphereLight('#fff8ed', '#766355', 2.15));
+        const key = new THREE.DirectionalLight('#fff0dc', 3.1); key.position.set(4, 2.5, 4); scene.add(key);
+        const fill = new THREE.DirectionalLight('#dfc19a', 1.4); fill.position.set(-4, 1, -3); scene.add(fill);
+        const rim = new THREE.DirectionalLight('#f2c98e', 1.0); rim.position.set(-3, 3, 5); scene.add(rim);
 
         model = createProductModel(modelRef);
         const bounds = new THREE.Box3().setFromObject(model);
         const center = bounds.getCenter(new THREE.Vector3());
         const size = bounds.getSize(new THREE.Vector3());
-        model.position.sub(center); model.rotation.set(angleRef.current.x, angleRef.current.y, 0);
+        model.position.sub(center); model.rotation.set(angleRef.current.x, angleRef.current.y, model.rotation.z);
         modelSlot.current = model; scene.add(model);
 
         const shadowData = new Uint8Array(64 * 64 * 4);
@@ -68,9 +69,15 @@ export default function ModelViewer({ modelRef, name, imageSrc }: Props) {
           if (!camera || !mount) return;
           const width = Math.max(1, mount.clientWidth); const height = Math.max(1, mount.clientHeight);
           const aspect = width / height; camera.aspect = aspect; camera.updateProjectionMatrix();
-          const verticalFov = THREE.MathUtils.degToRad(camera.fov / 2);
-          const frameWidth = Math.max(size.x, size.z);
-          fitDistanceRef.current = Math.max(size.y, frameWidth / Math.max(0.5, aspect)) / (2 * Math.tan(verticalFov)) * 1.18;
+          const verticalHalfFov = THREE.MathUtils.degToRad(camera.fov / 2);
+          const horizontalHalfFov = Math.atan(Math.tan(verticalHalfFov) * aspect);
+          // Fit the rotated envelope, not only the unrotated front: the whole item stays in frame at any yaw.
+          const rotatedWidth = Math.hypot(size.x, size.z);
+          const rotatedHeight = Math.hypot(size.y, size.z);
+          fitDistanceRef.current = Math.max(
+            rotatedHeight / (2 * Math.tan(verticalHalfFov)),
+            rotatedWidth / (2 * Math.tan(horizontalHalfFov)),
+          ) * 1.28;
           camera.position.set(0, 0, fitDistanceRef.current / zoomRef.current); camera.lookAt(0, 0, 0);
         };
         fitCamera();
@@ -78,6 +85,8 @@ export default function ModelViewer({ modelRef, name, imageSrc }: Props) {
         renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false, powerPreference: 'low-power' });
         renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.2));
         renderer.outputColorSpace = THREE.SRGBColorSpace;
+        renderer.toneMapping = THREE.ACESFilmicToneMapping;
+        renderer.toneMappingExposure = 1.05;
         renderer.setSize(Math.max(1, mount.clientWidth), Math.max(1, mount.clientHeight), false);
         rendererRef.current = renderer;
         mount.replaceChildren(renderer.domElement);

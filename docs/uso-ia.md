@@ -53,6 +53,17 @@
 - **Revisión humana:** pendiente. Revisar escucha en equipo real, tacto en teléfono, fallback visual, claridad de contenidos y guion de demo. Gemini en línea también pendiente por falta de clave activa.
 - **Commit asociado:** P4 — Completar validación y documentación (SHA indicado en la entrega).
 
+## Ciclo 5 · Revisión visual de Digari Studio
+
+- **Tarea:** corregir la legibilidad y el acabado del modelo acústico en la rama publicada, comparar la vista previa con el mismo commit base y dejar evidencia de las 15 fichas.
+- **Extracto del prompt:** “Corrige la legibilidad mirando la página, no solo los resultados de contraste” y “En la acústica actual, la boca se ve como un aro sobre una tapa sólida. Haz una abertura real con cavidad visible en vista de tres cuartos”.
+- **Resultado:** Chrome Headless 157 mostró el visor acústico vertical y de canto en el commit base. La revisión llevó a cambiar la orientación del grupo de guitarras, recalcular el encuadre, abrir la tapa de la acústica y cerrar la cara posterior con refuerzos alineados. Se guardaron 12 pares de capturas en iguales viewports y 15 imágenes del canvas.
+- **Revisión humana del agente:** se inspeccionaron Inicio, Tienda, ficha, Estudio, Asesoría y menús en escritorio y móvil; 33 combinaciones sin overflow y 15 canvas WebGL, más giros laterales. La primera comparación visual detectó que una prueba geométrica por sí sola no bastaba: las guitarras se veían de pie; el giro posterior reveló que el hueco atravesaba también la tapa de atrás. Ambos defectos se corrigieron y se volvió a construir. Los demás modelos siguen estilizados, con formas más simples en flauta, caña, paquete de cuerdas, cable y audífonos.
+- **Corrección aplicada:** contraste oscuro-claro, tamaños y controles; rotación inicial horizontal en tres cuartos; cavidad del soundhole; tapa trasera; refuerzos. La ficha conserva explícitamente la etiqueta “ilustración demo; no es foto exacta”.
+- **Pruebas:** `npm test` 31/31, `npm run lint`, `npm run build`, `npm run test:api`; auditoría de 11 rutas por tres viewports, 15 modelos renderizados y galería comparativa en `docs/evidencia-acabado/`.
+- **Aprobación pendiente:** revisión del estudiante, giro táctil en teléfono físico, contraste con lector de pantalla, escucha física y llamada real a Gemini.
+- **Commit asociado:** commit de acabado visual en `refactor/experiencia-digari` que agrega `docs/acabado-visual.md` y `docs/evidencia-acabado/`.
+
 ## Ciclo 5 · Refactor de experiencia y catálogo (RX)
 
 - **Tarea:** corregir el contraste de Estudio, dar continuidad a la asesoría, mejorar las 15 maquetas 3D y actualizar el inventario demo sin alterar la historia SQLite; conservar cambios locales, etiqueta y archivos de referencia del estudiante.

@@ -25,3 +25,61 @@ html{background:#171615}body{background:#171615;color:#f0e8da;font-family:Arial,
 @media(max-width:760px){.viewer-controls{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}.viewer-controls .button{width:100%;min-width:0}.studio-product-summary{grid-template-columns:1fr}.studio-art{min-height:200px}}
 @media(max-width:760px){.hero-studio{min-height:690px;min-height:min(760px,calc(100svh - 67px));align-items:flex-end}.hero-studio-image{background-position:62% center}.hero-studio-shade{background:linear-gradient(0deg,rgba(17,15,13,.95),rgba(18,16,14,.77) 48%,rgba(18,16,14,.14) 100%)}.hero-studio-copy{padding-block:60px 88px}.hero-studio-copy>p{font-size:.96rem}.hero-studio h1{font-size:clamp(2.8rem,12vw,4rem)}.hero-caption{font-size:.57rem;right:18px;bottom:14px}.section-block{padding-block:56px}.product-art{height:165px}.advice-page{padding-top:28px}.advice-layout{gap:15px}}
 @media(max-width:420px){.hero-studio{min-height:740px;min-height:calc(100svh - 67px)}.hero-studio-image{background-position:64% center}.hero-studio-copy{padding-bottom:74px}.hero-studio .hero-actions .button{width:100%}.product-art{height:180px}.cart-art .product-image{width:68px;height:68px}}
+
+/* Readability pass: frequent content and controls start at a legible 16 px. */
+:root{--header-height:88px}
+html{scroll-padding-top:calc(var(--header-height) + 18px)}
+body{font-size:16px}
+.site-header{height:var(--header-height)}
+.header-inner{gap:24px}
+.desktop-nav{gap:clamp(14px,1.8vw,24px);font-size:1rem}
+.nav-menu summary{padding-block:12px;font-size:1rem}
+.nav-popover{top:48px;min-width:270px;padding:10px;gap:4px}
+.nav-popover a{min-height:48px;padding:12px 14px;font-size:1rem}
+.cart-link{font-size:1rem;gap:10px}
+.cart-link span{min-width:28px;height:28px;font-size:.82rem}
+.mobile-nav summary{font-size:1.8rem;line-height:1}
+.mobile-nav nav{top:48px;width:min(390px,calc(100vw - 24px));max-height:calc(100dvh - var(--header-height) - 20px);overflow:auto;padding:12px;gap:3px}
+.mobile-nav nav a{min-height:48px;padding:12px 14px;font-size:1rem}
+.button{min-height:48px;padding-inline:20px;font-size:1rem}
+.button-small{min-height:44px;padding-inline:14px;font-size:.95rem}
+.product-info{padding:18px}
+.product-meta{font-size:.875rem;line-height:1.4;letter-spacing:.055em}
+.product-info h2{font-size:1.125rem;line-height:1.35;margin-block:10px}
+.product-info>p{font-size:.95rem;line-height:1.55}
+.product-price{font-size:1.25rem}
+.product-stock{font-size:.875rem}
+.rating-row{font-size:.875rem;gap:8px}
+.star{font-size:1.15rem;padding:4px}
+.compare-toggle,.product-actions label,.filters-panel label,.order-summary>label,.tracking-form label,.service-form-panel label,.contact-demo label{font-size:.95rem}
+.filters-panel input,.filters-panel select,.order-summary select,.tracking-form input,.tracking-form select,.service-form-panel input,.service-form-panel select,.service-form-panel textarea,.operator-panel input,.operator-panel select,.contact-demo textarea,.advice-fields input,.advice-fields select,.chat-composer-label+textarea,.advice-form textarea,.product-actions select{min-height:48px;padding:11px 13px;font-size:1rem;color:#f0e8da;background:#191817;border-color:#665847;color-scheme:dark}
+.filters-panel option,.order-summary option,.tracking-form option,.service-form-panel option,.operator-panel option,.advice-fields option,.product-actions option{background:#211f1c;color:#f0e8da}
+.product-actions select{width:100%;border:1px solid #665847;border-radius:4px}
+.product-art small{font-size:.75rem;letter-spacing:.08em;padding:6px 8px}
+.favorite-button{width:42px;height:42px;font-size:1.35rem}
+.detail-copy h1{font-size:clamp(2rem,4vw,3rem)}
+.detail-copy p,.detail-attributes,.detail-copy label{font-size:1rem;line-height:1.6}
+.detail-copy strong{font-size:1.25rem}
+.page-masthead p,.studio-lede,.advice-lede{font-size:1.05rem;line-height:1.6}
+.result-count,.eyebrow{font-size:.82rem}
+.studio-product-picker label,.scale-controls label,.studio-panel>p,.studio-product-summary p,.audio-specs p{font-size:1rem;line-height:1.6}
+.studio-product-picker select,.scale-controls select{min-height:50px;padding:12px 14px;font-size:1rem;color:#f0e8da;background:#191817;border-color:#665847;color-scheme:dark}
+.studio-loading{background:#211f1c;color:#f0e8da;min-height:260px;padding:20px;font-size:1rem}
+.studio-product-summary>div>strong{font-size:1.3rem}
+.viewer-controls .button{min-height:48px;font-size:.95rem}
+.advice-fields label,.chat-composer-label{font-size:1rem}
+.advice-form-footer small,.advice-side ol,.advice-side li,.chat-meta,.chat-bubble>p,.advice-recommendation>p{font-size:.95rem;line-height:1.55}
+.advice-side ol{color:#e0d4c4}
+.advice-side h2,.advice-recommendation h3{font-size:1.2rem}
+.advice-recommendation>strong{font-size:1.125rem}
+.chat-log{scroll-margin-top:calc(var(--header-height) + 18px)}
+.advice-fields input::placeholder,.advice-form textarea::placeholder,.filters-panel input::placeholder,.tracking-form input::placeholder{color:#b0a596;opacity:1}
+.promo-list>a{background:#211f1c;color:#f0e8da;border-color:#443c33;font-size:1.125rem}
+.promo-list>a span{color:#c4b8a7;font-size:.95rem}
+.promo-list>a:hover{background:#2b2722;border-color:#c18b4e}
+.notice,.field-error{font-size:1rem;line-height:1.55}
+.button:disabled,button:disabled{opacity:1}
+.button:disabled{background:#514637;border-color:#665743;color:#ddd0bc}
+main :focus{scroll-margin-top:calc(var(--header-height) + 18px)}
+@media(max-width:760px){.site-header{height:76px}.header-inner{width:calc(100% - 28px);gap:8px}.cart-link{font-size:.95rem}.mobile-nav nav{max-height:calc(100dvh - 92px)}.desktop-nav{display:none}.studio-page{padding-top:28px}.studio-panel{padding:20px}.studio-section-title .button{width:100%}.product-info{padding:14px}.product-info h2{font-size:1.05rem}.product-grid{gap:12px}.card-actions{gap:10px}.detail-copy{padding:12px 0}.advice-panel,.advice-side{padding:18px}}
+@media(max-width:420px){.cart-link{gap:6px}.product-info{padding:12px}.product-info h2{font-size:1rem}.product-price{font-size:1.15rem}.card-actions .button{width:100%}.hero-studio h1{font-size:clamp(2.8rem,12vw,4rem)}}
