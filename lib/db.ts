@@ -68,7 +68,7 @@ if (count.count === 0) {
 }
 // Una migración de catálogo idempotente actualiza las fichas demo existentes sin
 // reemplazar la base ni tocar pedidos, líneas históricas, eventos o servicios.
-const catalogVersion = 'brands-prices-stock-2026-01';
+const catalogVersion = 'photo-models-2026-11';
 const catalogDone = db.prepare('SELECT 1 FROM catalog_migrations WHERE version=?').get(catalogVersion);
 if (!catalogDone) withTransaction(() => {
   const updateCatalog = db.prepare(`UPDATE products SET name=?,family=?,category=?,price_crc=?,stock=?,style_json=?,compatible_json=?,summary=?,variant_label=?,variants_json=?,visual=?,icon=?,model_ref=?,audio_json=? WHERE id=?`);

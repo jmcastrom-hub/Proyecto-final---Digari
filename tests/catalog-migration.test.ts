@@ -28,7 +28,7 @@ describe('migración aditiva del catálogo demo', () => {
     const order = db.prepare('SELECT status,total_crc FROM orders WHERE id=?').get('o1') as {status:string;total_crc:number};
     const line = db.prepare('SELECT product_name,unit_price_crc,quantity FROM order_lines WHERE id=1').get() as {product_name:string;unit_price_crc:number;quantity:number};
     const service = db.prepare('SELECT status FROM service_requests WHERE id=?').get('s1') as {status:string};
-    assert.equal(product.name,'Yamaha · guitarra acústica ilustrativa'); assert.equal(product.price_crc,84900); assert.equal(product.stock,8);
+    assert.equal(product.name,'Yamaha F310 · guitarra acústica'); assert.equal(product.price_crc,84900); assert.equal(product.stock,8);
     assert.equal(order.status,'en preparación'); assert.equal(order.total_crc,24690);
     assert.equal(line.product_name,'Old Guitar'); assert.equal(line.unit_price_crc,12345); assert.equal(line.quantity,2); assert.equal(service.status,'diagnóstico');
     db.close();

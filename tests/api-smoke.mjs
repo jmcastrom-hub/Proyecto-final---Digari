@@ -20,9 +20,11 @@ assert(insufficientAdvice.mode === 'local' && insufficientAdvice.recommendations
 const invalidAdvice = await fetch(base + '/api/advice', json({ budgetCrc: -1, family: 'Guitarra acústica', use: 'iniciacion' }));
 assert(invalidAdvice.status === 400, 'La asesoría debe rechazar un presupuesto inválido.');
 assert(catalog.total === 15, 'El catálogo no devolvió 15 fichas.');
+const photoIds = new Set(['acustica-luz', 'electrica-bruma', 'bajo-marea', 'teclado-nube', 'ukelele-sol', 'flauta-rio', 'cable-pulso', 'cana-viento']);
 for (const item of catalog.items) {
-  const image = await fetch(`${base}/products/${item.id}.svg`);
-  assert(image.status === 200 && image.headers.get('content-type')?.includes('image/svg+xml'), `La ilustración de ${item.id} no está disponible.`);
+  const photo = photoIds.has(item.id);
+  const image = await fetch(`${base}${photo ? `/product-photos/${item.id}.webp` : `/products/${item.id}.svg`}`);
+  assert(image.status === 200 && image.headers.get('content-type')?.includes(photo ? 'image/webp' : 'image/svg+xml'), `La imagen de ${item.id} no está disponible.`);
 }
 const filterError = await fetch(base + '/api/products?minPrice=90000&maxPrice=10000');
 assert(filterError.status === 400, 'El API debe rechazar un rango CRC imposible.');
