@@ -59,3 +59,17 @@ Ver `docs/medicion-p2.1.md` y `docs/validacion-p4.md` para protocolo y cifras. E
 ### Estado de cierre P4
 
 Los resultados exactos de instalacion, comandos, seed, browser y demo automatizada se registran en `docs/validacion-p4.md`. Las mediciones de navegador de catalogo y apertura 3D se distinguen de la metrica de tarea (todavia no medida con participantes). La revision del estudiante y la demo oral no se marcan completadas.
+
+## Refactor de experiencia (rama `refactor/experiencia-digari`)
+
+| ID | Tarea | Dependencias | Responsable | Estado | Prueba / evidencia | Commit |
+|---|---|---|---|---|---|---|
+| RX-01 | Confirmar raíz, rama, remoto, etiqueta y estado inicial; preservar cambios del usuario | P4 | Codex + estudiante | Verificado | Raíz Git exacta; rama `refactor/experiencia-digari`; remoto `origin` del proyecto; etiqueta intacta; `.env.local` no tocado | d482f128 base |
+| RX-02 | Revisar las 11 rutas en escritorio, móvil y viewport de 200%; definir superficies de texto | RX-01 | Codex | Verificado; aprobación de estudiante pendiente | 33 combinaciones post; cero desbordamientos; menús desktop/móvil; contraste AA medido. Capturas en `docs/evidencia-refactor/` | Pendiente de commit |
+| RX-03 | Corregir contraste y responsive de Estudio, pie y controles; mejorar 15 modelos 3D | RX-02 | Codex | Verificado en Chrome Headless 157; tacto físico pendiente | Suite valida 15 geometrías; canvas WebGL y giros a costado/reverso para 15 fichas; vista SVG disponible | Pendiente de commit |
+| RX-04 | Actualizar las 15 fichas demo con marcas propuestas, precios CRC y stock solicitado mediante migración segura | RX-01 | Codex | Verificado; historia preservada | SQLite actual: 15 productos, 1 pedido/línea, 2 eventos, 2 servicios y 4 eventos; prueba de migración conserva historia | Pendiente de commit |
+| RX-05 | Continuar asesoría con preferencias y referencias estructuradas; validar cambios naturales y modo local/fake | RX-01 | Codex | Verificado | `npm test`: 31/31; continuidad de opciones más baratas, presupuesto, ensayo y 503 simulado/local | Pendiente de commit |
+| RX-06 | Medir antes/después misma configuración y verificar flujos, accesibilidad y rutas | RX-02…RX-05 | Codex; estudiante para revisión física | Verificado en emulación; revisión manual pendiente | Inicio/tienda/asesoría: 57/70/86→69/67/60 ms; visor frío 467.9→488.3 ms; giro 33.30→33.35 ms. Detalle y límites en `docs/auditoria-refactor.md` | Pendiente de commit |
+| RX-07 | Actualizar especificación y ciclos IA, guardar commit y publicar rama/PR | RX-01…RX-06 | Codex; revisión del estudiante pendiente | Documentación y validación listas; publicar tras commit | `npm test`, lint, build, smoke API 11 rutas, `git diff --check`; excluir `.env.example`, `.env.local`, consigna/guía/PDF | Pendiente |
+
+El objetivo de cinco minutos continúa siendo hipótesis: no se han reclutado participantes ni medido una línea base comparable de tasa de éxito. La revisión manual del estudiante, tacto en un teléfono físico, escucha en equipo real y llamada Gemini con clave activa siguen pendientes salvo que una evidencia posterior los compruebe expresamente.

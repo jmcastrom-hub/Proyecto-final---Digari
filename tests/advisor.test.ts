@@ -7,7 +7,7 @@ import { DEFAULT_GEMINI_MODEL, requestGeminiAdvice, supportedGeminiModel } from 
 import { repairLegacyUtf8 } from '../lib/text-encoding';
 
 const styles = [...new Set(products.flatMap((product) => product.style))];
-const completeInput = { budgetCrc: 80000, family: 'Guitarra acústica', style: 'folk', use: 'iniciacion', question: '¿Cuál es la diferencia?' };
+const completeInput = { budgetCrc: 90000, family: 'Guitarra acústica', style: 'folk', use: 'iniciacion', question: '¿Cuál es la diferencia?' };
 
 describe('asesoría determinista y privacidad', () => {
   it('corrige texto UTF-8 legado en conversaciones ya guardadas', () => {
@@ -72,6 +72,21 @@ describe('asesoría determinista y privacidad', () => {
       assert.equal(result.mode, 'local');
       assert.ok(result.recommendations.length > 0);
     }
+  });
+  it('continúa una conversación estructurada con filtro más barato, cambio de presupuesto y uso', async () => {
+    const catalog = products;
+    const first = await buildAdvice({ ...completeInput, budgetCrc:100000 }, catalog);
+    const cheaper = await buildAdvice({ ...completeInput, budgetCrc:100000, question:'¿Hay algo más barato?', previousRecommendationIds:first.recommendations.map((item) => item.productId) }, catalog);
+    assert.equal(cheaper.mode, 'local'); assert.equal(cheaper.recommendations.length,0); assert.match(cheaper.message,/No encuentro otra ficha/);
+    const updated = parseAdviceInput({ ...completeInput, budgetCrc:100000, question:'Subí el presupuesto a ₡150 000', conversationId:'123e4567-e89b-12d3-a456-426614174000', previousRecommendationIds:['acustica-luz'] }, styles, catalog.map((item) => item.id));
+    assert.equal(updated.budgetCrc,150000);
+    assert.throws(() => parseAdviceInput({ ...completeInput, conversationId:'x', previousRecommendationIds:['missing-product'] }, styles, catalog.map((item) => item.id)), AdviceInputError);
+    const rehearsal = parseAdviceInput({ ...completeInput, budgetCrc:100000, question:'¿Me sirve para ensayar?', previousRecommendationIds:['acustica-luz'] }, styles, catalog.map((item) => item.id));
+    assert.equal(rehearsal.use,'ensayo'); assert.deepEqual(rehearsal.previousRecommendationIds,['acustica-luz']);
+    const gemini = await buildAdvice({ ...completeInput, budgetCrc:100000 }, catalog, async (ctx) => ({ recommendations:[{productId:ctx.candidates[0].id,reason:'La ficha coincide con tus preferencias de práctica.'}],question:null }));
+    const local = await buildAdvice({ ...completeInput, budgetCrc:100000 }, catalog, async () => { throw Object.assign(new Error('provider unavailable'),{status:503}); });
+    assert.equal(gemini.mode,'gemini'); assert.equal(local.mode,'local');
+    assert.deepEqual(local.recommendations.map((item) => item.productId),gemini.recommendations.map((item) => item.productId));
   });
 });
 

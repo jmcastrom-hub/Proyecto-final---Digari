@@ -99,3 +99,23 @@ La instalación usa `npm ci`, Node 22.13 o superior y SQLite local. `DIGARI_DB_P
 | RF-05 Servicio/contacto | Solicitud, consulta, evento, transición secuencial, token inválido sin cambiar estado; contacto no envía | `tests/orders.test.ts`, `tests/api-smoke.mjs`; contacto externo no se ejecuta |
 
 GitHub Actions (`.github/workflows/ci.yml`) repite `npm ci`, tests, lint, build y smoke del servidor. Los datos y códigos demo son locales; no migrar el token de operador, base SQLite ni credenciales al navegador/CI. No se considera el prototipo listo para producción o para operar datos de clientes.
+
+## Contrato vigente de la refactorización RX
+
+### Datos demo y migración
+
+Las 15 fichas conservan sus IDs y referencias a geometría. La marca es una propuesta de categoría, no una asociación comercial verificada; no se afirma un número de modelo específico. Nombres, compatibilidad, precio y stock son sintéticos. El inventario de demostración propuesto es: Yamaha acústica ₡84 900 (8); Squier eléctrica ₡109 900 (6); Ibanez bajo ₡129 900 (5); Casio teclado ₡79 900 (8); Kala ukelele ₡29 900 (12); Yamaha flauta dulce ₡6 900 (10); D’Addario cuerdas ₡5 900 (12); Hosa cable ₡7 900 (10); Vandoren caña ₡3 500 (12); Behringer micrófono ₡23 900 (8); PreSonus monitor ₡54 900 (6); Behringer parlante activo ₡99 900 (4); Numark DJ ₡89 900 (4); Audio-Technica audífonos ₡26 900 (10); M-Audio interfaz ₡49 900 (6).
+
+La migración `brands-prices-stock-2026-01` es transaccional e idempotente: actualiza las 15 fichas en su lugar, sin borrar tablas ni cambiar pedidos, líneas históricas, estados/eventos o solicitudes de servicio. Las pruebas se ejecutan con `DIGARI_DB_PATH` apuntando a SQLite temporal; no deben invocar rutinas de reset sobre `data/digari.sqlite`.
+
+### Conversación de asesoría
+
+`POST /api/advice` acepta `conversationId` con formato UUID, preferencias activas en campos separados, `question` de hasta 240 caracteres y como máximo 3 `previousRecommendationIds`. El servidor valida ID de conversación y referencias contra el catálogo, conserva las preferencias que el cliente vuelve a enviar, interpreta una revisión explícita de presupuesto (₡0–₡10 000 000) y detecta la intención «más barato» sin sustituir precios/stock del servidor. Una referencia fuera del catálogo se rechaza. El modo local y el proveedor de prueba operan sobre los mismos criterios; Gemini solo recibe preferencias y candidatos filtrados, sin ID de conversación, PII, texto libre o historial.
+
+### Superficies y controles del Estudio
+
+Texto marfil se usa sobre nogal/carbón oscuros; texto oscuro sobre superficies claras reservadas para ilustración de producto. Selectores, resumen de ficha, especificaciones, tarjetas de audio, controles y pie del Estudio usan el primer esquema; la escena/canvas es decorativa y sin texto superpuesto. Los controles del visor mantienen foco visible, rotación por puntero, flechas, zoom, elevación y reinicio. El motor/modelo Three.js se importa solo al activar el visor; si falla WebGL se ofrece la ilustración SVG asociada a la ficha con etiqueta de alternativa.
+
+La auditoría de contraste y las mediciones reproducibles de esta refactorización se registran en `docs/auditoria-refactor.md`. Los fondos oscuros del Estudio usan texto marfil/secundario y las superficies claras de catálogo/formularios usan tinta oscura. Las pruebas browser verifican 11 rutas en escritorio, móvil y ventana equivalente a zoom 200%, 15 canvas WebGL y controles en frente/costado/reverso. El visor se precarga ante foco o puntero y el audio únicamente al abrir su sección; la reproducción requiere una acción explícita. No se midió mejora de carga fría 3D y el giro quedó esencialmente igual.
+
+El inventario se actualiza transaccionalmente sobre las filas existentes. Antes y después se revisan los conteos de pedidos, líneas, eventos y servicios; una prueba SQLite separada comprueba además que la migración no cambia los datos históricos de una solicitud. La carpeta de evidencia compara capturas antes/después y el archivo JSON conserva las 33 mediciones de vista. La tercera imagen de referencia solicitada no estaba presente en los archivos accesibles, por lo que las maquetas se ajustaron a la descripción textual.

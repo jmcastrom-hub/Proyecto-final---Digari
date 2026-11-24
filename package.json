@@ -10,7 +10,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",
-    "test": "tsc --module commonjs --moduleResolution node --esModuleInterop --strict --target ES2022 --skipLibCheck --outDir .test-dist tests/orders.test.ts tests/models.test.ts tests/advisor.test.ts tests/audio-profiles.test.ts && node --test .test-dist/tests/*.test.js",
+    "test": "tsc --module commonjs --moduleResolution node --esModuleInterop --strict --target ES2022 --skipLibCheck --outDir .test-dist tests/orders.test.ts tests/models.test.ts tests/advisor.test.ts tests/audio-profiles.test.ts tests/catalog-migration.test.ts && node tests/run-tests.mjs",
     "test:api": "node tests/api-smoke.mjs"
   },
   "dependencies": {

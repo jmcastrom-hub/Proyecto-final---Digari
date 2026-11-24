@@ -8,7 +8,7 @@ import { ProductImage } from '@/components/product-image';
 
 type Preferences = { budgetCrc: string; family: string; style: string; use: string };
 type Turn = { role: 'user' | 'assistant'; text: string; mode?: 'gemini' | 'local'; recommendations?: Recommendation[] };
-type Stored = { preferences: Preferences; turns: Turn[] };
+type Stored = { preferences: Preferences; turns: Turn[]; conversationId?: string };
 type Props = { families: string[]; styles: string[] };
 const storageKey = 'digari-advice-chat-v1';
 const initialPreferences: Preferences = { budgetCrc: '', family: '', style: '', use: '' };
@@ -42,6 +42,7 @@ export default function AdviceChat({ families, styles }: Props) {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
   const [ready, setReady] = useState(false);
+  const [conversationId, setConversationId] = useState('');
   const budgetError = friendlyBudgetError(preferences.budgetCrc);
 
   useEffect(() => {
@@ -50,6 +51,7 @@ export default function AdviceChat({ families, styles }: Props) {
       if (raw) {
         const saved = JSON.parse(raw) as Stored;
         if (saved.preferences && Array.isArray(saved.turns)) {
+          setConversationId(typeof saved.conversationId === 'string' && /^[a-f0-9-]{36}$/i.test(saved.conversationId) ? saved.conversationId : crypto.randomUUID());
           setPreferences({
             budgetCrc: repairLegacyUtf8(String(saved.preferences.budgetCrc ?? '')),
             family: repairLegacyUtf8(String(saved.preferences.family ?? '')),
@@ -60,12 +62,13 @@ export default function AdviceChat({ families, styles }: Props) {
         }
       }
     } catch { localStorage.removeItem(storageKey); }
+    if (!localStorage.getItem(storageKey)) setConversationId(crypto.randomUUID());
     setReady(true);
   }, []);
 
   useEffect(() => {
-    if (ready) localStorage.setItem(storageKey, JSON.stringify({ preferences, turns: turns.slice(-24) } satisfies Stored));
-  }, [preferences, turns, ready]);
+    if (ready) localStorage.setItem(storageKey, JSON.stringify({ preferences, turns: turns.slice(-24), conversationId } satisfies Stored));
+  }, [preferences, turns, conversationId, ready]);
 
   const change = (key: keyof Preferences, value: string) => setPreferences((current) => ({ ...current, [key]: value }));
 
@@ -85,8 +88,16 @@ export default function AdviceChat({ families, styles }: Props) {
     catch { setError('Revisá el presupuesto: debe ser un monto entero entre ₡0 y ₡10 000 000.'); return; }
 
     const question = composer.trim();
+    let activeBudget = budgetCrc;
+    const budgetUpdate = question && /presupuesto|monto|sub[ií]|aument[eé]|hasta/i.test(question) ? question.match(/₡?\s*(\d[\d.,' ]*)\s*$/)?.[1] : undefined;
+    if (budgetUpdate) {
+      try { activeBudget = parseBudgetCrc(budgetUpdate); setPreferences((current) => ({ ...current, budgetCrc: String(activeBudget ?? '') })); }
+      catch { setError('Revisá el monto que escribiste; debe ser un entero entre ₡0 y ₡10 000 000.'); return; }
+    }
+    const activeUse = question && /ensay|practic(?:ar|a)\s+con\s+(?:la\s+)?banda/i.test(question) ? 'ensayo' : preferences.use;
+    if (activeUse !== preferences.use) setPreferences((current) => ({ ...current, use: activeUse }));
     const useLabel = USE_OPTIONS.find((option) => option.id === preferences.use)?.label.toLocaleLowerCase('es');
-    const userText = question || `Busco ${preferences.family || 'un producto'}${useLabel ? ` para ${useLabel}` : ''}${budgetCrc !== undefined ? ` con un máximo de ₡${budgetCrc.toLocaleString('es-CR')}` : ''}.`;
+    const userText = question || `Busco ${preferences.family || 'un producto'}${useLabel ? ` para ${useLabel}` : ''}${activeBudget !== undefined ? ` con un máximo de ₡${activeBudget.toLocaleString('es-CR')}` : ''}.`;
     setTurns((current) => [...current, { role: 'user' as const, text: userText }].slice(-24));
     setComposer('');
     setBusy(true);
@@ -94,7 +105,7 @@ export default function AdviceChat({ families, styles }: Props) {
       const response = await fetch('/api/advice', {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ budgetCrc, family: preferences.family || undefined, style: preferences.style || undefined, use: preferences.use || undefined, question }),
+        body: JSON.stringify({ conversationId, previousRecommendationIds: turns.at(-1)?.role === 'assistant' ? turns.at(-1)?.recommendations?.map((item) => item.productId) ?? [] : [], budgetCrc: activeBudget, family: preferences.family || undefined, style: preferences.style || undefined, use: activeUse || undefined, question }),
       });
       const data = await response.json() as AdviceResult | { error?: string };
       if (!response.ok || !('mode' in data)) {
@@ -115,6 +126,7 @@ export default function AdviceChat({ families, styles }: Props) {
   function clearConversation() {
     setPreferences(initialPreferences);
     setTurns([welcome]);
+    setConversationId(crypto.randomUUID());
     setComposer('');
     setError('');
     localStorage.removeItem(storageKey);
