@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import './globals.css';
 import './studio.css';
 import './advice.css';
+import './redesign.css';
 import { SiteHeader } from '@/components/site-header';
 import { SiteFooter } from '@/components/site-footer';
 

@@ -1,14 +1,28 @@
 import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
 import { products } from '../lib/catalog';
-import { AdviceInputError, buildAdvice, parseAdviceInput, USE_OPTIONS } from '../lib/advisor';
+import { AdviceInputError, buildAdvice, parseAdviceInput, parseBudgetCrc, USE_OPTIONS } from '../lib/advisor';
 import { createAdviceRateLimiter } from '../lib/advice-rate-limit';
 import { DEFAULT_GEMINI_MODEL, requestGeminiAdvice, supportedGeminiModel } from '../lib/gemini-advice';
+import { repairLegacyUtf8 } from '../lib/text-encoding';
 
 const styles = [...new Set(products.flatMap((product) => product.style))];
 const completeInput = { budgetCrc: 80000, family: 'Guitarra acústica', style: 'folk', use: 'iniciacion', question: '¿Cuál es la diferencia?' };
 
 describe('asesoría determinista y privacidad', () => {
+  it('corrige texto UTF-8 legado en conversaciones ya guardadas', () => {
+    assert.equal(repairLegacyUtf8('Pr\u00c3\u00a1ctica de guitarra'), 'Práctica de guitarra');
+    assert.equal(repairLegacyUtf8('Guitarra acústica'), 'Guitarra acústica');
+  });
+  it('acepta montos enteros inclusivos con separadores y distingue vacío de cero', () => {
+    assert.equal(parseBudgetCrc('0'), 0);
+    assert.equal(parseBudgetCrc('₡1'), 1);
+    assert.equal(parseBudgetCrc('10 000 000'), 10_000_000);
+    assert.equal(parseBudgetCrc('₡10.000.000'), 10_000_000);
+    assert.equal(parseBudgetCrc(''), undefined);
+    assert.throws(() => parseBudgetCrc('-1'), AdviceInputError);
+    assert.throws(() => parseBudgetCrc('10 000 001'), AdviceInputError);
+  });
   it('rechaza montos y estilos inválidos, pero pregunta por preferencias faltantes', () => {
     assert.throws(() => parseAdviceInput({ ...completeInput, budgetCrc: '80 mil' }, styles), AdviceInputError);
     assert.throws(() => parseAdviceInput({ ...completeInput, style: 'inexistente' }, styles), AdviceInputError);
@@ -17,7 +31,13 @@ describe('asesoría determinista y privacidad', () => {
   });
   it('devuelve seguimiento local cuando el presupuesto no alcanza', async () => {
     const result = await buildAdvice({ ...completeInput, budgetCrc: 1000 }, products);
-    assert.equal(result.mode, 'local'); assert.equal(result.recommendations.length, 0); assert.match(result.question ?? '', /flexibilizar/);
+    assert.equal(result.mode, 'local'); assert.equal(result.recommendations.length, 0); assert.match(result.message, /flexibilizar/);
+  });
+  it('explica con tacto que cero no alcanza para un producto demo', async () => {
+    const result = await buildAdvice({ ...completeInput, budgetCrc: 0 }, products);
+    assert.equal(result.recommendations.length, 0);
+    assert.match(result.message, /₡0/);
+    assert.match(result.message, /podés flexibilizar el presupuesto/i);
   });
   it('funciona sin proveedor con hasta tres candidatos y motivos reproducibles', async () => {
     const result = await buildAdvice({ ...completeInput, budgetCrc: 180000, family: 'Guitarra eléctrica', style: 'rock', use: 'ensayo' }, products);
@@ -45,6 +65,13 @@ describe('asesoría determinista y privacidad', () => {
     const down = await buildAdvice(completeInput, products, async () => { throw new Error('timeout'); });
     const inventedPrice = await buildAdvice(completeInput, products, async (context) => ({ recommendations: [{ productId: (context as { candidates: { id: string }[] }).candidates[0].id, reason: 'Cuesta ₡70000 y tiene mejor stock.' }], question: null }));
     assert.equal(down.mode, 'local'); assert.equal(inventedPrice.mode, 'local');
+  });
+  it('usa el filtro local ante respuestas de proveedor 429 o 503', async () => {
+    for (const status of [429, 503]) {
+      const result = await buildAdvice(completeInput, products, async () => { throw Object.assign(new Error('provider unavailable'), { status }); });
+      assert.equal(result.mode, 'local');
+      assert.ok(result.recommendations.length > 0);
+    }
   });
 });
 

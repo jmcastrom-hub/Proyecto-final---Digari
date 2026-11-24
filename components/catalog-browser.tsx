@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useEffect, useMemo, useState } from 'react';
 import type { Product } from '@/lib/catalog';
+import { ProductImage } from '@/components/product-image';
 
 type CatalogResponse = { items: Product[]; categories: string[]; families: string[]; styles: string[]; total: number };
 type CartLine = { productId: string; variant?: string; quantity: number };
@@ -92,14 +93,14 @@ export function CatalogBrowser({ favoritesOnly = false }: { favoritesOnly?: bool
       {favoritesOnly && favorites.length === 0 && <div className="empty-state"><span>♡</span><h2>Aún no guardás favoritos</h2><p>Explorá el catálogo y guardá las opciones que querés comparar.</p><Link className="button" href="/tienda">Ir a la tienda</Link></div>}
       {loaded && !error && shown.length === 0 && (!favoritesOnly || favorites.length > 0) && <div className="empty-state"><span>⌕</span><h2>No encontramos opciones</h2><p>Probá otro presupuesto, búsqueda o categoría.</p><button className="button" onClick={() => { setQuery(''); setFamily(''); setCategory(''); setMinPrice(''); setMaxPrice(''); setStyle(''); setInStock(false); }}>Limpiar filtros</button></div>}
       <div className="product-grid">{shown.map((p) => <article className="product-card" key={p.id}>
-        <div className="product-art" style={{ background: p.visual }}><span aria-hidden="true">{p.icon}</span><small>ILUSTRACIÓN DEMO</small><button className={`favorite-button ${favorites.includes(p.id) ? 'is-favorite' : ''}`} onClick={() => toggleFavorite(p.id)} aria-label={favorites.includes(p.id) ? `Quitar ${p.name} de favoritos` : `Guardar ${p.name} en favoritos`}>{favorites.includes(p.id) ? '♥' : '♡'}</button></div>
+        <div className="product-art"><ProductImage productId={p.id} productName={p.name} /><small>ILUSTRACIÓN · NO ES FOTO EXACTA</small><button className={`favorite-button ${favorites.includes(p.id) ? 'is-favorite' : ''}`} onClick={() => toggleFavorite(p.id)} aria-label={favorites.includes(p.id) ? `Quitar ${p.name} de favoritos` : `Guardar ${p.name} en favoritos`}>{favorites.includes(p.id) ? '♥' : '♡'}</button></div>
         <div className="product-info"><div className="product-meta">{p.category} <span>·</span> {p.family}</div><h2><Link href={`/productos/${p.id}`}>{p.name}</Link></h2><p>{p.summary}</p><strong className="product-price">{money(p.priceCrc)}</strong><div className="product-stock">{p.stock > 0 ? `${p.stock} unidades demo` : 'Sin existencias demo'}</div>
           <div className="rating-row" aria-label="Valoración personal"><span>Tu valoración</span><div>{[1,2,3,4,5].map((star) => <button key={star} className={star <= (ratings[p.id] || 0) ? 'star active' : 'star'} onClick={() => rate(p.id, star)} aria-label={`${star} de 5`}>★</button>)}</div></div>
           <div className="card-actions"><button className="button button-small" onClick={() => addToCart(p)} disabled={p.stock < 1}>{addedId===p.id?'Agregado ✓':'Agregar al carrito demo'}</button><label className="compare-toggle"><input type="checkbox" checked={compare.includes(p.id)} onChange={() => toggleCompare(p.id)} disabled={!compare.includes(p.id) && compare.length >= 3} /> Comparar</label></div>
         </div>
       </article>)}</div>
       {compare.length > 0 && <section className="compare-panel" aria-labelledby="compare-title"><div className="section-heading"><div><span className="eyebrow">DECIDÍ CON CALMA</span><h2 id="compare-title">Comparación lado a lado <small>({compared.length}/3)</small></h2></div><button className="text-button" onClick={() => setCompare([])}>Limpiar</button></div>
-        <div className="compare-grid" role="table" aria-label="Comparación de productos">{compared.map((p) => <div className="compare-item" role="row" key={p.id}><span className="product-meta">{p.family}</span><h3><Link href={`/productos/${p.id}`}>{p.name}</Link></h3><strong>{money(p.priceCrc)}</strong><p>Existencias demo: {p.stock}</p><p>Estilo: {p.style.join(', ')}</p><p>Compatible con: {p.compatible.join(', ')}</p><button className="text-button" onClick={() => toggleCompare(p.id)}>Quitar</button></div>)}</div>
+        <div className="compare-grid" role="table" aria-label="Comparación de productos">{compared.map((p) => <div className="compare-item" role="row" key={p.id}><ProductImage productId={p.id} productName={p.name} /><span className="product-meta">{p.family}</span><h3><Link href={`/productos/${p.id}`}>{p.name}</Link></h3><strong>{money(p.priceCrc)}</strong><p>Existencias demo: {p.stock}</p><p>Estilo: {p.style.join(', ')}</p><p>Compatible con: {p.compatible.join(', ')}</p><button className="text-button" onClick={() => toggleCompare(p.id)}>Quitar</button></div>)}</div>
       </section>}
     </section>
   </div>;

@@ -16,7 +16,7 @@ assert(catalog.items.find((item) => item.id === 'monitor-alfar')?.audioNotes?.co
 const advice = await fetch(base + '/api/advice', json({ budgetCrc: 80000, family: 'Guitarra acústica', style: 'folk', use: 'iniciacion', question: '¿Cuál me recomiendas?' })).then((response) => response.json());
 assert(advice.mode === 'local' && advice.recommendations.length <= 3 && advice.recommendations.every((item) => item.productId === 'acustica-luz'), 'La asesoría local no filtró el catálogo correctamente.');
 const insufficientAdvice = await fetch(base + '/api/advice', json({ budgetCrc: 1000, family: 'Guitarra acústica', use: 'iniciacion' })).then((response) => response.json());
-assert(insufficientAdvice.mode === 'local' && insufficientAdvice.recommendations.length === 0 && insufficientAdvice.question, 'La asesoría no preguntó ante presupuesto insuficiente.');
+assert(insufficientAdvice.mode === 'local' && insufficientAdvice.recommendations.length === 0 && /flexibilizar/.test(insufficientAdvice.message), 'La asesoría debe explicar con tacto cuando el presupuesto no alcanza.');
 const invalidAdvice = await fetch(base + '/api/advice', json({ budgetCrc: -1, family: 'Guitarra acústica', use: 'iniciacion' }));
 assert(invalidAdvice.status === 400, 'La asesoría debe rechazar un presupuesto inválido.');
 assert(catalog.total === 15, 'El catálogo no devolvió 15 fichas.');

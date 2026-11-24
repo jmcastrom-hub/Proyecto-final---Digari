@@ -21,14 +21,32 @@ export type AdviceResult = { mode: 'gemini' | 'local'; message: string; question
 export type AdviceProvider = (context: GeminiContext) => Promise<unknown>;
 export class AdviceInputError extends Error {}
 
+const MAX_BUDGET_CRC = 10_000_000;
+const budgetMessage = 'Ingresá un monto entero entre ₡0 y ₡10 000 000.';
+
+export function parseBudgetCrc(value: unknown): number | undefined {
+  if (value === undefined || value === null) return undefined;
+  if (typeof value === 'number') {
+    if (!Number.isSafeInteger(value) || value < 0 || value > MAX_BUDGET_CRC) throw new AdviceInputError(budgetMessage);
+    return value;
+  }
+  if (typeof value !== 'string') throw new AdviceInputError(budgetMessage);
+  let text = value.trim().replace(/^₡\s*/, '');
+  if (!text) return undefined;
+  if (!/^\d+$/.test(text)) {
+    const grouped = /^(\d{1,3})([.,'\u00a0\u202f ])(\d{3})(?:\2\d{3})*$/.exec(text);
+    if (!grouped) throw new AdviceInputError(budgetMessage);
+    text = text.replace(/[.,'\u00a0\u202f ]/g, '');
+  }
+  const amount = Number(text);
+  if (!Number.isSafeInteger(amount) || amount < 0 || amount > MAX_BUDGET_CRC) throw new AdviceInputError(budgetMessage);
+  return amount;
+}
+
 export function parseAdviceInput(value: unknown, styles: string[]): AdviceInput {
   if (!value || typeof value !== 'object' || Array.isArray(value)) throw new AdviceInputError('Envía un objeto JSON con tus preferencias.');
   const raw = value as Record<string, unknown>;
-  let budgetCrc: number | undefined;
-  if (raw.budgetCrc !== undefined && raw.budgetCrc !== null && raw.budgetCrc !== '') {
-    if (typeof raw.budgetCrc !== 'number' || !Number.isSafeInteger(raw.budgetCrc) || raw.budgetCrc < 1 || raw.budgetCrc > 10_000_000) throw new AdviceInputError('El presupuesto debe ser un monto entero en CRC entre 1 y 10 000 000.');
-    budgetCrc = raw.budgetCrc;
-  }
+  const budgetCrc = parseBudgetCrc(raw.budgetCrc);
   const textField = (key: 'family' | 'style' | 'use' | 'question', max: number): string | undefined => {
     const field = raw[key];
     if (field === undefined || field === null || field === '') return undefined;
@@ -51,7 +69,7 @@ function classifyIntent(question = ''): GeminiContext['preferences']['intent'] {
 }
 function missingQuestion(input: AdviceInput) {
   const missing: string[] = [];
-  if (!input.budgetCrc) missing.push('un presupuesto aproximado en CRC');
+  if (input.budgetCrc === undefined) missing.push('un presupuesto aproximado en CRC');
   if (!input.family) missing.push('el tipo de producto');
   if (!input.use && !input.style) missing.push('el uso o estilo que prefieres');
   if (!missing.length) return null;
@@ -84,7 +102,13 @@ export async function buildAdvice(input: AdviceInput, catalog: Product[], provid
   if (followUp) return { mode: 'local', message: 'Aún necesito algunos datos para filtrar opciones.', question: followUp, recommendations: [] };
   const pool = catalog.filter((product) => product.stock > 0 && product.priceCrc <= input.budgetCrc! && product.family === input.family && (!input.style || product.style.includes(input.style)) && (!input.use || matchesUse(product, input.use)));
   const ranked = pool.map((product) => ({ product, score: (input.style && product.style.includes(input.style) ? 2 : 0) + (input.use && matchesUse(product, input.use) ? 1 : 0) })).sort((a, b) => b.score - a.score || a.product.priceCrc - b.product.priceCrc || a.product.name.localeCompare(b.product.name, 'es')).slice(0, 3).map(({ product }) => product);
-  if (!ranked.length) return { mode: 'local', message: 'No encontré fichas demo con stock que cumplan a la vez tu presupuesto, tipo y compatibilidad. Puedes ampliar el presupuesto o ajustar uso/estilo.', question: '¿Qué criterio prefieres flexibilizar?', recommendations: [] };
+  if (!ranked.length) {
+    const amount = input.budgetCrc === 0 ? '₡0' : `₡${input.budgetCrc!.toLocaleString('es-CR')}`;
+    const message = input.budgetCrc === 0
+      ? 'Con ₡0 no hay una ficha demo disponible dentro de ese monto. Cuando querás, podés flexibilizar el presupuesto o probar otro tipo de equipo.'
+      : `No encontré una ficha demo con existencias dentro de ${amount} para esos criterios. Si te parece, podés flexibilizar un poco el monto o ajustar el uso/estilo.`;
+    return { mode: 'local', message, question: null, recommendations: [] };
+  }
   const localRecommendations = ranked.map((product) => recommendation(product, deterministicReason(product, input)));
   if (!provider) return { mode: 'local', message: 'Asesoría local: filtré el catálogo demo con los mismos criterios, sin conectar con Gemini.', question: null, recommendations: localRecommendations };
   const context: GeminiContext = {
