@@ -12,9 +12,10 @@ const money = (n: number) => new Intl.NumberFormat('es-CR', { style: 'currency',
 export function CartPage() {
   const [cart, setCart] = useState<Line[]>([]); const [products, setProducts] = useState<Product[]>([]); const [fulfillment, setFulfillment] = useState<'retiro demo'|'envío demo'>('retiro demo');
   const [error, setError] = useState(''); const [busy, setBusy] = useState(false); const [receipt, setReceipt] = useState<ApiResult | null>(null);
+  const [ready, setReady] = useState(false);
   useEffect(() => {
     try { setCart(JSON.parse(localStorage.getItem('digari-cart') || '[]')); } catch { setCart([]); }
-    fetch('/api/products').then((r) => r.json()).then((d) => setProducts(d.items || [])).catch(() => setError('No se pudo cargar el resumen.'));
+    fetch('/api/products').then((r) => { if (!r.ok) throw new Error(); return r.json(); }).then((d) => setProducts(d.items || [])).catch(() => setError('No se pudo cargar el resumen.')).finally(() => setReady(true));
   }, []);
   function save(next: Line[]) { setCart(next); localStorage.setItem('digari-cart', JSON.stringify(next)); window.dispatchEvent(new Event('digari-cart-updated')); }
   const detail = cart.map((line) => ({ line, product: products.find((product) => product.id === line.productId) })).filter((x): x is {line:Line;product:Product} => Boolean(x.product));
@@ -39,7 +40,9 @@ export function CartPage() {
     finally { setBusy(false); }
   }
   if (receipt?.trackingCode) return <section className="container receipt-card"><span className="success-mark">✓</span><span className="eyebrow">PEDIDO DE DEMOSTRACIÓN</span><h2>Listo para seguir.</h2><p>Tu código privado de consulta:</p><code className="tracking-code">{receipt.trackingCode}</code><p>Guardalo ahora. Solo se muestra una vez y no representa una compra.</p><div className="receipt-total">Total demo <strong>{money(receipt.totalCrc || 0)}</strong></div><Link className="button" href={`/seguimiento?code=${receipt.trackingCode}`}>Consultar estado demo</Link></section>;
-  if (cart.length === 0 && !error) return <section className="container empty-state page-empty"><span>◌</span><h2>Tu carrito está vacío.</h2><p>Agregá productos demo desde el catálogo para preparar un pedido de prueba.</p><Link className="button" href="/tienda">Explorar catálogo</Link></section>;
+  if (!ready) return <section className="container empty-state page-empty" role="status"><h2>Cargando tu bolsa…</h2><p>Estamos recuperando los productos y sus precios demo.</p></section>;
+  if (error) return <section className="container empty-state page-empty" role="alert"><h2>No pudimos cargar tu bolsa.</h2><p>{error}</p><button className="button" onClick={() => window.location.reload()}>Reintentar</button></section>;
+  if (cart.length === 0) return <section className="container empty-state page-empty"><span>◌</span><h2>Tu carrito está vacío.</h2><p>Agregá productos demo desde el catálogo para preparar un pedido de prueba.</p><Link className="button" href="/tienda">Explorar catálogo</Link></section>;
   return <section className="container cart-layout"><div className="cart-lines"><div className="section-heading"><div><span className="eyebrow">TU SELECCIÓN</span><h2>{detail.length} artículos</h2></div><Link className="text-button" href="/tienda">Seguir explorando</Link></div>
     {detail.map(({ line, product }) => <article className="cart-line" key={`${line.productId}-${line.variant}`}><div className="cart-art"><ProductImage productId={product.id} productName={product.name} /></div><div className="cart-product"><span className="product-meta">{product.family}</span><h3>{product.name}</h3><p>{product.variantLabel}: {line.variant || product.variants[0]}</p><strong>{money(product.priceCrc)}</strong></div><label className="quantity-control">Cantidad<input aria-label={`Cantidad de ${product.name}`} type="number" min="1" max="20" value={line.quantity} onChange={(e) => save(cart.map((x) => x.productId === line.productId && x.variant === line.variant ? { ...x, quantity: Number(e.target.value) } : x))} /></label><button className="text-button remove-line" onClick={() => save(cart.filter((x) => x.productId !== line.productId || x.variant !== line.variant))}>Quitar</button></article>)}
     {error && <div className="notice notice-error" role="alert">{error}</div>}</div>

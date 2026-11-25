@@ -75,6 +75,15 @@ if (!catalogDone) withTransaction(() => {
   for (const p of products) updateCatalog.run(p.name,p.family,p.category,p.priceCrc,p.stock,JSON.stringify(p.style),JSON.stringify(p.compatible),p.summary,p.variantLabel ?? null,JSON.stringify(p.variants),p.visual,p.icon,p.modelRef,JSON.stringify(p.audioNotes ?? null),p.id);
   db.prepare('INSERT INTO catalog_migrations(version) VALUES(?)').run(catalogVersion);
 });
+const imageVersion = 'licensed-photos-2026-11';
+if (!db.prepare('SELECT 1 FROM catalog_migrations WHERE version=?').get(imageVersion)) withTransaction(() => {
+  const updatePhotoModel = db.prepare('UPDATE products SET name=?, compatible_json=?, summary=?, variants_json=?, audio_json=? WHERE id=?');
+  for (const id of ['cuerdas-onda', 'controlador-eco']) {
+    const item = products.find((product) => product.id === id)!;
+    updatePhotoModel.run(item.name, JSON.stringify(item.compatible), item.summary, JSON.stringify(item.variants), JSON.stringify(item.audioNotes ?? null), id);
+  }
+  db.prepare('INSERT INTO catalog_migrations(version) VALUES(?)').run(imageVersion);
+});
 const updateModel = db.prepare('UPDATE products SET model_ref=?, audio_json=? WHERE id=?');
 for (const item of products) updateModel.run(item.modelRef, JSON.stringify(item.audioNotes ?? null), item.id);
 

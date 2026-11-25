@@ -4,7 +4,7 @@ type Props = { productId: string; productName: string; className?: string; prior
 
 /** One canonical mapping keeps catalog, cart, recommendations and study fallback aligned. */
 export const productPhoto = (productId: string) => `/product-photos/${productId}.webp`;
-const photoIds = new Set(['acustica-luz', 'electrica-bruma', 'bajo-marea', 'teclado-nube', 'ukelele-sol', 'flauta-rio', 'cable-pulso', 'cana-viento']);
+const photoIds = new Set(['acustica-luz', 'electrica-bruma', 'bajo-marea', 'teclado-nube', 'ukelele-sol', 'flauta-rio', 'cable-pulso', 'cana-viento', 'cuerdas-onda', 'microfono-claro', 'monitor-alfar', 'parlante-brisa', 'controlador-eco', 'audifonos-senda', 'interfaz-faro']);
 export const hasProductPhoto = (productId: string) => photoIds.has(productId);
 export const productImageSource = (productId: string) => hasProductPhoto(productId) ? productPhoto(productId) : `/products/${productId}.svg`;
 
