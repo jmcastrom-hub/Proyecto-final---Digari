@@ -17,7 +17,7 @@ export type GeminiContext = {
   candidates: Array<Pick<Product, 'id' | 'name' | 'family' | 'priceCrc' | 'stock' | 'style' | 'compatible' | 'summary'>>;
 };
 export type Recommendation = { productId: string; name: string; family: string; priceCrc: number; stockDemo: number; style: string[]; compatible: string[]; reason: string; href: string; compareHref: string };
-export type AdviceResult = { mode: 'gemini' | 'local'; message: string; question: string | null; recommendations: Recommendation[] };
+export type AdviceResult = { mode: 'gemini' | 'local'; message: string; question: string | null; recommendations: Recommendation[]; alternatives?: Recommendation[]; hasMore?: boolean };
 export type AdviceProvider = (context: GeminiContext) => Promise<unknown>;
 export class AdviceInputError extends Error {}
 
@@ -43,7 +43,7 @@ export function parseBudgetCrc(value: unknown): number | undefined {
   return amount;
 }
 
-export function parseAdviceInput(value: unknown, styles: string[], productIds?: string[]): AdviceInput {
+export function parseAdviceInput(value: unknown, styles: string[], productIds?: string[], availableFamilies: string[] = families): AdviceInput {
   if (!value || typeof value !== 'object' || Array.isArray(value)) throw new AdviceInputError('Envía un objeto JSON con tus preferencias.');
   const raw = value as Record<string, unknown>;
   const budgetCrc = parseBudgetCrc(raw.budgetCrc);
@@ -55,20 +55,28 @@ export function parseAdviceInput(value: unknown, styles: string[], productIds?: 
   };
   const family = textField('family', 60); const style = textField('style', 40); const use = textField('use', 32); const question = textField('question', 240);
   const conversationId = raw.conversationId === undefined ? undefined : typeof raw.conversationId === 'string' && /^[a-f0-9-]{36}$/i.test(raw.conversationId) ? raw.conversationId : (() => { throw new AdviceInputError('El identificador de conversación no es válido.'); })();
-  if (family && !families.includes(family) && !['Guitarra', 'Piano'].includes(family)) throw new AdviceInputError('Selecciona un tipo disponible en el catálogo demo.');
-  if (style && !styles.includes(style)) throw new AdviceInputError('Selecciona un estilo disponible en el catálogo demo.');
+  const normalizedQuestion = normalize(question ?? '');
+  const broadInventory = /\b(qu[eé]|que)\b.*\b(instrumentos?|equipos?|productos?|cat[aá]logo)\b.*\b(ten[eé]s|hay|disponibles?|ofrec[eé]s)\b/i.test(normalizedQuestion);
+  const explicitFamily = availableFamilies.find((item) => normalizedQuestion.includes(normalize(item)))
+    ?? (/\bguitarra(?:s)?\b/.test(normalizedQuestion) ? 'Guitarra' : undefined)
+    ?? (/\bpiano(?:s)?\b/.test(normalizedQuestion) ? 'Piano' : undefined)
+    ?? (/\bbajo(?:s)?\b/.test(normalizedQuestion) ? 'Bajo' : undefined);
+  const resolvedFamily = broadInventory ? undefined : explicitFamily ?? family;
+  if (resolvedFamily && !availableFamilies.includes(resolvedFamily) && !['Guitarra', 'Piano'].includes(resolvedFamily)) throw new AdviceInputError('Selecciona un tipo disponible en el catálogo demo.');
+  const requestedStyle = broadInventory ? undefined : style;
+  if (requestedStyle && !styles.includes(requestedStyle)) throw new AdviceInputError('Selecciona un estilo disponible en el catálogo demo.');
   if (use && !USE_OPTIONS.some((option) => option.id === use)) throw new AdviceInputError('Selecciona un uso de la lista disponible.');
   let previousRecommendationIds: string[] = [];
   if (raw.previousRecommendationIds !== undefined) {
-    if (!Array.isArray(raw.previousRecommendationIds) || raw.previousRecommendationIds.length > 3 || raw.previousRecommendationIds.some((id) => typeof id !== 'string' || (productIds && !productIds.includes(id)))) throw new AdviceInputError('Las referencias de la conversación no son válidas.');
+    if (!Array.isArray(raw.previousRecommendationIds) || raw.previousRecommendationIds.length > 100 || raw.previousRecommendationIds.some((id) => typeof id !== 'string' || (productIds && !productIds.includes(id)))) throw new AdviceInputError('Las referencias de la conversación no son válidas.');
     previousRecommendationIds = [...new Set(raw.previousRecommendationIds as string[])];
   }
   // Follow-ups may revise one field without resubmitting the preference form.
-  let resolvedBudget = budgetCrc;
-  const budgetUpdate = question && /presupuesto|monto|sub[ií]|aument[eé]|hasta/i.test(question) ? question.match(/₡?\s*(\d[\d.,' ]*)\s*$/)?.[1] : undefined;
+  let resolvedBudget = broadInventory ? undefined : budgetCrc;
+  const budgetUpdate = question?.match(/(?:m[aá]ximo|maximo|presupuesto|monto|sub[ií]|aument[eé]|hasta|tope|por)\s*(?:(?:de|a)\s*)?₡?\s*(\d[\d.,' ]*)/i)?.[1];
   if (budgetUpdate) resolvedBudget = parseBudgetCrc(budgetUpdate);
   const resolvedUse = question && /ensay|practic(?:ar|a)\s+con\s+(?:la\s+)?banda/i.test(question) ? 'ensayo' : use;
-  return { budgetCrc: resolvedBudget, family, style, use: resolvedUse, question, conversationId, previousRecommendationIds };
+  return { budgetCrc: resolvedBudget, family: resolvedFamily, style: requestedStyle, use: broadInventory ? undefined : resolvedUse, question, conversationId, previousRecommendationIds };
 }
 
 function normalize(text: string) { return text.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLocaleLowerCase('es'); }
@@ -78,9 +86,9 @@ function classifyIntent(question = ''): GeminiContext['preferences']['intent'] {
   if (/alternativ|otra opcion|mas econom|mas barato|similar/.test(value)) return 'alternatives';
   return 'recommend';
 }
-function missingQuestion(input: AdviceInput) {
-  return input.family ? null : '¿Qué tipo de equipo estás buscando? Podés decirme una categoría, por ejemplo bajos, guitarras o pianos.';
-}
+function isInventoryQuery(question = '') { return /\b(qu[eé]|que)\b.*\b(instrumentos?|equipos?|productos?|cat[aá]logo)\b.*\b(ten[eé]s|hay|disponibles?|ofrec[eé]s)\b/i.test(normalize(question)); }
+function isBeginnerQuery(question = '') { return /\b(empezar|principiante|para iniciar|estoy empezando)\b/i.test(normalize(question)); }
+function isMoreQuery(question = '') { return /\b(mostr[aá]me|mostrame|ver|dame)\s+m[aá]s\b|\bm[aá]s opciones\b/i.test(normalize(question)); }
 function familyMatches(product: Product, family?: string) {
   if (!family) return true;
   const value = normalize(family);
@@ -97,7 +105,9 @@ function recommendation(product: Product, reason: string): Recommendation {
   return { productId: product.id, name: product.name, family: product.family, priceCrc: product.priceCrc, stockDemo: product.stock, style: product.style, compatible: product.compatible, reason, href: `/productos/${product.id}`, compareHref: `/tienda?compare=${encodeURIComponent(product.id)}` };
 }
 function deterministicReason(product: Product, input: AdviceInput) {
-  const parts = [`Precio de demostración ₡${product.priceCrc.toLocaleString('es-CR')}, dentro del límite indicado`];
+  const parts = [`Precio de demostración ₡${product.priceCrc.toLocaleString('es-CR')}`];
+  if (input.budgetCrc !== undefined) parts.push('dentro del límite indicado');
+  else parts.push('con existencias en el catálogo demo');
   if (input.style && product.style.includes(input.style)) parts.push(`coincide con el estilo ${input.style}`);
   if (input.use) parts.push(`sus datos de uso y compatibilidad encajan con ${USE_OPTIONS.find((option) => option.id === input.use)?.label.toLocaleLowerCase('es')}`);
   if (product.compatible.length) parts.push(`compatibilidad declarada en la ficha: ${product.compatible.slice(0, 2).join(', ')}`);
@@ -111,31 +121,61 @@ function safeGeneratedReason(value: unknown): string | undefined {
 }
 
 export async function buildAdvice(input: AdviceInput, catalog: Product[], provider?: AdviceProvider): Promise<AdviceResult> {
-  const followUp = missingQuestion(input);
-  if (followUp) return { mode: 'local', message: 'Aún necesito algunos datos para filtrar opciones.', question: followUp, recommendations: [] };
-  const cheaper = /m[aá]s\s+(?:barat|econ[oó]mic)|menos\s+costos/i.test(input.question ?? '');
+  const questionText = input.question ?? '';
+  const inventoryQuery = isInventoryQuery(questionText);
+  const instrumentsQuery = inventoryQuery && /instrument/i.test(normalize(questionText));
+  const beginnerQuery = isBeginnerQuery(questionText);
+  const moreQuery = isMoreQuery(questionText);
+  const cheaper = /m[aá]s\s+(?:barat|econ[oó]mic)|menos\s+costos/i.test(questionText);
   const prior = new Set(input.previousRecommendationIds ?? []);
   const priorProducts = catalog.filter((item) => prior.has(item.id));
   const previousFloor = priorProducts.length ? Math.max(...priorProducts.map((item) => item.priceCrc)) : undefined;
   const priceCeiling = cheaper && previousFloor !== undefined ? Math.min(input.budgetCrc ?? Number.MAX_SAFE_INTEGER, previousFloor - 1) : (input.budgetCrc ?? Number.MAX_SAFE_INTEGER);
-  const pool = catalog.filter((product) => product.stock > 0 && product.priceCrc <= priceCeiling && familyMatches(product, input.family) && (!input.style || product.style.includes(input.style)) && (!input.use || matchesUse(product, input.use)) && (!cheaper || previousFloor === undefined || product.priceCrc < previousFloor) && (!cheaper || !prior.has(product.id)));
-  const ranked = pool.map((product) => ({ product, score: (input.style && product.style.includes(input.style) ? 2 : 0) + (input.use && matchesUse(product, input.use) ? 1 : 0) })).sort((a, b) => b.score - a.score || a.product.priceCrc - b.product.priceCrc || a.product.name.localeCompare(b.product.name, 'es')).slice(0, 3).map(({ product }) => product);
-  if (!ranked.length) {
-    if (cheaper && priorProducts.length) return { mode: 'local', message: 'No encuentro otra ficha de esta categoría con existencias y precio inferior a la opción que ya vimos. Podés cambiar el tipo o ampliar el presupuesto.', question: null, recommendations: [] };
-    const amount = input.budgetCrc === 0 ? '₡0' : input.budgetCrc === undefined ? 'sin presupuesto definido' : `₡${input.budgetCrc.toLocaleString('es-CR')}`;
-    const message = cheaper && previousFloor !== undefined
-      ? 'No encuentro una alternativa más barata dentro de esta categoría con existencias demo. Podés cambiar de tipo o revisar el catálogo completo.'
-      : input.budgetCrc === 0
-      ? 'Con ₡0 no hay una ficha demo disponible dentro de ese monto. Cuando querás, podés flexibilizar el presupuesto o probar otro tipo de equipo.'
-      : input.family === 'Piano' ? 'En el catálogo demo no hay pianos acústicos ni pianos digitales todavía; sí hay teclados, que son una familia distinta. Puedo mostrarte teclados si te sirven.'
-      : input.budgetCrc !== undefined ? `No encontré una ficha demo con existencias dentro de ${amount} para esos criterios. Si te parece, podés flexibilizar un poco el monto o ajustar el uso/estilo.` : 'No encontré opciones con existencias demo para este tipo de equipo.';
-    return { mode: 'local', message, question: null, recommendations: [] };
+  const basePool = catalog.filter((product) => product.stock > 0 && familyMatches(product, input.family) && (!(instrumentsQuery || beginnerQuery) || product.category === 'Instrumentos') && (!(beginnerQuery || input.use) || beginnerQuery || matchesUse(product, input.use!)) && (!input.style || product.style.includes(input.style)));
+  const unpricedPool = basePool.filter((product) => (!cheaper || previousFloor === undefined || product.priceCrc < previousFloor) && (!cheaper || !prior.has(product.id)));
+  const eligible = unpricedPool.filter((product) => product.priceCrc <= priceCeiling && (!moreQuery || !prior.has(product.id)));
+  const scored = eligible.map((product) => ({
+    product,
+    score: (input.style && product.style.includes(input.style) ? 5 : 0) +
+      (input.use && matchesUse(product, input.use) ? 2 : 0) +
+      (beginnerQuery && matchesUse(product, 'iniciacion') ? 4 : 0) +
+      (beginnerQuery && product.compatible.some((item) => normalize(item).includes('principiante')) ? 6 : 0) +
+      (beginnerQuery && product.category === 'Instrumentos' ? 2 : 0),
+  })).sort((a, b) => b.score - a.score || a.product.priceCrc - b.product.priceCrc || a.product.name.localeCompare(b.product.name, 'es'));
+  const diversePool = (inventoryQuery || beginnerQuery) ? (() => {
+    const group = (product: Product) => instrumentsQuery ? product.family : product.category;
+    const used = new Set<string>();
+    const diverse = scored.filter(({ product }) => { const key = group(product); if (used.has(key)) return false; used.add(key); return true; });
+    const diverseIds = new Set(diverse.map(({ product }) => product.id));
+    return [...diverse, ...scored.filter(({ product }) => !diverseIds.has(product.id))];
+  })() : scored;
+  const chosen = diversePool.slice(0, 3).map(({ product }) => product);
+  const hasMore = eligible.length > chosen.length;
+  const amount = input.budgetCrc === 0 ? '₡0' : input.budgetCrc === undefined ? '' : `₡${input.budgetCrc.toLocaleString('es-CR')}`;
+  if (!chosen.length) {
+    if (input.family === 'Piano') return { mode: 'local', message: 'No tenemos pianos acústicos ni digitales en el catálogo demo. Sí hay teclados, que son una familia distinta. Puedo mostrarte esas opciones si te sirven.', question: null, recommendations: [] };
+    const alternatives = input.budgetCrc === undefined ? [] : unpricedPool.filter((product) => product.priceCrc > input.budgetCrc!).sort((a, b) => a.priceCrc - b.priceCrc).slice(0, 3).map((product) => recommendation(product, `Alternativa de demostración: ₡${product.priceCrc.toLocaleString('es-CR')}, por encima de tu tope de ${amount}.`));
+    const message = cheaper && priorProducts.length
+      ? 'No encuentro otra ficha con existencias demo por debajo del precio que vimos.'
+      : input.budgetCrc !== undefined
+        ? `${input.budgetCrc === 0 ? 'Con ₡0' : `No encontré coincidencias dentro de ${amount}`} para esa consulta.${alternatives.length ? ' Te separo alternativas de demostración que superan el tope; podés flexibilizar el monto si te sirven.' : ' Podés flexibilizar el monto o cambiar los criterios.'}`
+        : 'No encontré opciones con existencias demo para esa consulta.';
+    return { mode: 'local', message, question: null, recommendations: [], alternatives };
   }
-  const localRecommendations = ranked.map((product) => recommendation(product, deterministicReason(product, input)));
-  if (!provider) return { mode: 'local', message: 'Asesoría local: filtré el catálogo demo con los mismos criterios, sin conectar con Gemini.', question: null, recommendations: localRecommendations };
+  const localRecommendations = chosen.map((product) => recommendation(product, deterministicReason(product, input)));
+  const familyNames = [...new Set(basePool.map((product) => product.family))];
+  const summary = inventoryQuery
+    ? `${instrumentsQuery ? 'Instrumentos' : 'Equipo'} con existencias demo en ${familyNames.length} familias: ${familyNames.join(', ')}. Te muestro ejemplos variados del catálogo; precios y stock son de demostración.`
+    : beginnerQuery
+      ? 'Para empezar, estas opciones del catálogo demo son variadas y tienen existencias. Compará su uso y compatibilidad en cada ficha.'
+      : cheaper
+        ? 'Estas son opciones del catálogo demo por debajo del precio que ya vimos.'
+        : 'Asesoría local: revisé las fichas vigentes de SQLite con tus criterios. Precios y existencias son de demostración.';
+  const message = `${summary}${hasMore ? ' Hay más opciones; escribí «mostrame más» para ver otras sin repetir.' : ''}`;
+  if (!provider) return { mode: 'local', message, question: null, recommendations: localRecommendations, hasMore };
   const context: GeminiContext = {
     preferences: { budgetCrc: input.budgetCrc, family: input.family, style: input.style ?? null, use: input.use ?? null, intent: classifyIntent(input.question) },
-    candidates: ranked.map(({ id, name, family, priceCrc, stock, style, compatible, summary }) => ({ id, name, family, priceCrc, stock, style, compatible, summary })),
+    candidates: chosen.map(({ id, name, family, priceCrc, stock, style, compatible, summary }) => ({ id, name, family, priceCrc, stock, style, compatible, summary })),
   };
   try {
     const generated = await provider(context);
@@ -145,13 +185,13 @@ export async function buildAdvice(input: AdviceInput, catalog: Product[], provid
     const mapped: Recommendation[] = []; const seen = new Set<string>();
     for (const value of data.recommendations) {
       if (!value || typeof value !== 'object' || Array.isArray(value)) throw new Error('invalid recommendation');
-      const item = value as Record<string, unknown>; const product = ranked.find((candidate) => candidate.id === item.productId); const reason = safeGeneratedReason(item.reason);
+      const item = value as Record<string, unknown>; const product = chosen.find((candidate) => candidate.id === item.productId); const reason = safeGeneratedReason(item.reason);
       if (!product || seen.has(product.id) || !reason) throw new Error('recommendation outside candidates');
       seen.add(product.id); mapped.push(recommendation(product, reason));
     }
     const question = data.question === null || data.question === undefined ? null : typeof data.question === 'string' && data.question.length <= 200 && !/[\r\n<>]/.test(data.question) ? data.question : (() => { throw new Error('invalid question'); })();
-    return { mode: 'gemini', message: 'Gemini explicó estas opciones utilizando únicamente candidatos filtrados del catálogo demo.', question, recommendations: mapped };
+    return { mode: 'gemini', message: `${message} Gemini añadió una explicación a estas opciones.`, question, recommendations: mapped, hasMore };
   } catch {
-    return { mode: 'local', message: 'Gemini no respondió dentro del formato permitido; te muestro el filtro local con los mismos criterios.', question: null, recommendations: localRecommendations };
+    return { mode: 'local', message: `${message} Gemini no respondió; te muestro la selección local.`, question: null, recommendations: localRecommendations, hasMore };
   }
 }

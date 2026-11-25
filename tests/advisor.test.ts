@@ -21,13 +21,49 @@ describe('asesoría determinista y privacidad', () => {
     const parsed = parseAdviceInput({ question: 'Busco un piano por ₡200 000', family: 'Piano', budgetCrc: 200000 }, styles, products.map((item) => item.id));
     const result = await buildAdvice(parsed, products);
     assert.equal(result.recommendations.length, 0);
-    assert.match(result.message, /pianos digitales.*teclados.*familia distinta/i);
+    assert.match(result.message, /pianos acústicos ni digitales.*teclados.*familia distinta/i);
   });
   it('permite guitarra acústica y eléctrica dentro del presupuesto solicitado', async () => {
     const parsed = parseAdviceInput({ question: 'Busco una guitarra por ₡150 000', family: 'Guitarra', budgetCrc: 150000 }, styles, products.map((item) => item.id));
     const result = await buildAdvice(parsed, products);
     assert.deepEqual(new Set(result.recommendations.map((item) => item.family)), new Set(['Guitarra acústica', 'Guitarra eléctrica']));
     assert.ok(result.recommendations.every((item) => item.priceCrc <= 150000));
+  });
+  it('responde consultas generales y limpia filtros heredados guardados', async () => {
+    const parsed = parseAdviceInput({ budgetCrc: 0, family: 'Bajo', style: 'funk', use: 'ensayo', question: '¿Qué instrumentos tenés?' }, styles, products.map((item) => item.id));
+    assert.equal(parsed.budgetCrc, undefined); assert.equal(parsed.family, undefined); assert.equal(parsed.style, undefined); assert.equal(parsed.use, undefined);
+    const result = await buildAdvice(parsed, products);
+    assert.match(result.message, /familias:.*Guitarra acústica.*Bajo/i);
+    assert.equal(result.recommendations.length, 3);
+    assert.ok(result.recommendations.every((item) => products.find((product) => product.id === item.productId)?.category === 'Instrumentos'));
+  });
+  it('resume el inventario completo de equipo y diversifica las tarjetas por categoría', async () => {
+    const parsed = parseAdviceInput({ budgetCrc: 0, family: 'Piano', question: '¿Qué equipo tenés?' }, styles, products.map((item) => item.id));
+    const result = await buildAdvice(parsed, products);
+    assert.ok(result.message.includes('Cable') && result.message.includes('Interfaz') && result.message.includes('Bajo'));
+    assert.equal(result.recommendations.length, 3);
+    assert.equal(new Set(result.recommendations.map((item) => products.find((product) => product.id === item.productId)?.category)).size, 3);
+  });
+  it('recomienda para empezar sin pedir presupuesto y amplía sin repetir productos', async () => {
+    const first = await buildAdvice({ question: '¿Cuál me recomendás para empezar?', use: 'iniciacion' }, products);
+    assert.equal(first.recommendations.length, 3);
+    const more = await buildAdvice({ question: 'mostrame más', use: 'iniciacion', previousRecommendationIds: first.recommendations.map((item) => item.productId) }, products);
+    assert.ok(more.recommendations.length > 0 && more.recommendations.length <= 3);
+    assert.ok(more.recommendations.every((item) => !first.recommendations.some((prior) => prior.productId === item.productId)));
+    assert.equal(more.hasMore, true);
+  });
+  it('respeta el tope escrito en la consulta y separa opciones por encima del monto', async () => {
+    const overBudget = { ...products.find((item) => item.id === 'bajo-marea')!, id: 'bajo-gama-alta-demo', name: 'Bajo demo de mayor precio', priceCrc: 180000 };
+    const parsed = parseAdviceInput({ family: 'Bajo', question: 'Busco bajo máximo ₡120 000' }, styles, [...products.map((item) => item.id), overBudget.id]);
+    const result = await buildAdvice(parsed, [...products, overBudget]);
+    assert.equal(parsed.budgetCrc, 120000);
+    assert.ok(result.recommendations.every((item) => item.priceCrc <= 120000));
+    assert.ok(result.alternatives?.some((item) => item.productId === overBudget.id && item.priceCrc > 120000));
+  });
+  it('evalúa el producto final del inventario completo antes de recortar candidatos', async () => {
+    const finalProduct = { ...products[0], id: 'piano-digital-final', name: 'Piano digital final', family: 'Piano digital', priceCrc: 95000, stock: 2, category: 'Instrumentos', style: ['solo-final'], compatible: [], summary: 'Una ficha añadida al final de SQLite.' };
+    const result = await buildAdvice({ family: 'Piano', style: 'solo-final', question: 'Busco un piano' }, [...products, finalProduct]);
+    assert.deepEqual(result.recommendations.map((item) => item.productId), ['piano-digital-final']);
   });
   it('corrige texto UTF-8 legado en conversaciones ya guardadas', () => {
     assert.equal(repairLegacyUtf8('Pr\u00c3\u00a1ctica de guitarra'), 'Práctica de guitarra');
@@ -46,7 +82,7 @@ describe('asesoría determinista y privacidad', () => {
     assert.throws(() => parseAdviceInput({ ...completeInput, budgetCrc: '80 mil' }, styles), AdviceInputError);
     assert.throws(() => parseAdviceInput({ ...completeInput, style: 'inexistente' }, styles), AdviceInputError);
     const parsed = parseAdviceInput({ question: 'Busco algo' }, styles);
-    return buildAdvice(parsed, products).then((result) => { assert.equal(result.mode, 'local'); assert.match(result.question ?? '', /tipo de equipo/i); });
+    return buildAdvice(parsed, products).then((result) => { assert.equal(result.mode, 'local'); assert.ok(result.recommendations.length > 0); });
   });
   it('devuelve seguimiento local cuando el presupuesto no alcanza', async () => {
     const result = await buildAdvice({ ...completeInput, budgetCrc: 1000 }, products);
@@ -56,7 +92,7 @@ describe('asesoría determinista y privacidad', () => {
     const result = await buildAdvice({ ...completeInput, budgetCrc: 0 }, products);
     assert.equal(result.recommendations.length, 0);
     assert.match(result.message, /₡0/);
-    assert.match(result.message, /podés flexibilizar el presupuesto/i);
+    assert.match(result.message, /podés flexibilizar el monto/i);
   });
   it('funciona sin proveedor con hasta tres candidatos y motivos reproducibles', async () => {
     const result = await buildAdvice({ ...completeInput, budgetCrc: 180000, family: 'Guitarra eléctrica', style: 'rock', use: 'ensayo' }, products);

@@ -22,7 +22,7 @@ export async function POST(request: Request) {
   } catch { return Response.json({ error: 'Envía una consulta JSON válida.' }, { status: 400, headers }); }
   const catalog = listProducts();
   let input;
-  try { input = parseAdviceInput(value, [...new Set(catalog.flatMap((item) => item.style))], catalog.map((item) => item.id)); }
+  try { input = parseAdviceInput(value, [...new Set(catalog.flatMap((item) => item.style))], catalog.map((item) => item.id), [...new Set(catalog.map((item) => item.family))]); }
   catch (error) { return Response.json({ error: error instanceof AdviceInputError ? error.message : 'La consulta no es válida.' }, { status: 400, headers }); }
   const model = process.env.GEMINI_MODEL?.trim() || DEFAULT_GEMINI_MODEL;
   const key = process.env.GEMINI_API_KEY?.trim();

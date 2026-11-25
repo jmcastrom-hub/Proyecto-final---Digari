@@ -25,7 +25,7 @@ export async function requestGeminiAdvice(context: GeminiContext, options: { api
     body: JSON.stringify({
       model: options.model,
       store: false,
-      system_instruction: 'Responde en español como asesor musical. Trabaja únicamente con las preferencias estructuradas y los candidatos entregados. No inventes especificaciones, compatibilidad, precios ni existencias. No agregues productos; devuelve únicamente IDs de los candidatos. Explica diferencias breves usando estilo, uso, resumen y compatibilidad del candidato. No decidas compras, órdenes, pagos ni estados. No solicites datos personales. Si falta un dato útil, pregunta solo por tipo de instrumento, estilo, uso o presupuesto.',
+      system_instruction: 'Responde en español como asesor musical. Trabaja únicamente con las preferencias estructuradas y los candidatos elegidos por el servidor, que ya consultó el inventario vigente completo. No inventes especificaciones, compatibilidad, precios ni existencias. No agregues productos; devuelve únicamente IDs de los candidatos recibidos y razones breves basadas en estilo, uso, resumen y compatibilidad. No elimines opciones solo porque falten preferencias cuando el usuario pidió el inventario o una recomendación general. No decidas compras, órdenes, pagos ni estados y no solicites datos personales.',
       input: JSON.stringify(context),
       generation_config: { max_output_tokens: 420, thinking_level: 'low' },
       response_format: { type: 'text', mime_type: 'application/json', schema: responseSchema },
