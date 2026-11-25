@@ -18,11 +18,11 @@ Prototipo académico local para clientes y operador de demostración. El servido
 
 **Aceptación observable:** controles de mouse/táctiles/teclado y etiquetas se verifican; el modelo se distingue como ilustrativo salvo que se licencie y verifique uno exacto; sonido inicia solo por acción del usuario; audio A/B usa misma señal con volumen equiparado y explica que la simulación no reproduce especificación real; si WebGL/audio falla se presenta alternativa e instrucción. Carga diferida del motor y muestras.
 
-### RF-03 — Asesoría Gemini con continuidad local
+### RF-03 — Asesoría conversacional con modo local y Gemini opcional
 
-**Entrada:** presupuesto CRC positivo, tipo, uso/estilo y texto acotado. **Salida:** hasta tres IDs candidatos, explicación, pregunta si faltan datos y etiqueta del modo Gemini o local.
+**Entrada vigente:** texto libre de hasta 240 caracteres, una petición por turno, contexto de conversación y hasta 100 IDs ya presentados. Presupuesto es opcional (entero CRC de ₡0 a ₡10 000 000), igual que familia, uso y estilo; se infieren del mensaje y no hay campos obligatorios separados. **Salida:** respuesta legible, modo local/Gemini, resumen por familia para consultas generales, hasta tres tarjetas con foto/modelo/precio/enlace, alternativas sobre el tope separadas y continuación sin repetir.
 
-**Aceptación observable:** servidor filtra candidatos por presupuesto/tipo/stock/compatibilidad; valida que IDs sugeridos estén en candidatos; clave ausente, timeout, cuota/error activa fallback determinista con mismos filtros; entrada demasiado larga/inválida se rechaza; Gemini nunca dicta precio, stock, orden o estado. Enviar solo preferencias y atributos de catálogo, nunca PII, credenciales ni historial de pedido. El historial opcional local se puede borrar y no se comparte al proveedor.
+**Aceptación observable:** cada solicitud consulta SQLite y evalúa el inventario vigente completo antes de escoger/reducir tarjetas; una consulta general nueva vuelve al catálogo completo sin filtros antiguos. Seguimientos como “más barato”/“mostrame más” mantienen el tema; un presupuesto explícito nuevo reemplaza el anterior. Un piano ausente se declara ausente y no se renombra un teclado como piano. Si no hay coincidencias bajo el tope, cualquier alternativa superior se etiqueta aparte. Gemini solo explica candidatos seleccionados por servidor; modo local usa las mismas reglas. Entrada inválida se rechaza; proveedor ausente, timeout, cuota/error o salida inválida usa fallback local. No se mandan PII, texto/historial conversacional, códigos ni pedidos al proveedor.
 
 ### RF-04 — Pedido/pago demo y seguimiento
 
@@ -69,9 +69,9 @@ JSON, rutas Next.js `/api`; códigos 200/201 para éxito, 400 entrada inválida,
 
 Validación de esquema en servidor; límites de frecuencia y tamaño en endpoints públicos. Nunca incluir `operatorDemoToken` en consultas/respuestas ni registrar secretos.
 
-### P3 — contrato implementado de asesoría
+### Contrato vigente de Asesoría en el candidato
 
-`/asesoria` muestra el historial, un campo libre y los controles Enviar/Empezar de nuevo; no presenta un formulario separado de preferencias. El contexto estructurado (tope, tipo, estilo y uso) se conserva en `localStorage` para seguimientos, pero una pregunta general nueva sobre el inventario lo limpia. Cada petición de servidor consulta el catálogo vigente completo en SQLite y evalúa disponibilidad, criterios y presupuesto antes de escoger hasta tres productos diversos. «Mostrame más» excluye todos los IDs ya mostrados en el tema actual. Con tope sin coincidencias, la respuesta separa alternativas por encima del monto. Cada tarjeta toma nombre, precio demo, existencias, foto y enlace del catálogo. Gemini solo explica los IDs elegidos por el servidor; su modo y el modo local usan la misma selección y fallback. El proveedor opera con `store:false`; no se usa estado conversacional remoto. Límites: cuerpo 4 KB, texto 240 caracteres, 12 solicitudes/minuto por dirección, salida hasta 420 tokens y timeout 8 s.
+`/asesoria` muestra historial, compositor, Enviar y Empezar de nuevo; no hay formulario de preferencias separado. El navegador guarda conversación y preferencias estructuradas localmente; una pregunta general o un tema nuevo reinicia criterios heredados. Cada mensaje produce una sola llamada `POST /api/advice` con `{question, conversationId?, previousRecommendationIds?, budgetCrc?, family?, style?, use?}`. El servidor valida, ejecuta `listProducts()` de SQLite y evalúa candidatos antes de limitar tarjetas. Consulta general resume familias con existencias; “empezar” sugiere opciones concretas; “más” excluye IDs ya vistos. Un monto explícito del mensaje prevalece sobre el estado previo; ₡0 es válido. Las tarjetas derivan imagen, nombre, precio, stock y enlace del catálogo. Gemini solo recibe preferencias controladas e IDs/candidatos elegidos por el servidor; no recibe el texto de usuario ni selecciona/modifica datos comerciales. El modo local conserva el mismo filtro. Cuerpo máximo 4 KB, texto 240 caracteres, límite de 12 solicitudes/minuto por clave de cliente, máximo solicitado de 420 tokens y timeout de 8 s; el limitador en memoria sirve solo a la demo local.
 
 ## Arquitectura y tecnología
 

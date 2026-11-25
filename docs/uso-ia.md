@@ -1,5 +1,17 @@
 # Uso de IA — ciclos P1, P2 y P3
 
+## Revisiones solicitadas por el estudiante: evidencia de iteración humana
+
+Estas son tres revisiones reales expresadas por el estudiante durante el trabajo. Se registran como instrucciones y correcciones incorporadas; **no son una aprobación final** de la entrega ni sustituyen el ensayo de su autor.
+
+| Revisión del estudiante | Corrección realizada | Verificación y evidencia | Commit relacionado |
+|---|---|---|---|
+| Tema/contraste: «Corrige el tema oscuro… aplica superficies oscuras coherentes, texto marfil y ámbar para acciones» y después «Usa Instrumentos como referencia… títulos y descripciones… escritorio y móvil» | Se ajustó la cascada del tema y el chat oscuro; las categorías de Inicio recibieron fondo compartido oscuro. | Capturas del tema/chat en [`docs/evidencia-tema-chat/`](evidencia-tema-chat/); prueba de tarjetas [`tests/category-tiles-check.mjs`](../tests/category-tiles-check.mjs) y capturas de [`docs/qa/evidence/`](qa/evidence/). Contraste/capturas son evidencia automatizada, no aprobación del estudiante. | [`13c5ed5`](https://github.com/jmcastrom-hub/Proyecto-final---Digari/commit/13c5ed5) y [`36080a7`](https://github.com/jmcastrom-hub/Proyecto-final---Digari/commit/36080a7) |
+| Menú: cerrar al navegar incluso a la página actual, Escape, clic fuera y cambio a escritorio; mantener logo/Bolsa y panel alcanzable al 200 %. | El encabezado controla estados móvil/Tienda, foco y anclaje debajo de la cabecera; al escapar devuelve foco y la selección cierra los paneles. | Registro [`docs/evidencia-menu/verificacion.json`](evidencia-menu/verificacion.json), capturas móvil/200 % y lógica de componente. Evidencia en emulación/automatización; no equivale a teléfono físico. | [`90ee345`](https://github.com/jmcastrom-hub/Proyecto-final---Digari/commit/90ee345) |
+| Chat: «Elimina … Preferencias… Deja el historial, un campo de texto, Enviar y Empezar de nuevo» y consulta libre del catálogo vigente antes de recomendar. | Asesoría quedó como conversación de texto libre; cada mensaje consulta SQLite, evalúa el conjunto antes del recorte, permite pedir más sin repetir, respeta presupuesto y muestra respuesta local o Gemini según el modo. | Tests de inventario/asesoría y [`docs/qa/advice-chat-inventory.md`](qa/advice-chat-inventory.md), incluida ficha válida al final del conjunto y datos de tarjeta leídos del catálogo. Es verificación técnica; la revisión conversacional final del estudiante sigue pendiente. | [`0d2f086`](https://github.com/jmcastrom-hub/Proyecto-final---Digari/commit/0d2f086) |
+
+Las aprobaciones del estudiante, ensayo cronometrado y presentación oral permanecen **pendientes**. No registrar este historial de cambios como visto bueno.
+
 ## Ciclo 3 · Asesoría contextual y modo local (P3)
 
 - **Tarea:** incorporar una conversación de presupuesto/tipo/uso/estilo con hasta tres opciones, fallback local y Gemini opcional sin afectar pedidos, catálogo ni seguimiento.
