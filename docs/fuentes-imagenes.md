@@ -50,3 +50,9 @@ Los enlaces oficiales confirman modelos cuando están disponibles. El autor y la
 - La foto de YRS-24B incluye el estuche; la de los cables muestra más de un cable. No se presentan como fotografías de existencias locales.
 - Las quince fotos aparecen mediante `ProductImage` en tienda, ficha, favoritos, comparación, carrito y recomendaciones. Estudio usa la misma ruta como alternativa a WebGL. El visor 3D sigue rotulado como ilustrativo.
 - Revisión visual final en escritorio y teléfono debe confirmar encuadre y correspondencia antes de liberar fuera del prototipo académico.
+
+## Revisión de ampliación del catálogo (noviembre de 2026)
+
+La revisión de esta versión encontró 15 fichas en 15 familias, una por familia. No se agregaron fichas: esta entrega no pudo verificar para modelos adicionales, de forma simultánea, el modelo/variante exactos y una fotografía reutilizable con licencia clara. En particular, todavía hacen falta al menos cinco modelos económicos, intermedios y altos por familia; Piano digital también está ausente. No se duplicaron las fotografías actuales para aparentar modelos nuevos ni se tocaron los productos, pedidos o líneas históricas de SQLite.
+
+El conteo actual es 15/15 archivos de foto con atribución y licencia registradas en la tabla anterior; 9/15 fichas tienen además confirmación de modelo indicada en la sección de fuentes oficiales. Las seis fichas restantes y sus dudas concretas siguen enumeradas en esa tabla. La secuencia de Asesoría y el estado de cobertura del inventario están registrados en [la prueba de regresión](qa/advice-chat-regression.md).

@@ -26,7 +26,9 @@ try {
   assert.match(await answer.innerText(), /Asesoría local/);
   assert.ok(await answer.locator('.advice-recommendation').count() >= 1);
   assert.ok(await answer.locator('.advice-recommendation img').count() >= 1);
-  assert.ok((await answer.locator('.advice-recommendation img').evaluateAll((images) => images.every((image) => image instanceof HTMLImageElement && image.complete && image.naturalWidth > 0))));
+  const bassPhotos = answer.locator('.advice-recommendation img');
+  for (const photo of await bassPhotos.all()) await photo.scrollIntoViewIfNeeded();
+  await page.waitForFunction(() => [...document.querySelectorAll('.chat-assistant:last-child .advice-recommendation img')].every((image) => image instanceof HTMLImageElement && image.complete && image.naturalWidth > 0), undefined, { timeout: 10000 });
   assert.ok(await answer.locator('a[href^="/productos/"]').count() >= 1);
   assert.match(await answer.innerText(), /₡/);
   await page.screenshot({ path: 'docs/qa/advice-chat-bajos.png', fullPage: true });
