@@ -16,15 +16,21 @@ assert(catalog.items.find((item) => item.id === 'monitor-alfar')?.audioNotes?.co
 const advice = await fetch(base + '/api/advice', json({ budgetCrc: 80000, family: 'Guitarra acústica', style: 'folk', use: 'iniciacion', question: '¿Cuál me recomiendas?' })).then((response) => response.json());
 assert(advice.mode === 'local' && advice.recommendations.length <= 3 && advice.recommendations.every((item) => item.productId === 'acustica-luz'), 'La asesoría local no filtró el catálogo correctamente.');
 const insufficientAdvice = await fetch(base + '/api/advice', json({ budgetCrc: 1000, family: 'Guitarra acústica', use: 'iniciacion' })).then((response) => response.json());
-assert(insufficientAdvice.mode === 'local' && insufficientAdvice.recommendations.length === 0 && insufficientAdvice.question, 'La asesoría no preguntó ante presupuesto insuficiente.');
+assert(insufficientAdvice.mode === 'local' && insufficientAdvice.recommendations.length === 0 && /flexibilizar/.test(insufficientAdvice.message), 'La asesoría debe explicar con tacto cuando el presupuesto no alcanza.');
 const invalidAdvice = await fetch(base + '/api/advice', json({ budgetCrc: -1, family: 'Guitarra acústica', use: 'iniciacion' }));
 assert(invalidAdvice.status === 400, 'La asesoría debe rechazar un presupuesto inválido.');
 assert(catalog.total === 15, 'El catálogo no devolvió 15 fichas.');
+const photoIds = new Set(['acustica-luz', 'electrica-bruma', 'bajo-marea', 'teclado-nube', 'ukelele-sol', 'flauta-rio', 'cable-pulso', 'cana-viento']);
+for (const item of catalog.items) {
+  const photo = photoIds.has(item.id);
+  const image = await fetch(`${base}${photo ? `/product-photos/${item.id}.webp` : `/products/${item.id}.svg`}`);
+  assert(image.status === 200 && image.headers.get('content-type')?.includes(photo ? 'image/webp' : 'image/svg+xml'), `La imagen de ${item.id} no está disponible.`);
+}
 const filterError = await fetch(base + '/api/products?minPrice=90000&maxPrice=10000');
 assert(filterError.status === 400, 'El API debe rechazar un rango CRC imposible.');
 
 const trackingCode = randomBytes(24).toString('base64url');
-const orderPayload = { items: [{ productId: 'ukelele-sol', variant: 'Miel', quantity: 1 }], fulfillment: 'retiro demo', idempotencyKey: randomUUID(), trackingCode };
+const orderPayload = { items: [{ productId: 'ukelele-sol', variant: 'Rojo', quantity: 1 }], fulfillment: 'retiro demo', idempotencyKey: randomUUID(), trackingCode };
 const orderResponse = await fetch(base + '/api/orders', json(orderPayload));
 const order = await orderResponse.json();
 assert(orderResponse.status === 201 && order.trackingCode === trackingCode, 'No se creó pedido demo.');

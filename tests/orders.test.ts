@@ -14,13 +14,13 @@ describe('catálogo y pedidos demo', () => {
     assert.ok(items.find((item) => item.id === 'monitor-alfar')?.audioNotes?.connections.length);
   });
   it('filtra catálogo por presupuesto y estilo', () => {
-    const results = listProducts({ minPrice: 30000, maxPrice: 80000, style: 'folk' });
+    const results = listProducts({ minPrice: 25000, maxPrice: 100000, style: 'folk' });
     assert.ok(results.length > 0);
-    assert.ok(results.every((item) => item.priceCrc >= 30000 && item.priceCrc <= 80000 && item.style.includes('folk')));
+    assert.ok(results.every((item) => item.priceCrc >= 25000 && item.priceCrc <= 100000 && item.style.includes('folk')));
   });
   it('recalcula total y crea seguimiento privado', () => {
     const order = createOrder({ items: [{ productId: 'acustica-luz', variant: 'Natural', quantity: 2 }], fulfillment: 'retiro demo', idempotencyKey: '41a3f1cc-23b6-45e8-87cd-f129e75a12d8', trackingCode: 'Z'.repeat(32) });
-    assert.equal(order.totalCrc, 149800); assert.ok('trackingCode' in order && order.trackingCode);
+    assert.equal(order.totalCrc, 169800); assert.ok('trackingCode' in order && order.trackingCode);
     const tracked = lookupOrder('trackingCode' in order ? order.trackingCode : '');
     assert.equal(tracked?.status, 'recibido'); assert.equal(tracked?.lines[0].quantity, 2);
   });
@@ -32,8 +32,8 @@ describe('catálogo y pedidos demo', () => {
   });
   it('rechaza cantidad inválida y stock insuficiente sin alterar stock', () => {
     assert.throws(() => createOrder({ items: [{ productId: 'acustica-luz', quantity: 0 }], fulfillment: 'retiro demo', idempotencyKey: '41a3f1cc-23b6-45e8-87cd-f129e75a12d8', trackingCode:'A'.repeat(32) }), InputError);
-    assert.throws(() => createOrder({ items: [{ productId: 'acustica-luz', quantity: 5 }], fulfillment: 'retiro demo', idempotencyKey: '51a3f1cc-23b6-45e8-87cd-f129e75a12d8', trackingCode:'B'.repeat(32) }), ConflictError);
-    assert.equal(listProducts().find((p) => p.id === 'acustica-luz')?.stock, 4);
+    assert.throws(() => createOrder({ items: [{ productId: 'acustica-luz', quantity: 9 }], fulfillment: 'retiro demo', idempotencyKey: '51a3f1cc-23b6-45e8-87cd-f129e75a12d8', trackingCode:'B'.repeat(32) }), ConflictError);
+    assert.equal(listProducts().find((p) => p.id === 'acustica-luz')?.stock, 8);
   });
   it('registra una sola vez pedidos con la misma clave', () => {
     const payload = { items: [{ productId: 'ukelele-sol', quantity: 1 }], fulfillment: 'envío demo', idempotencyKey: '61a3f1cc-23b6-45e8-87cd-f129e75a12d8', trackingCode: 'C'.repeat(32) };
@@ -43,7 +43,7 @@ describe('catálogo y pedidos demo', () => {
     assert.equal(second.trackingCode, payload.trackingCode);
     assert.throws(() => createOrder({ ...payload, trackingCode: 'D'.repeat(32) }), ConflictError);
     assert.equal(Number((db.prepare('SELECT COUNT(*) AS count FROM orders').get() as { count: number }).count), 1);
-    assert.equal(listProducts().find((p) => p.id === 'ukelele-sol')?.stock, 5);
+    assert.equal(listProducts().find((p) => p.id === 'ukelele-sol')?.stock, 11);
   });
   it('valida código privado, operador y transición consecutiva', () => {
     const order = createOrder({ items: [{ productId: 'cable-pulso', quantity: 1 }], fulfillment: 'retiro demo', idempotencyKey: '71a3f1cc-23b6-45e8-87cd-f129e75a12d8', trackingCode:'D'.repeat(32) });

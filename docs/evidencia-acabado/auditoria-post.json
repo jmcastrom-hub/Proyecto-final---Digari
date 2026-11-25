@@ -1,0 +1,1021 @@
+{
+  "base": "http://127.0.0.1:3113",
+  "browser": "Chrome Headless 157",
+  "results": {
+    "/:desktop": {
+      "title": "Digari Studio | Elegí tu próximo sonido",
+      "innerWidth": 1440,
+      "scrollWidth": 1425,
+      "overflow": false,
+      "bodyText": 1622,
+      "select": false,
+      "images": [],
+      "contrast": {
+        "target": "site-footer",
+        "foreground": "rgb(240, 232, 218)",
+        "background": "rgb(33, 31, 28)",
+        "ratio": 13.51
+      },
+      "timing": 355
+    },
+    "/tienda:desktop": {
+      "title": "Tienda | Digari Studio",
+      "innerWidth": 1440,
+      "scrollWidth": 1425,
+      "overflow": false,
+      "bodyText": 4643,
+      "select": true,
+      "images": [
+        {
+          "src": "http://127.0.0.1:3113/products/cuerdas-onda.svg",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:3113/products/cable-pulso.svg",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:3113/products/cana-viento.svg",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:3113/products/microfono-claro.svg",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:3113/products/parlante-brisa.svg",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:3113/products/controlador-eco.svg",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:3113/products/audifonos-senda.svg",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:3113/products/interfaz-faro.svg",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:3113/products/monitor-alfar.svg",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:3113/products/teclado-nube.svg",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:3113/products/bajo-marea.svg",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:3113/products/ukelele-sol.svg",
+          "ok": true
+        },
+        {
+          "src": "",
+          "ok": false
+        },
+        {
+          "src": "",
+          "ok": false
+        },
+        {
+          "src": "",
+          "ok": false
+        }
+      ],
+      "contrast": {
+        "target": "site-footer",
+        "foreground": "rgb(240, 232, 218)",
+        "background": "rgb(33, 31, 28)",
+        "ratio": 13.51
+      },
+      "timing": 84
+    },
+    "/productos/acustica-luz:desktop": {
+      "title": "Yamaha · guitarra acústica ilustrativa | Digari Studio",
+      "innerWidth": 1440,
+      "scrollWidth": 1425,
+      "overflow": false,
+      "bodyText": 1153,
+      "select": true,
+      "images": [
+        {
+          "src": "http://127.0.0.1:3113/products/acustica-luz.svg",
+          "ok": true
+        }
+      ],
+      "contrast": {
+        "target": "site-footer",
+        "foreground": "rgb(240, 232, 218)",
+        "background": "rgb(33, 31, 28)",
+        "ratio": 13.51
+      },
+      "timing": 109
+    },
+    "/promos:desktop": {
+      "title": "Digari Studio | Elegí tu próximo sonido",
+      "innerWidth": 1440,
+      "scrollWidth": 1425,
+      "overflow": false,
+      "bodyText": 734,
+      "select": false,
+      "images": [],
+      "contrast": {
+        "target": "site-footer",
+        "foreground": "rgb(240, 232, 218)",
+        "background": "rgb(33, 31, 28)",
+        "ratio": 13.51
+      },
+      "timing": 65
+    },
+    "/favoritos:desktop": {
+      "title": "Digari Studio | Elegí tu próximo sonido",
+      "innerWidth": 1440,
+      "scrollWidth": 1425,
+      "overflow": false,
+      "bodyText": 1270,
+      "select": true,
+      "images": [],
+      "contrast": {
+        "target": "site-footer",
+        "foreground": "rgb(240, 232, 218)",
+        "background": "rgb(33, 31, 28)",
+        "ratio": 13.51
+      },
+      "timing": 84
+    },
+    "/carrito:desktop": {
+      "title": "Digari Studio | Elegí tu próximo sonido",
+      "innerWidth": 1440,
+      "scrollWidth": 1440,
+      "overflow": false,
+      "bodyText": 612,
+      "select": false,
+      "images": [],
+      "contrast": {
+        "target": "site-footer",
+        "foreground": "rgb(240, 232, 218)",
+        "background": "rgb(33, 31, 28)",
+        "ratio": 13.51
+      },
+      "timing": 95
+    },
+    "/estudio:desktop": {
+      "title": "Digari Studio | Elegí tu próximo sonido",
+      "innerWidth": 1440,
+      "scrollWidth": 1425,
+      "overflow": false,
+      "bodyText": 2211,
+      "select": true,
+      "images": [],
+      "contrast": {
+        "target": "SELECT",
+        "foreground": "rgb(240, 232, 218)",
+        "background": "rgb(25, 24, 23)",
+        "ratio": 14.57
+      },
+      "timing": 69
+    },
+    "/asesoria:desktop": {
+      "title": "Asesoría de equipo | Digari Studio",
+      "innerWidth": 1440,
+      "scrollWidth": 1425,
+      "overflow": false,
+      "bodyText": 1944,
+      "select": true,
+      "images": [],
+      "contrast": {
+        "target": "site-footer",
+        "foreground": "rgb(240, 232, 218)",
+        "background": "rgb(33, 31, 28)",
+        "ratio": 13.51
+      },
+      "timing": 91
+    },
+    "/servicios:desktop": {
+      "title": "Digari Studio | Elegí tu próximo sonido",
+      "innerWidth": 1440,
+      "scrollWidth": 1425,
+      "overflow": false,
+      "bodyText": 1519,
+      "select": true,
+      "images": [],
+      "contrast": {
+        "target": "site-footer",
+        "foreground": "rgb(240, 232, 218)",
+        "background": "rgb(33, 31, 28)",
+        "ratio": 13.51
+      },
+      "timing": 87
+    },
+    "/seguimiento:desktop": {
+      "title": "Digari Studio | Elegí tu próximo sonido",
+      "innerWidth": 1440,
+      "scrollWidth": 1425,
+      "overflow": false,
+      "bodyText": 702,
+      "select": true,
+      "images": [],
+      "contrast": {
+        "target": "site-footer",
+        "foreground": "rgb(240, 232, 218)",
+        "background": "rgb(33, 31, 28)",
+        "ratio": 13.51
+      },
+      "timing": 98
+    },
+    "/contacto:desktop": {
+      "title": "Digari Studio | Elegí tu próximo sonido",
+      "innerWidth": 1440,
+      "scrollWidth": 1425,
+      "overflow": false,
+      "bodyText": 1193,
+      "select": false,
+      "images": [],
+      "contrast": {
+        "target": "site-footer",
+        "foreground": "rgb(240, 232, 218)",
+        "background": "rgb(33, 31, 28)",
+        "ratio": 13.51
+      },
+      "timing": 72
+    },
+    "/:mobile": {
+      "title": "Digari Studio | Elegí tu próximo sonido",
+      "innerWidth": 390,
+      "scrollWidth": 390,
+      "overflow": false,
+      "bodyText": 1545,
+      "select": false,
+      "images": [],
+      "contrast": {
+        "target": "site-footer",
+        "foreground": "rgb(240, 232, 218)",
+        "background": "rgb(33, 31, 28)",
+        "ratio": 13.51
+      },
+      "timing": 85
+    },
+    "/tienda:mobile": {
+      "title": "Tienda | Digari Studio",
+      "innerWidth": 390,
+      "scrollWidth": 390,
+      "overflow": false,
+      "bodyText": 4568,
+      "select": true,
+      "images": [
+        {
+          "src": "http://127.0.0.1:3113/products/cuerdas-onda.svg",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:3113/products/cable-pulso.svg",
+          "ok": true
+        },
+        {
+          "src": "",
+          "ok": false
+        },
+        {
+          "src": "",
+          "ok": false
+        },
+        {
+          "src": "",
+          "ok": false
+        },
+        {
+          "src": "",
+          "ok": false
+        },
+        {
+          "src": "",
+          "ok": false
+        },
+        {
+          "src": "",
+          "ok": false
+        },
+        {
+          "src": "",
+          "ok": false
+        },
+        {
+          "src": "",
+          "ok": false
+        },
+        {
+          "src": "",
+          "ok": false
+        },
+        {
+          "src": "",
+          "ok": false
+        },
+        {
+          "src": "",
+          "ok": false
+        },
+        {
+          "src": "",
+          "ok": false
+        },
+        {
+          "src": "",
+          "ok": false
+        }
+      ],
+      "contrast": {
+        "target": "site-footer",
+        "foreground": "rgb(240, 232, 218)",
+        "background": "rgb(33, 31, 28)",
+        "ratio": 13.51
+      },
+      "timing": 82
+    },
+    "/productos/acustica-luz:mobile": {
+      "title": "Yamaha · guitarra acústica ilustrativa | Digari Studio",
+      "innerWidth": 390,
+      "scrollWidth": 390,
+      "overflow": false,
+      "bodyText": 1078,
+      "select": true,
+      "images": [
+        {
+          "src": "http://127.0.0.1:3113/products/acustica-luz.svg",
+          "ok": true
+        }
+      ],
+      "contrast": {
+        "target": "site-footer",
+        "foreground": "rgb(240, 232, 218)",
+        "background": "rgb(33, 31, 28)",
+        "ratio": 13.51
+      },
+      "timing": 80
+    },
+    "/promos:mobile": {
+      "title": "Digari Studio | Elegí tu próximo sonido",
+      "innerWidth": 390,
+      "scrollWidth": 390,
+      "overflow": false,
+      "bodyText": 659,
+      "select": false,
+      "images": [],
+      "contrast": {
+        "target": "site-footer",
+        "foreground": "rgb(240, 232, 218)",
+        "background": "rgb(33, 31, 28)",
+        "ratio": 13.51
+      },
+      "timing": 66
+    },
+    "/favoritos:mobile": {
+      "title": "Digari Studio | Elegí tu próximo sonido",
+      "innerWidth": 390,
+      "scrollWidth": 390,
+      "overflow": false,
+      "bodyText": 1195,
+      "select": true,
+      "images": [],
+      "contrast": {
+        "target": "site-footer",
+        "foreground": "rgb(240, 232, 218)",
+        "background": "rgb(33, 31, 28)",
+        "ratio": 13.51
+      },
+      "timing": 80
+    },
+    "/carrito:mobile": {
+      "title": "Digari Studio | Elegí tu próximo sonido",
+      "innerWidth": 390,
+      "scrollWidth": 390,
+      "overflow": false,
+      "bodyText": 537,
+      "select": false,
+      "images": [],
+      "contrast": {
+        "target": "site-footer",
+        "foreground": "rgb(240, 232, 218)",
+        "background": "rgb(33, 31, 28)",
+        "ratio": 13.51
+      },
+      "timing": 70
+    },
+    "/estudio:mobile": {
+      "title": "Digari Studio | Elegí tu próximo sonido",
+      "innerWidth": 390,
+      "scrollWidth": 390,
+      "overflow": false,
+      "bodyText": 2136,
+      "select": true,
+      "images": [],
+      "contrast": {
+        "target": "SELECT",
+        "foreground": "rgb(240, 232, 218)",
+        "background": "rgb(25, 24, 23)",
+        "ratio": 14.57
+      },
+      "timing": 75
+    },
+    "/asesoria:mobile": {
+      "title": "Asesoría de equipo | Digari Studio",
+      "innerWidth": 390,
+      "scrollWidth": 390,
+      "overflow": false,
+      "bodyText": 1869,
+      "select": true,
+      "images": [],
+      "contrast": {
+        "target": "site-footer",
+        "foreground": "rgb(240, 232, 218)",
+        "background": "rgb(33, 31, 28)",
+        "ratio": 13.51
+      },
+      "timing": 79
+    },
+    "/servicios:mobile": {
+      "title": "Digari Studio | Elegí tu próximo sonido",
+      "innerWidth": 390,
+      "scrollWidth": 390,
+      "overflow": false,
+      "bodyText": 1444,
+      "select": true,
+      "images": [],
+      "contrast": {
+        "target": "site-footer",
+        "foreground": "rgb(240, 232, 218)",
+        "background": "rgb(33, 31, 28)",
+        "ratio": 13.51
+      },
+      "timing": 155
+    },
+    "/seguimiento:mobile": {
+      "title": "Digari Studio | Elegí tu próximo sonido",
+      "innerWidth": 390,
+      "scrollWidth": 390,
+      "overflow": false,
+      "bodyText": 627,
+      "select": true,
+      "images": [],
+      "contrast": {
+        "target": "site-footer",
+        "foreground": "rgb(240, 232, 218)",
+        "background": "rgb(33, 31, 28)",
+        "ratio": 13.51
+      },
+      "timing": 65
+    },
+    "/contacto:mobile": {
+      "title": "Digari Studio | Elegí tu próximo sonido",
+      "innerWidth": 390,
+      "scrollWidth": 390,
+      "overflow": false,
+      "bodyText": 1118,
+      "select": false,
+      "images": [],
+      "contrast": {
+        "target": "site-footer",
+        "foreground": "rgb(240, 232, 218)",
+        "background": "rgb(33, 31, 28)",
+        "ratio": 13.51
+      },
+      "timing": 81
+    },
+    "/:zoom200": {
+      "title": "Digari Studio | Elegí tu próximo sonido",
+      "innerWidth": 720,
+      "scrollWidth": 705,
+      "overflow": false,
+      "bodyText": 1547,
+      "select": false,
+      "images": [],
+      "contrast": {
+        "target": "site-footer",
+        "foreground": "rgb(240, 232, 218)",
+        "background": "rgb(33, 31, 28)",
+        "ratio": 13.51
+      },
+      "timing": 79
+    },
+    "/tienda:zoom200": {
+      "title": "Tienda | Digari Studio",
+      "innerWidth": 720,
+      "scrollWidth": 705,
+      "overflow": false,
+      "bodyText": 4568,
+      "select": true,
+      "images": [
+        {
+          "src": "http://127.0.0.1:3113/products/cuerdas-onda.svg",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:3113/products/cable-pulso.svg",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:3113/products/cana-viento.svg",
+          "ok": true
+        },
+        {
+          "src": "http://127.0.0.1:3113/products/microfono-claro.svg",
+          "ok": true
+        },
+        {
+          "src": "",
+          "ok": false
+        },
+        {
+          "src": "",
+          "ok": false
+        },
+        {
+          "src": "",
+          "ok": false
+        },
+        {
+          "src": "",
+          "ok": false
+        },
+        {
+          "src": "",
+          "ok": false
+        },
+        {
+          "src": "",
+          "ok": false
+        },
+        {
+          "src": "",
+          "ok": false
+        },
+        {
+          "src": "",
+          "ok": false
+        },
+        {
+          "src": "",
+          "ok": false
+        },
+        {
+          "src": "",
+          "ok": false
+        },
+        {
+          "src": "",
+          "ok": false
+        }
+      ],
+      "contrast": {
+        "target": "site-footer",
+        "foreground": "rgb(240, 232, 218)",
+        "background": "rgb(33, 31, 28)",
+        "ratio": 13.51
+      },
+      "timing": 79
+    },
+    "/productos/acustica-luz:zoom200": {
+      "title": "Yamaha · guitarra acústica ilustrativa | Digari Studio",
+      "innerWidth": 720,
+      "scrollWidth": 705,
+      "overflow": false,
+      "bodyText": 1078,
+      "select": true,
+      "images": [
+        {
+          "src": "http://127.0.0.1:3113/products/acustica-luz.svg",
+          "ok": true
+        }
+      ],
+      "contrast": {
+        "target": "site-footer",
+        "foreground": "rgb(240, 232, 218)",
+        "background": "rgb(33, 31, 28)",
+        "ratio": 13.51
+      },
+      "timing": 101
+    },
+    "/promos:zoom200": {
+      "title": "Digari Studio | Elegí tu próximo sonido",
+      "innerWidth": 720,
+      "scrollWidth": 705,
+      "overflow": false,
+      "bodyText": 659,
+      "select": false,
+      "images": [],
+      "contrast": {
+        "target": "site-footer",
+        "foreground": "rgb(240, 232, 218)",
+        "background": "rgb(33, 31, 28)",
+        "ratio": 13.51
+      },
+      "timing": 74
+    },
+    "/favoritos:zoom200": {
+      "title": "Digari Studio | Elegí tu próximo sonido",
+      "innerWidth": 720,
+      "scrollWidth": 705,
+      "overflow": false,
+      "bodyText": 1195,
+      "select": true,
+      "images": [],
+      "contrast": {
+        "target": "site-footer",
+        "foreground": "rgb(240, 232, 218)",
+        "background": "rgb(33, 31, 28)",
+        "ratio": 13.51
+      },
+      "timing": 77
+    },
+    "/carrito:zoom200": {
+      "title": "Digari Studio | Elegí tu próximo sonido",
+      "innerWidth": 720,
+      "scrollWidth": 705,
+      "overflow": false,
+      "bodyText": 537,
+      "select": false,
+      "images": [],
+      "contrast": {
+        "target": "site-footer",
+        "foreground": "rgb(240, 232, 218)",
+        "background": "rgb(33, 31, 28)",
+        "ratio": 13.51
+      },
+      "timing": 74
+    },
+    "/estudio:zoom200": {
+      "title": "Digari Studio | Elegí tu próximo sonido",
+      "innerWidth": 720,
+      "scrollWidth": 705,
+      "overflow": false,
+      "bodyText": 2136,
+      "select": true,
+      "images": [],
+      "contrast": {
+        "target": "SELECT",
+        "foreground": "rgb(240, 232, 218)",
+        "background": "rgb(25, 24, 23)",
+        "ratio": 14.57
+      },
+      "timing": 74
+    },
+    "/asesoria:zoom200": {
+      "title": "Asesoría de equipo | Digari Studio",
+      "innerWidth": 720,
+      "scrollWidth": 705,
+      "overflow": false,
+      "bodyText": 1869,
+      "select": true,
+      "images": [],
+      "contrast": {
+        "target": "site-footer",
+        "foreground": "rgb(240, 232, 218)",
+        "background": "rgb(33, 31, 28)",
+        "ratio": 13.51
+      },
+      "timing": 86
+    },
+    "/servicios:zoom200": {
+      "title": "Digari Studio | Elegí tu próximo sonido",
+      "innerWidth": 720,
+      "scrollWidth": 705,
+      "overflow": false,
+      "bodyText": 1444,
+      "select": true,
+      "images": [],
+      "contrast": {
+        "target": "site-footer",
+        "foreground": "rgb(240, 232, 218)",
+        "background": "rgb(33, 31, 28)",
+        "ratio": 13.51
+      },
+      "timing": 77
+    },
+    "/seguimiento:zoom200": {
+      "title": "Digari Studio | Elegí tu próximo sonido",
+      "innerWidth": 720,
+      "scrollWidth": 705,
+      "overflow": false,
+      "bodyText": 627,
+      "select": true,
+      "images": [],
+      "contrast": {
+        "target": "site-footer",
+        "foreground": "rgb(240, 232, 218)",
+        "background": "rgb(33, 31, 28)",
+        "ratio": 13.51
+      },
+      "timing": 69
+    },
+    "/contacto:zoom200": {
+      "title": "Digari Studio | Elegí tu próximo sonido",
+      "innerWidth": 720,
+      "scrollWidth": 705,
+      "overflow": false,
+      "bodyText": 1118,
+      "select": false,
+      "images": [],
+      "contrast": {
+        "target": "site-footer",
+        "foreground": "rgb(240, 232, 218)",
+        "background": "rgb(33, 31, 28)",
+        "ratio": 13.51
+      },
+      "timing": 75
+    }
+  },
+  "screenshots": [
+    "home-desktop",
+    "tienda-desktop",
+    "productos-acustica-luz-desktop",
+    "promos-desktop",
+    "favoritos-desktop",
+    "carrito-desktop",
+    "estudio-desktop",
+    "asesoria-desktop",
+    "servicios-desktop",
+    "seguimiento-desktop",
+    "contacto-desktop",
+    "home-mobile",
+    "tienda-mobile",
+    "productos-acustica-luz-mobile",
+    "promos-mobile",
+    "favoritos-mobile",
+    "carrito-mobile",
+    "estudio-mobile",
+    "asesoria-mobile",
+    "servicios-mobile",
+    "seguimiento-mobile",
+    "contacto-mobile",
+    "home-zoom200",
+    "tienda-zoom200",
+    "productos-acustica-luz-zoom200",
+    "promos-zoom200",
+    "favoritos-zoom200",
+    "carrito-zoom200",
+    "estudio-zoom200",
+    "asesoria-zoom200",
+    "servicios-zoom200",
+    "seguimiento-zoom200",
+    "contacto-zoom200",
+    "menu-desktop-open",
+    "menu-mobile-open",
+    "studio-desktop-3d",
+    "model-acustica-luz",
+    "model-bajo-marea",
+    "model-cable-pulso",
+    "model-controlador-eco",
+    "model-interfaz-faro",
+    "studio-desktop-audio",
+    "studio-mobile-3d",
+    "advice-mobile"
+  ],
+  "initialStudioScriptResources": [
+    "http://127.0.0.1:3113/_next/static/chunks/255-73938ce8a8eac1ad.js",
+    "http://127.0.0.1:3113/_next/static/chunks/4bd1b696-c023c6e3521b1417.js",
+    "http://127.0.0.1:3113/_next/static/chunks/main-app-77c94320cf1ce188.js",
+    "http://127.0.0.1:3113/_next/static/chunks/619-ba102abea3e3d0e4.js",
+    "http://127.0.0.1:3113/_next/static/chunks/app/layout-2a39b82fb56e5dbf.js",
+    "http://127.0.0.1:3113/_next/static/chunks/app/estudio/page-b397397cdae815f9.js",
+    "http://127.0.0.1:3113/_next/static/chunks/app/page-104d413dfb6006e9.js",
+    "http://127.0.0.1:3113/_next/static/chunks/356-ad1afcfca620a302.js",
+    "http://127.0.0.1:3113/_next/static/chunks/app/asesoria/page-f2ea52512a02ed22.js",
+    "http://127.0.0.1:3113/_next/static/chunks/app/servicios/page-a3ce799c4c6cd4b5.js",
+    "http://127.0.0.1:3113/_next/static/chunks/app/seguimiento/page-3210478cdc1091aa.js",
+    "http://127.0.0.1:3113/_next/static/chunks/app/contacto/page-565d9149c7f1ca91.js",
+    "http://127.0.0.1:3113/_next/static/chunks/597-afb8bd3f413fa82a.js",
+    "http://127.0.0.1:3113/_next/static/chunks/app/favoritos/page-8baa84e79fc472f2.js",
+    "http://127.0.0.1:3113/_next/static/chunks/app/carrito/page-8fc1af4512372d48.js",
+    "http://127.0.0.1:3113/_next/static/chunks/app/tienda/page-c38288d9940dfa70.js"
+  ],
+  "viewerScriptResources": [
+    "http://127.0.0.1:3113/_next/static/chunks/255-73938ce8a8eac1ad.js",
+    "http://127.0.0.1:3113/_next/static/chunks/4bd1b696-c023c6e3521b1417.js",
+    "http://127.0.0.1:3113/_next/static/chunks/main-app-77c94320cf1ce188.js",
+    "http://127.0.0.1:3113/_next/static/chunks/619-ba102abea3e3d0e4.js",
+    "http://127.0.0.1:3113/_next/static/chunks/app/layout-2a39b82fb56e5dbf.js",
+    "http://127.0.0.1:3113/_next/static/chunks/app/estudio/page-b397397cdae815f9.js",
+    "http://127.0.0.1:3113/_next/static/chunks/app/page-104d413dfb6006e9.js",
+    "http://127.0.0.1:3113/_next/static/chunks/356-ad1afcfca620a302.js",
+    "http://127.0.0.1:3113/_next/static/chunks/app/asesoria/page-f2ea52512a02ed22.js",
+    "http://127.0.0.1:3113/_next/static/chunks/app/servicios/page-a3ce799c4c6cd4b5.js",
+    "http://127.0.0.1:3113/_next/static/chunks/app/seguimiento/page-3210478cdc1091aa.js",
+    "http://127.0.0.1:3113/_next/static/chunks/app/contacto/page-565d9149c7f1ca91.js",
+    "http://127.0.0.1:3113/_next/static/chunks/597-afb8bd3f413fa82a.js",
+    "http://127.0.0.1:3113/_next/static/chunks/app/favoritos/page-8baa84e79fc472f2.js",
+    "http://127.0.0.1:3113/_next/static/chunks/app/carrito/page-8fc1af4512372d48.js",
+    "http://127.0.0.1:3113/_next/static/chunks/app/tienda/page-c38288d9940dfa70.js",
+    "http://127.0.0.1:3113/_next/static/chunks/480.3298070609e2c96e.js",
+    "http://127.0.0.1:3113/_next/static/chunks/bd904a5c.db54303232c8a55b.js",
+    "http://127.0.0.1:3113/_next/static/chunks/b536a0f1.eb1194062ec5efb1.js",
+    "http://127.0.0.1:3113/_next/static/chunks/281.1d847b5f7e34187f.js"
+  ],
+  "audioScriptResources": [
+    "http://127.0.0.1:3113/_next/static/chunks/255-73938ce8a8eac1ad.js",
+    "http://127.0.0.1:3113/_next/static/chunks/4bd1b696-c023c6e3521b1417.js",
+    "http://127.0.0.1:3113/_next/static/chunks/main-app-77c94320cf1ce188.js",
+    "http://127.0.0.1:3113/_next/static/chunks/619-ba102abea3e3d0e4.js",
+    "http://127.0.0.1:3113/_next/static/chunks/app/layout-2a39b82fb56e5dbf.js",
+    "http://127.0.0.1:3113/_next/static/chunks/app/estudio/page-b397397cdae815f9.js",
+    "http://127.0.0.1:3113/_next/static/chunks/app/page-104d413dfb6006e9.js",
+    "http://127.0.0.1:3113/_next/static/chunks/356-ad1afcfca620a302.js",
+    "http://127.0.0.1:3113/_next/static/chunks/app/asesoria/page-f2ea52512a02ed22.js",
+    "http://127.0.0.1:3113/_next/static/chunks/app/servicios/page-a3ce799c4c6cd4b5.js",
+    "http://127.0.0.1:3113/_next/static/chunks/app/seguimiento/page-3210478cdc1091aa.js",
+    "http://127.0.0.1:3113/_next/static/chunks/app/contacto/page-565d9149c7f1ca91.js",
+    "http://127.0.0.1:3113/_next/static/chunks/597-afb8bd3f413fa82a.js",
+    "http://127.0.0.1:3113/_next/static/chunks/app/favoritos/page-8baa84e79fc472f2.js",
+    "http://127.0.0.1:3113/_next/static/chunks/app/carrito/page-8fc1af4512372d48.js",
+    "http://127.0.0.1:3113/_next/static/chunks/app/tienda/page-c38288d9940dfa70.js",
+    "http://127.0.0.1:3113/_next/static/chunks/480.3298070609e2c96e.js",
+    "http://127.0.0.1:3113/_next/static/chunks/bd904a5c.db54303232c8a55b.js",
+    "http://127.0.0.1:3113/_next/static/chunks/b536a0f1.eb1194062ec5efb1.js",
+    "http://127.0.0.1:3113/_next/static/chunks/281.1d847b5f7e34187f.js",
+    "http://127.0.0.1:3113/_next/static/chunks/660.070b18888465f28f.js"
+  ],
+  "studioModels": [
+    {
+      "id": "acustica-luz",
+      "canvas": true,
+      "cssWidth": 1104,
+      "cssHeight": 558,
+      "complete": true,
+      "heading": "Yamaha · guitarra acústica ilustrativa"
+    },
+    {
+      "id": "electrica-bruma",
+      "canvas": true,
+      "cssWidth": 1104,
+      "cssHeight": 558,
+      "complete": true,
+      "heading": "Squier · guitarra eléctrica ilustrativa"
+    },
+    {
+      "id": "bajo-marea",
+      "canvas": true,
+      "cssWidth": 1104,
+      "cssHeight": 558,
+      "complete": true,
+      "heading": "Ibanez · bajo eléctrico ilustrativo"
+    },
+    {
+      "id": "teclado-nube",
+      "canvas": true,
+      "cssWidth": 1104,
+      "cssHeight": 558,
+      "complete": true,
+      "heading": "Casio · teclado portátil ilustrativo"
+    },
+    {
+      "id": "ukelele-sol",
+      "canvas": true,
+      "cssWidth": 1104,
+      "cssHeight": 558,
+      "complete": true,
+      "heading": "Kala · ukelele soprano ilustrativo"
+    },
+    {
+      "id": "flauta-rio",
+      "canvas": true,
+      "cssWidth": 1104,
+      "cssHeight": 558,
+      "complete": true,
+      "heading": "Yamaha · flauta dulce ilustrativa"
+    },
+    {
+      "id": "cuerdas-onda",
+      "canvas": true,
+      "cssWidth": 1104,
+      "cssHeight": 558,
+      "complete": true,
+      "heading": "D’Addario · juego de cuerdas ilustrativo"
+    },
+    {
+      "id": "cable-pulso",
+      "canvas": true,
+      "cssWidth": 1104,
+      "cssHeight": 558,
+      "complete": true,
+      "heading": "Hosa · cable de instrumento ilustrativo"
+    },
+    {
+      "id": "cana-viento",
+      "canvas": true,
+      "cssWidth": 1104,
+      "cssHeight": 558,
+      "complete": true,
+      "heading": "Vandoren · caña ilustrativa"
+    },
+    {
+      "id": "microfono-claro",
+      "canvas": true,
+      "cssWidth": 1104,
+      "cssHeight": 558,
+      "complete": true,
+      "heading": "Behringer · micrófono dinámico ilustrativo"
+    },
+    {
+      "id": "monitor-alfar",
+      "canvas": true,
+      "cssWidth": 1104,
+      "cssHeight": 558,
+      "complete": true,
+      "heading": "PreSonus · monitor de estudio ilustrativo"
+    },
+    {
+      "id": "parlante-brisa",
+      "canvas": true,
+      "cssWidth": 1104,
+      "cssHeight": 558,
+      "complete": true,
+      "heading": "Behringer · parlante activo ilustrativo"
+    },
+    {
+      "id": "controlador-eco",
+      "canvas": true,
+      "cssWidth": 1104,
+      "cssHeight": 558,
+      "complete": true,
+      "heading": "Numark · controlador DJ ilustrativo"
+    },
+    {
+      "id": "audifonos-senda",
+      "canvas": true,
+      "cssWidth": 1104,
+      "cssHeight": 558,
+      "complete": true,
+      "heading": "Audio-Technica · audífonos ilustrativos"
+    },
+    {
+      "id": "interfaz-faro",
+      "canvas": true,
+      "cssWidth": 1104,
+      "cssHeight": 558,
+      "complete": true,
+      "heading": "M-Audio · interfaz de audio ilustrativa"
+    }
+  ],
+  "studioSurfaceContrast": {
+    ".studio-product-picker select": {
+      "color": "rgb(240, 232, 218)",
+      "background": "rgb(25, 24, 23)",
+      "ratio": 14.57
+    },
+    ".studio-product-summary": {
+      "color": "rgb(240, 232, 218)",
+      "background": "rgb(33, 31, 28)",
+      "ratio": 13.51
+    },
+    ".studio-product-summary h2": {
+      "color": "rgb(240, 232, 218)",
+      "background": "rgba(0, 0, 0, 0)",
+      "ratio": 17.26
+    },
+    ".studio-product-summary .audio-specs": {
+      "color": "rgb(240, 232, 218)",
+      "background": "rgb(33, 31, 28)",
+      "ratio": 13.51
+    },
+    ".studio-product-summary .audio-specs p": {
+      "color": "rgb(196, 184, 167)",
+      "background": "rgba(0, 0, 0, 0)",
+      "ratio": 10.76
+    },
+    ".studio-panel": {
+      "color": "rgb(240, 232, 218)",
+      "background": "rgb(33, 31, 28)",
+      "ratio": 13.51
+    },
+    ".audio-card": {
+      "color": "rgb(240, 232, 218)",
+      "background": "rgb(33, 31, 28)",
+      "ratio": 13.51
+    },
+    ".audio-card p": {
+      "color": "rgb(196, 184, 167)",
+      "background": "rgba(0, 0, 0, 0)",
+      "ratio": 10.76
+    },
+    ".triad-button": {
+      "color": "rgb(240, 232, 218)",
+      "background": "rgb(33, 31, 28)",
+      "ratio": 13.51
+    },
+    ".triad-button small": {
+      "color": "rgb(196, 184, 167)",
+      "background": "rgba(0, 0, 0, 0)",
+      "ratio": 10.76
+    },
+    ".site-footer": {
+      "color": "rgb(240, 232, 218)",
+      "background": "rgb(33, 31, 28)",
+      "ratio": 13.51
+    }
+  },
+  "overflows": []
+}

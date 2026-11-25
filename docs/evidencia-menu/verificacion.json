@@ -1,0 +1,13 @@
+{
+  "touchNavigation": true,
+  "samePage": true,
+  "categoryFilter": true,
+  "escapeFocus": true,
+  "outsideClick": true,
+  "breakpointClose": true,
+  "desktopFilter": true,
+  "desktopEscapeFocus": true,
+  "bagNavigation": true,
+  "zoom200PanelUnderHeader": true,
+  "bagVisible": true
+}

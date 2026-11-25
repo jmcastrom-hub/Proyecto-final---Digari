@@ -1,5 +1,17 @@
 # Uso de IA — ciclos P1, P2 y P3
 
+## Revisiones solicitadas por el estudiante: evidencia de iteración humana
+
+Estas son tres revisiones reales expresadas por el estudiante durante el trabajo. Se registran como instrucciones y correcciones incorporadas; **no son una aprobación final** de la entrega ni sustituyen el ensayo de su autor.
+
+| Revisión del estudiante | Corrección realizada | Verificación y evidencia | Commit relacionado |
+|---|---|---|---|
+| Tema/contraste: «Corrige el tema oscuro… aplica superficies oscuras coherentes, texto marfil y ámbar para acciones» y después «Usa Instrumentos como referencia… títulos y descripciones… escritorio y móvil» | Se ajustó la cascada del tema y el chat oscuro; las categorías de Inicio recibieron fondo compartido oscuro. | Capturas del tema/chat en [`docs/evidencia-tema-chat/`](evidencia-tema-chat/); prueba de tarjetas [`tests/category-tiles-check.mjs`](../tests/category-tiles-check.mjs) y capturas de [`docs/qa/evidence/`](qa/evidence/). Contraste/capturas son evidencia automatizada, no aprobación del estudiante. | [`13c5ed5`](https://github.com/jmcastrom-hub/Proyecto-final---Digari/commit/13c5ed5) y [`36080a7`](https://github.com/jmcastrom-hub/Proyecto-final---Digari/commit/36080a7) |
+| Menú: cerrar al navegar incluso a la página actual, Escape, clic fuera y cambio a escritorio; mantener logo/Bolsa y panel alcanzable al 200 %. | El encabezado controla estados móvil/Tienda, foco y anclaje debajo de la cabecera; al escapar devuelve foco y la selección cierra los paneles. | Registro [`docs/evidencia-menu/verificacion.json`](evidencia-menu/verificacion.json), capturas móvil/200 % y lógica de componente. Evidencia en emulación/automatización; no equivale a teléfono físico. | [`90ee345`](https://github.com/jmcastrom-hub/Proyecto-final---Digari/commit/90ee345) |
+| Chat: «Elimina … Preferencias… Deja el historial, un campo de texto, Enviar y Empezar de nuevo» y consulta libre del catálogo vigente antes de recomendar. | Asesoría quedó como conversación de texto libre; cada mensaje consulta SQLite, evalúa el conjunto antes del recorte, permite pedir más sin repetir, respeta presupuesto y muestra respuesta local o Gemini según el modo. | Tests de inventario/asesoría y [`docs/qa/advice-chat-inventory.md`](qa/advice-chat-inventory.md), incluida ficha válida al final del conjunto y datos de tarjeta leídos del catálogo. Es verificación técnica; la revisión conversacional final del estudiante sigue pendiente. | [`0d2f086`](https://github.com/jmcastrom-hub/Proyecto-final---Digari/commit/0d2f086) |
+
+Las aprobaciones del estudiante, ensayo cronometrado y presentación oral permanecen **pendientes**. No registrar este historial de cambios como visto bueno.
+
 ## Ciclo 3 · Asesoría contextual y modo local (P3)
 
 - **Tarea:** incorporar una conversación de presupuesto/tipo/uso/estilo con hasta tres opciones, fallback local y Gemini opcional sin afectar pedidos, catálogo ni seguimiento.
@@ -52,3 +64,32 @@
 - **Correcciones aplicadas:** SQLite admite `DIGARI_DB_PATH` para aislar seed y pruebas; se agregaron persistencia entre procesos, compatibilidad en filtro, variant/token inválidos en smoke y CI GitHub Actions. Los valores P2.1 y P4 se mantienen separados.
 - **Revisión humana:** pendiente. Revisar escucha en equipo real, tacto en teléfono, fallback visual, claridad de contenidos y guion de demo. Gemini en línea también pendiente por falta de clave activa.
 - **Commit asociado:** P4 — Completar validación y documentación (SHA indicado en la entrega).
+
+## Ciclo 5 · Revisión visual de Digari Studio
+
+- **Tarea:** corregir la legibilidad y el acabado del modelo acústico en la rama publicada, comparar la vista previa con el mismo commit base y dejar evidencia de las 15 fichas.
+- **Extracto del prompt:** “Corrige la legibilidad mirando la página, no solo los resultados de contraste” y “En la acústica actual, la boca se ve como un aro sobre una tapa sólida. Haz una abertura real con cavidad visible en vista de tres cuartos”.
+- **Resultado:** Chrome Headless 157 mostró el visor acústico vertical y de canto en el commit base. La revisión llevó a cambiar la orientación del grupo de guitarras, recalcular el encuadre, abrir la tapa de la acústica y cerrar la cara posterior con refuerzos alineados. Se guardaron 12 pares de capturas en iguales viewports y 15 imágenes del canvas.
+- **Revisión humana del agente:** se inspeccionaron Inicio, Tienda, ficha, Estudio, Asesoría y menús en escritorio y móvil; 33 combinaciones sin overflow y 15 canvas WebGL, más giros laterales. La primera comparación visual detectó que una prueba geométrica por sí sola no bastaba: las guitarras se veían de pie; el giro posterior reveló que el hueco atravesaba también la tapa de atrás. Ambos defectos se corrigieron y se volvió a construir. Los demás modelos siguen estilizados, con formas más simples en flauta, caña, paquete de cuerdas, cable y audífonos.
+- **Corrección aplicada:** contraste oscuro-claro, tamaños y controles; rotación inicial horizontal en tres cuartos; cavidad del soundhole; tapa trasera; refuerzos. La ficha conserva explícitamente la etiqueta “ilustración demo; no es foto exacta”.
+- **Pruebas:** `npm test` 31/31, `npm run lint`, `npm run build`, `npm run test:api`; auditoría de 11 rutas por tres viewports, 15 modelos renderizados y galería comparativa en `docs/evidencia-acabado/`.
+- **Aprobación pendiente:** revisión del estudiante, giro táctil en teléfono físico, contraste con lector de pantalla, escucha física y llamada real a Gemini.
+- **Commit asociado:** commit de acabado visual en `refactor/experiencia-digari` que agrega `docs/acabado-visual.md` y `docs/evidencia-acabado/`.
+
+## Ciclo 5 · Refactor de experiencia y catálogo (RX)
+
+- **Tarea:** corregir el contraste de Estudio, dar continuidad a la asesoría, mejorar las 15 maquetas 3D y actualizar el inventario demo sin alterar la historia SQLite; conservar cambios locales, etiqueta y archivos de referencia del estudiante.
+- **Extracto del prompt:** «Trabaja sobre la versión local que contiene d482f128… conserva los cambios locales, .env.local, los datos existentes y la etiqueta entrega-final-v1.0.0… compara asesoría por turnos y registra evidencia antes/después».
+- **Resultado:** se definió contraste marfil/nogal y tinta/marfil claro; se actualizaron nombres de marca sugeridos, precios/stock sintéticos; una migración transaccional actualiza filas por ID; geometrías incluyen cuerpo, veta, herrajes, controles o conectores según familia; `conversationId`, preferencias y hasta tres IDs anteriores permiten cambios de presupuesto/uso y «más barato»; se preserva el modo determinista.
+- **Revisión humana del agente:** primera prueba de la asesoría indicó que las expectativas de tests usaban el inventario anterior; se ajustaron a los precios nuevos. En la conversación se incorporó el caso «no existe otra ficha más barata» con una respuesta explícita. El runner de pruebas ahora usa SQLite temporal después de verificar que los tests anteriores limpiaban tablas que comparten ruta con los datos locales.
+- **Prueba automatizada comprobada:** `npm test` pasó 31/31; incluye geometría para las 15 fichas, migración aditiva que conserva datos históricos, validación de preferencias/IDs, precio y stock servidor, simulación provider y fallback 503. El conteo de datos existentes fue 1 pedido, 1 línea, 2 eventos de pedido, 2 servicios y 4 eventos de servicio antes y después de migrar.
+- **Verificación visual/complementaria:** auditoría previa de 11 rutas × escritorio/móvil/200% capturada. Referencia de tercera imagen no venía adjunta al proyecto accesible, por lo que las maquetas siguen especificaciones textuales propias. Escucha real, tacto en teléfono y revisión del estudiante siguen pendientes; Gemini real solo se afirma si se valida una llamada con clave activa.
+- **Commit asociado:** `2e68c69`, `Refinar experiencia visual y catálogo de Digari Studio`. No se modifica la etiqueta final.
+
+### Verificación final del ciclo 5
+
+- **Qué se corrigió tras revisar:** la primera vista previa en `localhost:3110` tenía chunks de Next que devolvían HTTP 400 y dejaba `/estudio` en «Abriendo el estudio…». No se cerró ese listener porque el entorno no permitió identificar con seguridad su propietario. Se inició un servidor de producción independiente en `http://localhost:3113/`; ese sí cargó e hidrató todas las rutas.
+- **Pruebas:** `npm test` 31/31; `npm run lint`; `npm run build`; `npm run test:api` con SQLite temporal: 11 rutas, catálogo/imágenes y filtros, asesoría local/validación, pedido repetido idempotente, token inválido, stock, servicio y estados. La base local conserva sus conteos históricos. La llamada externa Gemini no se declara probada.
+- **Evidencia visual:** 33 rutas/vistas sin overflow; 15 modelos WebGL comprobados al frente, costado y reverso; menú desktop/móvil y asesoría móvil capturados. Contraste observado 10.76:1–17.26:1 en superficies auditadas. `docs/auditoria-refactor.md` contiene protocolo y resultados; las capturas comparables están bajo `docs/evidencia-refactor/`.
+- **Rendimiento observado:** mismas condiciones, Chrome 157, 1440×900 DPR1, cache deshabilitada y cuatro repeticiones. Inicio/tienda/asesoría: mediana `loadEventEnd` 57/70/86 ms antes y 69/67/60 ms después. Visor frío 467.9/488.3 ms; giro a dos frames 33.30/33.35 ms. No se reclama mejora global; el hover precarga cuatro chunks y reduce la espera post-hover medida, pero el total depende del tiempo de lectura.
+- **Revisión humana pendiente:** el estudiante debe revisar el aspecto/modelos y aprobar textos/flujo; además quedan prueba táctil en teléfono, escucha en equipo real y Gemini con una clave que dé respuesta válida. La imagen de referencia adicional mencionada no estaba adjunta. El resultado se asocia al commit `2e68c69`.

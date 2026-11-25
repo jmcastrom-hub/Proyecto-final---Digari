@@ -1,25 +1,20 @@
 # Digari Studio
 
-Prototipo académico de asesoría, catálogo demo y seguimiento inspirado en Digari Music Store, Costa Rica. No es un sistema oficial ni está conectado a la empresa.
+Prototipo académico para orientar a una persona que compara instrumentos/equipo por presupuesto y para mostrar seguimiento de pedidos y servicios. Está inspirado en Digari Music Store (Costa Rica), pero no es un producto oficial ni está conectado con la empresa. Autor: **José Manuel Castro Moya**. Desarrollo asistido con Codex; la revisión y aprobación final del estudiante siguen pendientes.
 
-## Problema y propuesta
+## Propuesta y alcance actual
 
-Quien compra equipo musical debe combinar presupuesto, tipo de producto, uso y compatibilidad. Digari Studio propone un prototipo académico local que conecta catálogo, comparación, asesoría, estudio 3D/audio y seguimiento demo. No está conectado a Digari ni procesa compras reales.
+El catálogo precargado contiene 15 fichas demo: Yamaha F310, Squier Affinity Strat, Ibanez GSR180, Casio WK-1800, Kala Makala, Yamaha YRS-24B, Ernie Ball Cobalt Slinky 10–52, cable TS genérico, cañas Vandoren, Behringer C-1, PreSonus Eris E4.5, Behringer Eurolive B212D, Numark Mixtrack, Audio-Technica ATH-M50 y M-Audio Fast Track Pro. Los nombres/modelos, imágenes, compatibilidad, precios CRC y existencias son datos ilustrativos del prototipo; no acreditan precio, inventario, licencia de marca ni disponibilidad actual de Digari. La cantidad de fichas no equivale a cinco alternativas por familia.
 
-Autor estudiante: José Manuel Castro Moya. Implementación asistida con Codex; las decisiones de alcance, revisión final y aprobación corresponden al estudiante.
+El flujo demostrable es: consulta libre en Asesoría → revisar opciones y abrir fichas → comparar dos o más productos → abrir Estudio 3D/audio → crear un pedido de demostración → recargar y consultar Seguimiento. También se registra y consulta una solicitud ficticia de servicio. No se realizan compras, pagos, reservas, envíos, mensajes ni solicitudes reales. El checkout no pide datos de tarjeta.
 
-
-## Estado actual
-
-P1 implementa tienda y seguimiento demo; P2 añade un estudio 3D procedural y audio sintético; P3 añade asesoría con filtro local y Gemini opcional. Chrome headless verificó rutas, comparación, audio y WebGL en P4; la revisión humana, la escucha física y la prueba táctil en teléfono siguen pendientes.
-
-Los 15 productos, precios CRC, existencias, compatibilidad, contacto y pedidos de prueba no deben interpretarse como inventario/oferta vigente. Las opciones de retiro/envío no se ejecutan. No se solicitan tarjetas ni se hacen reservas, compras o envíos reales.
+Asesoría recibe una consulta por mensaje y evalúa el catálogo vigente completo de SQLite antes de escoger hasta tres recomendaciones. La selección y los datos comerciales los determina el servidor; Gemini es opcional y solo explica candidatos ya seleccionados. Sin proveedor disponible, responde el asesor local. La interfaz informa el modo. El historial de conversación está en el navegador y no se envía a Gemini.
 
 ## Requisitos
 
 - Windows 10/11
-- Node.js 22.13 o posterior (se usa `node:sqlite`, sin servicio de base de datos externo)
-- npm incluido con Node
+- Node.js 22.13+ y npm (el proyecto usa `node:sqlite`)
+- Chrome o navegador moderno para la demostración; WebGL y salida de audio son opcionales
 
 ## Instalación y ejecución (PowerShell)
 
@@ -28,64 +23,44 @@ npm ci
 npm run dev
 ```
 
-Abrí http://localhost:3000. En el primer uso, SQLite crea `data/digari.sqlite` y precarga 15 fichas sintéticas. La base queda fuera de Git. En desarrollo, el panel local admite `local-demo-only` como código de demostración; la app completa no está preparada para uso productivo, aunque se configure otro token.
+Abrí <http://localhost:3000>. SQLite crea `data/digari.sqlite` al iniciar y carga datos demo. La base está ignorada por Git. Para una prueba aislada, define antes de iniciar `$env:DIGARI_DB_PATH = Join-Path $env:TEMP 'digari-final.sqlite'`. El código del operador `local-demo-only` solo habilita transiciones locales de demostración; no es autenticación productiva.
 
-La ruta `/asesoria` funciona sin clave con filtro local. Para habilitar Gemini, copia `.env.example` como `.env.local` y completa allí tu clave propia de Gemini AI Studio; deja ese archivo fuera de Git. El modelo predeterminado es `gemini-3.8-flash`. El proveedor usa Interactions API con `store:false`, recibe selecciones estructuradas y candidatos demo, no el texto libre ni el historial local. Si falta la clave o el proveedor falla, el modo local sigue disponible.
+La aplicación funciona sin clave externa y muestra Asesoría local. Gemini requiere una clave propia en `.env.local` (no versionar ese archivo). No es requisito de ejecución ni de las pruebas locales. CI verifica el fallback con proveedor simulado/sin clave. No se afirma una llamada real a Gemini para este candidato.
 
-## Pruebas
+## Verificación reproducible
 
 ```powershell
 npm test
 npm run lint
+$env:DIGARI_DB_PATH = Join-Path $env:TEMP 'digari-final-build.sqlite'
+node -e "require('./.test-dist/lib/db.js')"
 npm run build
 ```
 
-Las pruebas unitarias cubren catálogo/filtros, reglas de cantidades/stock, total del servidor, idempotencia, códigos privados y transiciones. Para la prueba HTTP integrada, inicia el servidor en otra terminal y define la misma clave demo en ambas:
+Para smoke HTTP, inicia la aplicación compilada en una terminal con una base temporal:
 
 ```powershell
+$env:DIGARI_DB_PATH = Join-Path $env:TEMP 'digari-final-api.sqlite'
 $env:DIGARI_DEMO_OPERATOR_TOKEN = 'local-demo-only'
 npm run start
 ```
 
-En otra terminal, desde la carpeta del proyecto:
+En otra terminal usa la misma ruta SQLite y token:
 
 ```powershell
+$env:DIGARI_DB_PATH = Join-Path $env:TEMP 'digari-final-api.sqlite'
 $env:DIGARI_DEMO_OPERATOR_TOKEN = 'local-demo-only'
 npm run test:api
 ```
 
-La suite HTTP prueba once páginas, el filtro local de asesoría y su validación, filtros de catálogo, idempotencia, consulta/actualización de pedido/servicio y stock insuficiente. La verificación visual manual y la revisión del estudiante deben registrarse por separado.
+El smoke ejercita páginas/API, catálogo, asesoría local y entradas inválidas, pedido idempotente, códigos privados, stock y estados de servicio. Resultados por SHA y límites están en [`docs/validacion-entrega.md`](docs/validacion-entrega.md). La auditoría histórica de 100 perfiles simulados en [`docs/qa/informe-usabilidad.md`](docs/qa/informe-usabilidad.md) se hizo sobre otra versión: no es un resultado de aceptación de este candidato ni una prueba con 100 personas reales.
 
-## Recorrido breve de demo
+## Demo y documentación
 
-1. En Tienda, busca guitarra, elige tipo y presupuesto, guarda favoritos y marca dos opciones para comparar.
-2. Abre una ficha y revisa origen sintético, variantes, compatibilidad y existencias demo.
-3. Agrega al carrito, cambia retiro/envío demo, confirma “Pedido de demostración” y guarda el código privado.
-4. En Seguimiento, consulta el código. Después en Servicios crea una afinación demo, consulta su código y usa el panel local de operador para moverla a diagnóstico.
-5. Usa cantidad/stock inválidos para ver la validación. No se transmite información a Digari.
+El guion de operación de 12 minutos y 3 minutos de preguntas, el caso comparable y las contingencias están en [`docs/demo.md`](docs/demo.md). El caso de negocio con objetivo medible y resultados aún no medidos está en [`docs/negocio.md`](docs/negocio.md). Intención, especificación y relación requisito–prueba–commit: [`intent.md`](intent.md), [`spec.md`](spec.md), [`plan.md`](plan.md). Los ciclos de trabajo asistido y las revisiones del estudiante registradas con su corrección y evidencia se describen en [`docs/uso-ia.md`](docs/uso-ia.md).
 
-P2 incorpora estudio 3D y audio sintético; P3 añade asesoría determinista/Gemini. Contactos y enlaces a asesoría/financiamiento apuntan a páginas públicas originales y deben verificarse al presentar la aplicación.
+## Datos, privacidad y límites
 
-## Documentación
+No ingresar datos reales de clientes. El seguimiento usa códigos aleatorios de alta entropía, guarda hashes y devuelve campos mínimos. El token de operador es solo para demo local. SQLite en un solo equipo no ofrece identidad, control multiusuario ni garantías de producción. No se envían datos personales, conversación, códigos ni pedidos a Gemini. Antes de un piloto se requieren autorización de Digari, validación humana del catálogo y licencias, seguridad, retención, soporte y evaluación de privacidad.
 
-- [`intent.md`](intent.md), [`spec.md`](spec.md) y [`plan.md`](plan.md): intención, reglas y trazabilidad.
-- [`docs/auditoria-digari.md`](docs/auditoria-digari.md): hechos reportados, alcance y validaciones del sitio pendientes.
-- [`docs/uso-ia.md`](docs/uso-ia.md): ciclos P1/P2/P3/P4 y revisión humana pendiente.
-- [`docs/negocio.md`](docs/negocio.md): caso medible, supuestos, costos y plan piloto.
-- [`docs/demo.md`](docs/demo.md): guion de 12 minutos y preguntas.
-- [`docs/validacion-p4.md`](docs/validacion-p4.md): instalación, pruebas y evidencia verificable.
-
-## Privacidad y límites
-
-No capturar datos personales reales. El código privado se genera aleatoriamente, se persiste como hash y solo se presenta al crear la solicitud. El operador demo usa un token solo de desarrollo. Esta app local y SQLite no tienen controles para producción, personal multiusuario o datos comerciales.
-
-## Estudio 3D y audio (P2)
-
-Abre `/estudio` o la ficha de cualquier producto y activa el visor o el audio de forma explícita. El catálogo enlaza cada una de sus 15 fichas a una geometría Three.js procedural; todas son maquetas ilustrativas, no réplicas exactas. El motor 3D y el componente de audio se cargan al activar cada panel. El visor acepta arrastre con ratón/tacto, botones y flechas/+/−/R al enfocar el canvas; ante error WebGL presenta una ilustración alternativa claramente identificada.
-
-Los tonos y acordes son síntesis Web Audio iniciada por el usuario. Los perfiles A/B de equipo usan una misma señal sintética; B simula un realce EQ y compensa su RMS calculado localmente. No son grabaciones ni mediciones de productos reales. Cuerdas, cable y caña se identifican como accesorios pasivos sin timbre ficticio. Repite las comprobaciones manuales de escritorio/móvil y escucha antes de presentar; la revisión visual/auditiva y la revisión del estudiante aún están pendientes.
-
-
-## CI y revisión P4
-
-GitHub Actions ejecuta `npm ci`, `npm test`, lint, build y smoke API local usando SQLite temporal y sin clave Gemini. Repite las pruebas en PowerShell con los comandos anteriores. Los resultados observados y sus límites están en [docs/validacion-p4.md](docs/validacion-p4.md); el guion completo está en [docs/demo.md](docs/demo.md) y el caso de negocio en [docs/negocio.md](docs/negocio.md). La revisión manual del estudiante no se considera aprobada por la ejecución automática.
+Los 15 visores son geometrías procedurales ilustrativas, no reproducciones exactas. Three.js y Web Audio se cargan al activar el estudio; el audio es síntesis etiquetada, no muestra grabada de los productos. Si WebGL no está disponible se ofrece una vista alternativa identificada. Revisión del estudiante, ensayo oral, escucha en equipo real, tacto en teléfono, medición con participantes y Gemini online permanecen pendientes.

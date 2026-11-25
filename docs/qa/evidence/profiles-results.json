@@ -1,0 +1,57 @@
+{
+  "base": "http://127.0.0.1:3114",
+  "profileCount": 1,
+  "generatedAt": "2026-11-24T22:58:53.019Z",
+  "branch": "refactor/experiencia-digari",
+  "sha": "90ee345fa2aeeb38bcf524f3ad24e6941438694a",
+  "groups": [
+    "principiantes",
+    "compradores de regalos",
+    "guitarristas",
+    "bajistas y tecladistas",
+    "productores de home studio",
+    "técnicos de audio",
+    "DJs",
+    "presupuesto ajustado",
+    "clientes de taller",
+    "teclado, teclado y zoom"
+  ],
+  "profiles": [
+    {
+      "id": "U001",
+      "grupo": "principiantes",
+      "tarea": "Empezar a practicar guitarra acústica con presupuesto limitado",
+      "dispositivo": "móvil",
+      "presupuesto_crc": 101000,
+      "inicio_menu": "completado",
+      "tienda_ficha_promos": "fallido",
+      "comparacion_favoritos": "fallido",
+      "estudio_3d_audio": "fallido",
+      "asesoria": "fallido",
+      "carrito_pedido_seguimiento": "no ejecutado",
+      "servicios_seguimiento_contacto": "no ejecutado",
+      "mayor_friccion": "fallo automatización Error: target missing\n    at <anonymous>:1:125\n    at <anonymous>:1:281",
+      "opinion_simulada": "[SIMULADA] Como principiantes, me frustraría que la secuencia se detuviera antes de completar empezar a practicar guitarra acústica con presupuesto limitado.",
+      "mejora_propuesta": "Corregir el primer control de la secuencia y repetir el recorrido con la misma vista y sesión.",
+      "evidencia": "",
+      "notas_resultado": "búsqueda/ficha/Promos incompleta|comparación o persistencia de favoritos incompleta|WebGL no disponible, se usó la vista alternativa|etiqueta sintética no visible|asesoría no conservó continuidad o cambió criterios|fallo automatización Error: target missing\n    at <anonymous>:1:125\n    at <anonymous>:1:281"
+    }
+  ],
+  "photos": {
+    "cable-pulso": "fotografía webp",
+    "cuerdas-onda": "ilustración svg",
+    "cana-viento": "fotografía webp",
+    "microfono-claro": "ilustración svg",
+    "parlante-brisa": "ilustración svg",
+    "controlador-eco": "ilustración svg",
+    "audifonos-senda": "ilustración svg",
+    "interfaz-faro": "ilustración svg",
+    "monitor-alfar": "ilustración svg",
+    "teclado-nube": "fotografía webp",
+    "bajo-marea": "fotografía webp",
+    "ukelele-sol": "fotografía webp",
+    "electrica-bruma": "fotografía webp",
+    "acustica-luz": "fotografía webp",
+    "flauta-rio": "fotografía webp"
+  }
+}

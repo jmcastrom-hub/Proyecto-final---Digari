@@ -1,23 +1,98 @@
 import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
 import { products } from '../lib/catalog';
-import { AdviceInputError, buildAdvice, parseAdviceInput, USE_OPTIONS } from '../lib/advisor';
+import { AdviceInputError, buildAdvice, parseAdviceInput, parseBudgetCrc, USE_OPTIONS } from '../lib/advisor';
 import { createAdviceRateLimiter } from '../lib/advice-rate-limit';
 import { DEFAULT_GEMINI_MODEL, requestGeminiAdvice, supportedGeminiModel } from '../lib/gemini-advice';
+import { repairLegacyUtf8 } from '../lib/text-encoding';
 
 const styles = [...new Set(products.flatMap((product) => product.style))];
-const completeInput = { budgetCrc: 80000, family: 'Guitarra acústica', style: 'folk', use: 'iniciacion', question: '¿Cuál es la diferencia?' };
+const completeInput = { budgetCrc: 90000, family: 'Guitarra acústica', style: 'folk', use: 'iniciacion', question: '¿Cuál es la diferencia?' };
 
 describe('asesoría determinista y privacidad', () => {
+  it('responde disponibilidad por categoría sin exigir presupuesto, estilo o uso', async () => {
+    const parsed = parseAdviceInput({ question: '¿Tienen bajos?', family: 'Bajo' }, styles, products.map((item) => item.id));
+    const result = await buildAdvice(parsed, products);
+    assert.equal(result.mode, 'local');
+    assert.equal(result.recommendations[0]?.productId, 'bajo-marea');
+    assert.match(result.message, /Asesoría local/);
+  });
+  it('aclara que piano y teclado son familias distintas cuando no hay pianos demo', async () => {
+    const parsed = parseAdviceInput({ question: 'Busco un piano por ₡200 000', family: 'Piano', budgetCrc: 200000 }, styles, products.map((item) => item.id));
+    const result = await buildAdvice(parsed, products);
+    assert.equal(result.recommendations.length, 0);
+    assert.match(result.message, /pianos acústicos ni digitales.*teclados.*familia distinta/i);
+  });
+  it('permite guitarra acústica y eléctrica dentro del presupuesto solicitado', async () => {
+    const parsed = parseAdviceInput({ question: 'Busco una guitarra por ₡150 000', family: 'Guitarra', budgetCrc: 150000 }, styles, products.map((item) => item.id));
+    const result = await buildAdvice(parsed, products);
+    assert.deepEqual(new Set(result.recommendations.map((item) => item.family)), new Set(['Guitarra acústica', 'Guitarra eléctrica']));
+    assert.ok(result.recommendations.every((item) => item.priceCrc <= 150000));
+  });
+  it('responde consultas generales y limpia filtros heredados guardados', async () => {
+    const parsed = parseAdviceInput({ budgetCrc: 0, family: 'Bajo', style: 'funk', use: 'ensayo', question: '¿Qué instrumentos tenés?' }, styles, products.map((item) => item.id));
+    assert.equal(parsed.budgetCrc, undefined); assert.equal(parsed.family, undefined); assert.equal(parsed.style, undefined); assert.equal(parsed.use, undefined);
+    const result = await buildAdvice(parsed, products);
+    assert.match(result.message, /familias:.*Guitarra acústica.*Bajo/i);
+    assert.equal(result.recommendations.length, 3);
+    assert.ok(result.recommendations.every((item) => products.find((product) => product.id === item.productId)?.category === 'Instrumentos'));
+  });
+  it('resume el inventario completo de equipo y diversifica las tarjetas por categoría', async () => {
+    const parsed = parseAdviceInput({ budgetCrc: 0, family: 'Piano', question: '¿Qué equipo tenés?' }, styles, products.map((item) => item.id));
+    const result = await buildAdvice(parsed, products);
+    assert.ok(result.message.includes('Cable') && result.message.includes('Interfaz') && result.message.includes('Bajo'));
+    assert.equal(result.recommendations.length, 3);
+    assert.equal(new Set(result.recommendations.map((item) => products.find((product) => product.id === item.productId)?.category)).size, 3);
+  });
+  it('recomienda para empezar sin pedir presupuesto y amplía sin repetir productos', async () => {
+    const first = await buildAdvice({ question: '¿Cuál me recomendás para empezar?', use: 'iniciacion' }, products);
+    assert.equal(first.recommendations.length, 3);
+    const more = await buildAdvice({ question: 'mostrame más', use: 'iniciacion', previousRecommendationIds: first.recommendations.map((item) => item.productId) }, products);
+    assert.ok(more.recommendations.length > 0 && more.recommendations.length <= 3);
+    assert.ok(more.recommendations.every((item) => !first.recommendations.some((prior) => prior.productId === item.productId)));
+    assert.equal(more.hasMore, true);
+  });
+  it('respeta el tope escrito en la consulta y separa opciones por encima del monto', async () => {
+    const overBudget = { ...products.find((item) => item.id === 'bajo-marea')!, id: 'bajo-gama-alta-demo', name: 'Bajo demo de mayor precio', priceCrc: 180000 };
+    const parsed = parseAdviceInput({ family: 'Bajo', question: 'Busco bajo máximo ₡120 000' }, styles, [...products.map((item) => item.id), overBudget.id]);
+    const result = await buildAdvice(parsed, [...products, overBudget]);
+    assert.equal(parsed.budgetCrc, 120000);
+    assert.ok(result.recommendations.every((item) => item.priceCrc <= 120000));
+    assert.ok(result.alternatives?.some((item) => item.productId === overBudget.id && item.priceCrc > 120000));
+  });
+  it('evalúa el producto final del inventario completo antes de recortar candidatos', async () => {
+    const finalProduct = { ...products[0], id: 'piano-digital-final', name: 'Piano digital final', family: 'Piano digital', priceCrc: 95000, stock: 2, category: 'Instrumentos', style: ['solo-final'], compatible: [], summary: 'Una ficha añadida al final de SQLite.' };
+    const result = await buildAdvice({ family: 'Piano', style: 'solo-final', question: 'Busco un piano' }, [...products, finalProduct]);
+    assert.deepEqual(result.recommendations.map((item) => item.productId), ['piano-digital-final']);
+  });
+  it('corrige texto UTF-8 legado en conversaciones ya guardadas', () => {
+    assert.equal(repairLegacyUtf8('Pr\u00c3\u00a1ctica de guitarra'), 'Práctica de guitarra');
+    assert.equal(repairLegacyUtf8('Guitarra acústica'), 'Guitarra acústica');
+  });
+  it('acepta montos enteros inclusivos con separadores y distingue vacío de cero', () => {
+    assert.equal(parseBudgetCrc('0'), 0);
+    assert.equal(parseBudgetCrc('₡1'), 1);
+    assert.equal(parseBudgetCrc('10 000 000'), 10_000_000);
+    assert.equal(parseBudgetCrc('₡10.000.000'), 10_000_000);
+    assert.equal(parseBudgetCrc(''), undefined);
+    assert.throws(() => parseBudgetCrc('-1'), AdviceInputError);
+    assert.throws(() => parseBudgetCrc('10 000 001'), AdviceInputError);
+  });
   it('rechaza montos y estilos inválidos, pero pregunta por preferencias faltantes', () => {
     assert.throws(() => parseAdviceInput({ ...completeInput, budgetCrc: '80 mil' }, styles), AdviceInputError);
     assert.throws(() => parseAdviceInput({ ...completeInput, style: 'inexistente' }, styles), AdviceInputError);
     const parsed = parseAdviceInput({ question: 'Busco algo' }, styles);
-    return buildAdvice(parsed, products).then((result) => { assert.equal(result.mode, 'local'); assert.match(result.question ?? '', /presupuesto.*tipo.*uso o estilo/i); });
+    return buildAdvice(parsed, products).then((result) => { assert.equal(result.mode, 'local'); assert.ok(result.recommendations.length > 0); });
   });
   it('devuelve seguimiento local cuando el presupuesto no alcanza', async () => {
     const result = await buildAdvice({ ...completeInput, budgetCrc: 1000 }, products);
-    assert.equal(result.mode, 'local'); assert.equal(result.recommendations.length, 0); assert.match(result.question ?? '', /flexibilizar/);
+    assert.equal(result.mode, 'local'); assert.equal(result.recommendations.length, 0); assert.match(result.message, /flexibilizar/);
+  });
+  it('explica con tacto que cero no alcanza para un producto demo', async () => {
+    const result = await buildAdvice({ ...completeInput, budgetCrc: 0 }, products);
+    assert.equal(result.recommendations.length, 0);
+    assert.match(result.message, /₡0/);
+    assert.match(result.message, /podés flexibilizar el monto/i);
   });
   it('funciona sin proveedor con hasta tres candidatos y motivos reproducibles', async () => {
     const result = await buildAdvice({ ...completeInput, budgetCrc: 180000, family: 'Guitarra eléctrica', style: 'rock', use: 'ensayo' }, products);
@@ -45,6 +120,28 @@ describe('asesoría determinista y privacidad', () => {
     const down = await buildAdvice(completeInput, products, async () => { throw new Error('timeout'); });
     const inventedPrice = await buildAdvice(completeInput, products, async (context) => ({ recommendations: [{ productId: (context as { candidates: { id: string }[] }).candidates[0].id, reason: 'Cuesta ₡70000 y tiene mejor stock.' }], question: null }));
     assert.equal(down.mode, 'local'); assert.equal(inventedPrice.mode, 'local');
+  });
+  it('usa el filtro local ante respuestas de proveedor 429 o 503', async () => {
+    for (const status of [429, 503]) {
+      const result = await buildAdvice(completeInput, products, async () => { throw Object.assign(new Error('provider unavailable'), { status }); });
+      assert.equal(result.mode, 'local');
+      assert.ok(result.recommendations.length > 0);
+    }
+  });
+  it('continúa una conversación estructurada con filtro más barato, cambio de presupuesto y uso', async () => {
+    const catalog = products;
+    const first = await buildAdvice({ ...completeInput, budgetCrc:100000 }, catalog);
+    const cheaper = await buildAdvice({ ...completeInput, budgetCrc:100000, question:'¿Hay algo más barato?', previousRecommendationIds:first.recommendations.map((item) => item.productId) }, catalog);
+    assert.equal(cheaper.mode, 'local'); assert.equal(cheaper.recommendations.length,0); assert.match(cheaper.message,/No encuentro otra ficha/);
+    const updated = parseAdviceInput({ ...completeInput, budgetCrc:100000, question:'Subí el presupuesto a ₡150 000', conversationId:'123e4567-e89b-12d3-a456-426614174000', previousRecommendationIds:['acustica-luz'] }, styles, catalog.map((item) => item.id));
+    assert.equal(updated.budgetCrc,150000);
+    assert.throws(() => parseAdviceInput({ ...completeInput, conversationId:'x', previousRecommendationIds:['missing-product'] }, styles, catalog.map((item) => item.id)), AdviceInputError);
+    const rehearsal = parseAdviceInput({ ...completeInput, budgetCrc:100000, question:'¿Me sirve para ensayar?', previousRecommendationIds:['acustica-luz'] }, styles, catalog.map((item) => item.id));
+    assert.equal(rehearsal.use,'ensayo'); assert.deepEqual(rehearsal.previousRecommendationIds,['acustica-luz']);
+    const gemini = await buildAdvice({ ...completeInput, budgetCrc:100000 }, catalog, async (ctx) => ({ recommendations:[{productId:ctx.candidates[0].id,reason:'La ficha coincide con tus preferencias de práctica.'}],question:null }));
+    const local = await buildAdvice({ ...completeInput, budgetCrc:100000 }, catalog, async () => { throw Object.assign(new Error('provider unavailable'),{status:503}); });
+    assert.equal(gemini.mode,'gemini'); assert.equal(local.mode,'local');
+    assert.deepEqual(local.recommendations.map((item) => item.productId),gemini.recommendations.map((item) => item.productId));
   });
 });
 

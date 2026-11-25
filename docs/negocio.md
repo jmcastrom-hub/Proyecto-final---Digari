@@ -2,67 +2,53 @@
 
 ## Problema y propuesta
 
-Digari Music Store es una empresa real. La auditoría pública heredada describe un catálogo amplio y opciones de asesoría, financiamiento y contacto; no se obtuvo acceso a sus datos comerciales u operaciones internas. El problema de selección y seguimiento integrado es una hipótesis que debe validarse con clientes y personal de Digari.
+Digari Music Store es una empresa real. La auditoría pública heredada describe categorías de instrumentos/audio, asesoría y servicios; no se obtuvo acceso a sus operaciones privadas. La dificultad de encontrar una opción por presupuesto y reunir comparación/seguimiento en un solo flujo es una **hipótesis**, no un hallazgo medido del negocio.
 
-Digari Studio propone una experiencia académica para que una persona con presupuesto y tipo/uso definidos encuentre opciones compatibles, las compare y consulte el estado de un pedido de prueba. Un segundo flujo registra solicitudes ficticias de afinación, calibración, restauración o reparación y permite mostrar transiciones con un operador demo local. La aplicación no está integrada con Digari y no genera ventas, reservas ni contactos reales.
+Digari Studio es un prototipo académico independiente. Conecta catálogo demo, recomendación local, comparación, estudio 3D/audio ilustrativo, pedido sin pago y seguimiento ficticio. Un flujo secundario demuestra solicitud y estados de servicio. No genera una operación para Digari.
 
-## Caso de medición comparable
+## Mismo caso para comparar el sitio actual y el prototipo
 
-**Participante:** persona principiante que busca una guitarra para practicar en casa, abierta a comparar formato acústico y eléctrico. **Límite:** ₡180,000 para la guitarra; accesorios adicionales quedan fuera del presupuesto del caso. **Criterios:** buscar “guitarra”, revisar compatibilidad y comparar la Guitarra acústica Luz (₡74,900) con la Guitarra eléctrica Bruma (₡169,900), ambas bajo el límite, para elegir según uso/estilo. **Inicio:** página pública de entrada del sitio actual y portada de Digari Studio, respectivamente. **Fin:** participante identifica ambas fichas dentro del límite y explica su elección.
+**Instrucción idéntica:** “Sos principiante y buscás una guitarra para practicar en casa. Tenés un máximo de **₡120 000 para el instrumento**, accesorios fuera del presupuesto. Encontrá y compará una guitarra acústica y una eléctrica dentro del tope, confirma modelo y precio, y explicá cuál escogerías para practicar en casa”. **Inicio:** portada pública de Digari Music Store para el sitio actual; portada de Digari Studio para el prototipo. **Fin correcto:** el participante identifica ambas categorías/opciones, verifica que no exceden el tope y explica una elección. El prototipo ofrece Yamaha F310 a ₡84 900 (`/productos/acustica-luz`) y Squier Affinity Strat roja a ₡109 900 (`/productos/electrica-bruma`); esos nombres e importes son datos demo del software, no cotización vigente.
 
-| Resultado | Sitio público actual | Prototipo Digari Studio |
+| Métrica con la misma instrucción | Sitio público actual | Digari Studio |
 |---|---|---|
-| Mediana de tiempo | No medida | No medida con participante |
-| Tasa de éxito | No medida | No medida con participante |
-| Evidencia disponible | Auditoría heredada; navegación dinámica actual pendiente de revisión humana | Suite automatizada, smoke API y prueba Chrome headless; no equivalen a una prueba moderada |
+| Mediana de tiempo de tarea | No medida | No medida con participantes |
+| Tasa de éxito | No medida | No medida con participantes |
+| Evidencia técnica disponible | Auditoría pública heredada; no es ensayo comparable | Pruebas automatizadas y navegador automatizado documentados por SHA; no sustituyen observación de personas |
 
-Objetivo sugerido: mediana de finalización de **≤5 minutos** en el prototipo. Medir también éxito (casos completados correctamente / intentos), errores, abandonos, dispositivo, fecha y cantidad de participantes. Usar las mismas instrucciones, contenido y límite de tiempo en ambos sistemas. La línea base sigue sin medir; no se atribuye una mejora.
+**Objetivo sugerido para el prototipo:** mediana ≤5 minutos y reportar tasa de éxito (termina correctamente/intentó). Es un objetivo, no resultado alcanzado. Para medir, reclutar participantes con consentimiento; balancear o alternar orden entre sitio actual y prototipo; usar mismo dispositivo o registrar diferencias; cronometrar desde la instrucción hasta elección explicada; registrar ayudas, errores, abandonos y resultados; calcular mediana y proporción de éxito con denominadores. No inventar la línea base ni generalizar desde una sola sesión. La auditoría de 100 perfiles fue simulada y no cuenta como muestra humana.
 
-## Supuestos que requieren validación
+## Hechos, hipótesis y restricciones
 
-- Clientes valoran reunir compatibilidad, presupuesto, comparación y seguimiento en un flujo.
-- Las fichas del catálogo real tienen atributos suficientes para filtrar de manera fiable.
-- Personal de Digari aceptaría un flujo de seguimiento y tendría permisos definidos para actualizar estados.
-- Las etiquetas y timbres ilustrativos del estudio ayudan a decidir sin confundirse con un producto exacto.
-- La empresa puede autorizar el tratamiento, los datos, la seguridad y cualquier integración antes de un piloto.
+- **Hechos comprobables del prototipo:** catálogo de 15 fichas, importes/stock demo, reglas servidor de pedido/seguimiento y modo de asesoría local; ver resultados por SHA en `validacion-entrega.md`.
+- **Supuestos:** comparar formatos de instrumento reduce esfuerzo; recomendar equipo compatible facilita una decisión; seguimiento unificado sería útil para clientes/personal. Validar con usuarios y Digari.
+- **Sin acceso:** inventario actual, precios comerciales, clientes, pedidos, CRM, personal, procesos de taller, métricas internas o autorización para piloto.
+- **Limitación del inventario demo:** hay una ficha por cada familia listada; no hay cinco modelos por familia. No prometer variedad que la app no tiene.
 
-## Costos estimados y dependencias
+## Costos aproximados y dependencias
 
-Las siguientes cifras son estimaciones de costo directo del **prototipo local**, no cotizaciones ni costos de operación de Digari.
-
-| Concepto | Estimación inicial | Supuesto / incertidumbre |
+| Rubro | Estimación del prototipo | Condición |
 |---|---:|---|
-| Next.js, SQLite, Three.js y Web Audio | ₡0 en licencias obligatorias | Dependencias open source; verificar licencias antes de un piloto |
-| Ejecución local de la demo | ₡0 de infraestructura adicional | Usa una computadora existente; electricidad y tiempo no incluidos |
-| Muestras, modelos y contenido | ₡0 | Geometría y sonido sintéticos propios; no hay material comercial autorizado |
-| Gemini | ₡0 en modo local; costo variable si se activa | No requerido para ejecutar. Precio y cuota dependen del modelo/proveedor y no están incluidos en este estimado |
-| Piloto integrado | Por cotizar | Requiere estimar alojamiento, seguridad, respaldo, soporte, integración, formación, revisión legal y mantenimiento con Digari |
+| Next.js, TypeScript, SQLite, Three.js y Web Audio | ₡0 en licencias obligatorias | Paquetes open source; revisar licencias/avisos antes de uso externo |
+| Demostración local | ₡0 en infraestructura incremental | Usa una computadora existente; excluye electricidad y trabajo |
+| IA | ₡0 si usa modo local | Gemini es opcional; si se habilita, revisar precio/cuota vigentes del proveedor |
+| Operación de piloto | Por cotizar | Alojamiento, seguridad, soporte, respaldo, integración, privacidad, formación y mantenimiento requieren estimación con Digari |
 
-No se incluyen horas de desarrollo del estudiante/agente, impuestos ni compras de dispositivos. No se deben tomar decisiones presupuestarias del negocio con esta tabla.
+No son cotizaciones. No incluyen horas, impuestos, compra de equipos ni compromiso comercial.
 
-## Controles, privacidad y límites
+## Controles, responsables y límites
 
-- P4 usa productos, precios CRC, existencias, pedidos, códigos y servicios sintéticos. No importar contactos ni datos reales.
-- No se recopilan tarjetas; no se ejecutan pagos, reservas, despachos, mensajes o servicios.
-- El catálogo y los estados son autoridad del servidor local; IA opcional solo explica candidatos ya filtrados.
-- Códigos privados no enumerables; se almacenan como hashes. Operador local mediante token solo de demo; no equivale a control de acceso para producción.
-- No compartir PII, códigos ni historial de pedidos con Gemini. Mantener API key fuera del navegador y del repositorio.
-- Validar con asesoría, taller, operaciones, TI y privacidad de Digari antes de cualquier piloto.
+Precios, stock, fotos, disponibilidad, códigos y estados visibles son de demostración. No hay pagos, tarjetas, reserva, envío ni mensajes. SQLite local, token demo y limitación de frecuencia en memoria no son aptos para producción/multiusuario. La recomendación de IA no decide productos/precios/estados: el servidor selecciona del catálogo y la clave, si existe, se mantiene del lado servidor. Nunca enviar PII, códigos privados o pedidos. Antes de un piloto, Digari debe nombrar responsable y aprobar problema, catálogo/licencias, datos, privacidad, roles, seguridad, retención, soporte y criterio de parada.
 
-## Responsables y decisión
-
-| Rol | Responsabilidad propuesta |
+| Rol propuesto | Responsabilidad |
 |---|---|
-| Estudiante / autor del proyecto | Dueño académico, aprueba alcance y realiza revisión humana de documentos e interfaz |
-| Equipo de desarrollo | Pruebas, privacidad por diseño, soporte y cambios controlados |
-| Representante autorizado de Digari | Valida problema, catálogo, vocabulario, operación y permiso de piloto |
-| Personal de tienda/taller | Valida casos, estados y necesidades de formación; no se les atribuye aprobación actual |
-| Participantes de prueba | Ejecutan el caso comparable y autorizan la recolección anónima de métricas |
+| José Manuel Castro Moya, estudiante | Autor académico, ensaya la demo y realiza revisión/aprobación humana; todavía pendiente |
+| Equipo técnico | Mantener pruebas, limitar datos y proponer controles de producción |
+| Representante autorizado de Digari | Validar necesidad, información, permisos y decisión de piloto; no hay aprobación registrada |
+| Participantes | Ejecutar el mismo caso con consentimiento y métricas mínimas |
 
-## Ruta propuesta: piloto → ajustes → ampliación
+## Camino de adopción propuesto
 
-1. **Preparar piloto:** validar necesidad y autorización con Digari; definir responsable, datos permitidos, controles de acceso, retención, soporte y criterios de parada. Empezar con datos ficticios o un conjunto aprobado y mínimo.
-2. **Probar y ajustar:** moderar el mismo caso en sitio actual y prototipo; revisar mediana, éxito, errores, accesibilidad, compatibilidad y claridad de etiquetas. Corregir y volver a probar; registrar decisiones del representante autorizado.
-3. **Decidir ampliación:** solo si la empresa aprueba el valor y la seguridad, estimar integración con catálogo/inventario y pedidos, arquitectura multiusuario, disponibilidad, respaldos, monitoreo, privacidad y costos. Sin aprobación, conservarlo como demo académica y retirar cualquier dato real.
-
-La ruta es una propuesta, no un acuerdo ni una aprobación de Digari.
+1. **Validar necesidad y permiso:** conversar con clientes y Digari; sin importar datos reales.
+2. **Medir y ajustar:** comparar el mismo caso/instrucción de ₡120 000; revisar tiempo, éxito, errores y accesibilidad; actualizar hipótesis con evidencia.
+3. **Decidir piloto:** solo con aprobación expresa, controles, responsables, presupuesto y datos autorizados; ampliar después de revisar seguridad y resultados. Sin eso, se conserva como demostración académica local.

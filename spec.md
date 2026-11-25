@@ -18,11 +18,11 @@ Prototipo académico local para clientes y operador de demostración. El servido
 
 **Aceptación observable:** controles de mouse/táctiles/teclado y etiquetas se verifican; el modelo se distingue como ilustrativo salvo que se licencie y verifique uno exacto; sonido inicia solo por acción del usuario; audio A/B usa misma señal con volumen equiparado y explica que la simulación no reproduce especificación real; si WebGL/audio falla se presenta alternativa e instrucción. Carga diferida del motor y muestras.
 
-### RF-03 — Asesoría Gemini con continuidad local
+### RF-03 — Asesoría conversacional con modo local y Gemini opcional
 
-**Entrada:** presupuesto CRC positivo, tipo, uso/estilo y texto acotado. **Salida:** hasta tres IDs candidatos, explicación, pregunta si faltan datos y etiqueta del modo Gemini o local.
+**Entrada vigente:** texto libre de hasta 240 caracteres, una petición por turno, contexto de conversación y hasta 100 IDs ya presentados. Presupuesto es opcional (entero CRC de ₡0 a ₡10 000 000), igual que familia, uso y estilo; se infieren del mensaje y no hay campos obligatorios separados. **Salida:** respuesta legible, modo local/Gemini, resumen por familia para consultas generales, hasta tres tarjetas con foto/modelo/precio/enlace, alternativas sobre el tope separadas y continuación sin repetir.
 
-**Aceptación observable:** servidor filtra candidatos por presupuesto/tipo/stock/compatibilidad; valida que IDs sugeridos estén en candidatos; clave ausente, timeout, cuota/error activa fallback determinista con mismos filtros; entrada demasiado larga/inválida se rechaza; Gemini nunca dicta precio, stock, orden o estado. Enviar solo preferencias y atributos de catálogo, nunca PII, credenciales ni historial de pedido. El historial opcional local se puede borrar y no se comparte al proveedor.
+**Aceptación observable:** cada solicitud consulta SQLite y evalúa el inventario vigente completo antes de escoger/reducir tarjetas; una consulta general nueva vuelve al catálogo completo sin filtros antiguos. Seguimientos como “más barato”/“mostrame más” mantienen el tema; un presupuesto explícito nuevo reemplaza el anterior. Un piano ausente se declara ausente y no se renombra un teclado como piano. Si no hay coincidencias bajo el tope, cualquier alternativa superior se etiqueta aparte. Gemini solo explica candidatos seleccionados por servidor; modo local usa las mismas reglas. Entrada inválida se rechaza; proveedor ausente, timeout, cuota/error o salida inválida usa fallback local. No se mandan PII, texto/historial conversacional, códigos ni pedidos al proveedor.
 
 ### RF-04 — Pedido/pago demo y seguimiento
 
@@ -69,9 +69,9 @@ JSON, rutas Next.js `/api`; códigos 200/201 para éxito, 400 entrada inválida,
 
 Validación de esquema en servidor; límites de frecuencia y tamaño en endpoints públicos. Nunca incluir `operatorDemoToken` en consultas/respuestas ni registrar secretos.
 
-### P3 — contrato implementado de asesoría
+### Contrato vigente de Asesoría en el candidato
 
-`/asesoria` conserva preferencias y hasta 24 turnos en `localStorage`; el cliente no reenvía el historial. `question` solo se usa en el servidor para clasificar una intención controlada (recomendar, comparar, alternativas) y no se incluye en la llamada al proveedor. Gemini recibe preferencias seleccionadas y, como máximo, tres candidatos del catálogo demo. La salida estructurada solo propone `{productId, reason}` y pregunta opcional; el servidor valida cada ID contra esos candidatos y agrega precio/stock/enlaces de su propia lectura SQLite. Con `GEMINI_API_KEY` ausente o un error/cuota/timeout/ID inválido, responde con las mismas reglas deterministas. El proveedor REST Interactions opera con `store:false`; no se usa estado conversacional remoto. Límite implementado: cuerpo 4 KB, texto 240 caracteres, 12 solicitudes/minuto por dirección de cliente, salida hasta 420 tokens y timeout 8 s. Los límites en memoria son adecuados solo para el prototipo local.
+`/asesoria` muestra historial, compositor, Enviar y Empezar de nuevo; no hay formulario de preferencias separado. El navegador guarda conversación y preferencias estructuradas localmente; una pregunta general o un tema nuevo reinicia criterios heredados. Cada mensaje produce una sola llamada `POST /api/advice` con `{question, conversationId?, previousRecommendationIds?, budgetCrc?, family?, style?, use?}`. El servidor valida, ejecuta `listProducts()` de SQLite y evalúa candidatos antes de limitar tarjetas. Consulta general resume familias con existencias; “empezar” sugiere opciones concretas; “más” excluye IDs ya vistos. Un monto explícito del mensaje prevalece sobre el estado previo; ₡0 es válido. Las tarjetas derivan imagen, nombre, precio, stock y enlace del catálogo. Gemini solo recibe preferencias controladas e IDs/candidatos elegidos por el servidor; no recibe el texto de usuario ni selecciona/modifica datos comerciales. El modo local conserva el mismo filtro. Cuerpo máximo 4 KB, texto 240 caracteres, límite de 12 solicitudes/minuto por clave de cliente, máximo solicitado de 420 tokens y timeout de 8 s; el limitador en memoria sirve solo a la demo local.
 
 ## Arquitectura y tecnología
 
@@ -99,3 +99,26 @@ La instalación usa `npm ci`, Node 22.13 o superior y SQLite local. `DIGARI_DB_P
 | RF-05 Servicio/contacto | Solicitud, consulta, evento, transición secuencial, token inválido sin cambiar estado; contacto no envía | `tests/orders.test.ts`, `tests/api-smoke.mjs`; contacto externo no se ejecuta |
 
 GitHub Actions (`.github/workflows/ci.yml`) repite `npm ci`, tests, lint, build y smoke del servidor. Los datos y códigos demo son locales; no migrar el token de operador, base SQLite ni credenciales al navegador/CI. No se considera el prototipo listo para producción o para operar datos de clientes.
+
+## Contrato vigente de la refactorización RX
+
+### Datos demo y migración
+
+Las 15 fichas conservan sus IDs y referencias a geometría. La marca es una propuesta de categoría, no una asociación comercial verificada; no se afirma un número de modelo específico. Nombres, compatibilidad, precio y stock son sintéticos. El inventario de demostración propuesto es: Yamaha acústica ₡84 900 (8); Squier eléctrica ₡109 900 (6); Ibanez bajo ₡129 900 (5); Casio teclado ₡79 900 (8); Kala ukelele ₡29 900 (12); Yamaha flauta dulce ₡6 900 (10); D’Addario cuerdas ₡5 900 (12); Hosa cable ₡7 900 (10); Vandoren caña ₡3 500 (12); Behringer micrófono ₡23 900 (8); PreSonus monitor ₡54 900 (6); Behringer parlante activo ₡99 900 (4); Numark DJ ₡89 900 (4); Audio-Technica audífonos ₡26 900 (10); M-Audio interfaz ₡49 900 (6).
+
+La migración `brands-prices-stock-2026-01` es transaccional e idempotente: actualiza las 15 fichas en su lugar, sin borrar tablas ni cambiar pedidos, líneas históricas, estados/eventos o solicitudes de servicio. Las pruebas se ejecutan con `DIGARI_DB_PATH` apuntando a SQLite temporal; no deben invocar rutinas de reset sobre `data/digari.sqlite`.
+
+### Conversación de asesoría
+
+`POST /api/advice` recibe texto libre y hasta 100 IDs anteriores para paginar sin repetición. El servidor comprueba esos IDs contra la lectura completa de SQLite, extrae un monto explícito (incluido ₡0), aplica el tipo/estilo/uso mencionados y no arrastra filtros heredados a preguntas generales de inventario. Resume familias con existencias y selecciona hasta tres candidatos tras evaluar todo el conjunto relevante. «Mostrame más» continúa sobre los candidatos no vistos; «más barato» conserva los criterios y usa el precio de las recomendaciones previas como referencia. Los resultados bajo tope y las alternativas sobre tope se devuelven en colecciones separadas. Nombre, precio, stock, foto y ruta de ficha provienen del catálogo. Gemini solo recibe los candidatos ya elegidos por el servidor y puede explicar sus diferencias; no controla selección, precio ni existencia. El modo local aplica el mismo algoritmo. Los IDs fuera del catálogo se rechazan.
+
+### Superficies y controles del Estudio
+
+Texto marfil se usa sobre nogal/carbón oscuros; texto oscuro sobre superficies claras reservadas para ilustración de producto. Selectores, resumen de ficha, especificaciones, tarjetas de audio, controles y pie del Estudio usan el primer esquema; la escena/canvas es decorativa y sin texto superpuesto. Los controles del visor mantienen foco visible, rotación por puntero, flechas, zoom, elevación y reinicio. El motor/modelo Three.js se importa solo al activar el visor; si falla WebGL se ofrece la ilustración SVG asociada a la ficha con etiqueta de alternativa.
+
+La auditoría de contraste y las mediciones reproducibles de esta refactorización se registran en `docs/auditoria-refactor.md`. Los fondos oscuros del Estudio usan texto marfil/secundario y las superficies claras de catálogo/formularios usan tinta oscura. Las pruebas browser verifican 11 rutas en escritorio, móvil y ventana equivalente a zoom 200%, 15 canvas WebGL y controles en frente/costado/reverso. El visor se precarga ante foco o puntero y el audio únicamente al abrir su sección; la reproducción requiere una acción explícita. No se midió mejora de carga fría 3D y el giro quedó esencialmente igual.
+
+El inventario se actualiza transaccionalmente sobre las filas existentes. Antes y después se revisan los conteos de pedidos, líneas, eventos y servicios; una prueba SQLite separada comprueba además que la migración no cambia los datos históricos de una solicitud. La carpeta de evidencia compara capturas antes/después y el archivo JSON conserva las 33 mediciones de vista. La tercera imagen de referencia solicitada no estaba presente en los archivos accesibles, por lo que las maquetas se ajustaron a la descripción textual.
+# Nota de verificación visual posterior (RX-08)
+
+La interfaz aplica texto de 16 px como base para lectura y controles frecuentes, superficies de texto diferenciadas para modo carbón y superficie clara, estados de foco y desplazamiento con espacio reservado al encabezado fijo. En el Estudio el contraste observado supera WCAG AA en selector y paneles (14.57:1 y 13.51:1, respectivamente). Los resultados de navegación a escritorio, móvil y viewport ampliado, además de la galería de cada producto, se versionan en `docs/evidencia-acabado/README.md`. La geometría procedural sigue siendo ilustrativa y no se presenta como réplica comercial.

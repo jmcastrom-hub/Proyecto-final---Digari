@@ -1,0 +1,41 @@
+.product-image {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  object-fit: contain;
+  background: #f1eee7;
+}
+
+.product-art {
+  background: #f1eee7;
+}
+
+.product-art > .product-image {
+  width: 100%;
+  height: 100%;
+  padding: 10px;
+}
+
+.product-art > small,
+.detail-art > small {
+  border-radius: 3px;
+  background: #fffdf7e8;
+  color: #302820;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 5px 8px;
+}
+
+.detail-art > .product-image {
+  width: 100%;
+  max-width: 680px;
+  max-height: min(60vh, 540px);
+  border-radius: 8px;
+}
+
+.advice-product-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 6px;
+}

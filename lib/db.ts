@@ -18,6 +18,7 @@ db.exec(`
     variant_label TEXT, variants_json TEXT NOT NULL, visual TEXT NOT NULL, icon TEXT NOT NULL,
     model_ref TEXT NOT NULL DEFAULT 'generic', audio_json TEXT NOT NULL DEFAULT 'null'
   );
+  CREATE TABLE IF NOT EXISTS catalog_migrations (version TEXT PRIMARY KEY, applied_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP);
   CREATE TABLE IF NOT EXISTS orders (
     id TEXT PRIMARY KEY, tracking_hash TEXT NOT NULL UNIQUE, idempotency_key TEXT NOT NULL UNIQUE,
     status TEXT NOT NULL, fulfillment TEXT NOT NULL, total_crc INTEGER NOT NULL, created_at TEXT NOT NULL
@@ -65,6 +66,24 @@ if (count.count === 0) {
   });
   seed(products);
 }
+// Una migración de catálogo idempotente actualiza las fichas demo existentes sin
+// reemplazar la base ni tocar pedidos, líneas históricas, eventos o servicios.
+const catalogVersion = 'photo-models-2026-11';
+const catalogDone = db.prepare('SELECT 1 FROM catalog_migrations WHERE version=?').get(catalogVersion);
+if (!catalogDone) withTransaction(() => {
+  const updateCatalog = db.prepare(`UPDATE products SET name=?,family=?,category=?,price_crc=?,stock=?,style_json=?,compatible_json=?,summary=?,variant_label=?,variants_json=?,visual=?,icon=?,model_ref=?,audio_json=? WHERE id=?`);
+  for (const p of products) updateCatalog.run(p.name,p.family,p.category,p.priceCrc,p.stock,JSON.stringify(p.style),JSON.stringify(p.compatible),p.summary,p.variantLabel ?? null,JSON.stringify(p.variants),p.visual,p.icon,p.modelRef,JSON.stringify(p.audioNotes ?? null),p.id);
+  db.prepare('INSERT INTO catalog_migrations(version) VALUES(?)').run(catalogVersion);
+});
+const imageVersion = 'licensed-photos-2026-11';
+if (!db.prepare('SELECT 1 FROM catalog_migrations WHERE version=?').get(imageVersion)) withTransaction(() => {
+  const updatePhotoModel = db.prepare('UPDATE products SET name=?, compatible_json=?, summary=?, variants_json=?, audio_json=? WHERE id=?');
+  for (const id of ['cuerdas-onda', 'controlador-eco']) {
+    const item = products.find((product) => product.id === id)!;
+    updatePhotoModel.run(item.name, JSON.stringify(item.compatible), item.summary, JSON.stringify(item.variants), JSON.stringify(item.audioNotes ?? null), id);
+  }
+  db.prepare('INSERT INTO catalog_migrations(version) VALUES(?)').run(imageVersion);
+});
 const updateModel = db.prepare('UPDATE products SET model_ref=?, audio_json=? WHERE id=?');
 for (const item of products) updateModel.run(item.modelRef, JSON.stringify(item.audioNotes ?? null), item.id);
 

@@ -37,6 +37,6 @@ Sin compra, pago, reserva, despacho, contacto ni solicitud real; sin integrar st
 
 Revisión humana del estudiante y eventual validación de pertinencia por Digari quedan pendientes. El prototipo no está autorizado para uso productivo.
 
-## Validación P4 y pendientes
+## Caso de entrega y validación pendiente
 
-El caso comparable es una persona principiante que busca guitarra para practicar en casa con un máximo de ₡180,000 para el instrumento (accesorios fuera del caso), y compara dos modelos acústico/eléctrico. La meta continúa siendo mediana ≤5 minutos y se medirá también tasa de éxito con instrucciones equivalentes en el sitio actual y el prototipo. No hay línea base ni prueba moderada medida; las cifras de navegación de `docs/medicion-p2.1.md` no son una métrica de éxito de tarea. La revisión del estudiante, escucha en equipo real, tacto en teléfono y validación con Digari siguen pendientes.
+El caso se fija en `docs/demo.md` y `docs/negocio.md`: persona principiante busca guitarra para practicar en casa, compara Yamaha F310 (₡84 900; `/productos/acustica-luz`) y Squier Affinity Strat roja (₡109 900; `/productos/electrica-bruma`) con tope de **₡120 000** para el instrumento, y explica una elección. Los precios y stock son demo. Objetivo sugerido: mediana ≤5 minutos; medir también la tasa de éxito con la misma instrucción en el sitio público y el prototipo. No existe línea base ni prueba moderada medida; cifras de carga no miden éxito de tarea. La auditoría de 100 perfiles es simulada y corresponde a otra versión. El ensayo oral del estudiante, aprobación humana, escucha real, tacto físico y validación con Digari siguen pendientes.

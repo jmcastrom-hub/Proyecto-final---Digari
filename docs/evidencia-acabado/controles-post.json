@@ -1,0 +1,232 @@
+[
+  {
+    "view": "desktop",
+    "route": "/",
+    "viewport": 1440,
+    "selectCount": 0,
+    "selectSurface": null,
+    "focused": "A",
+    "focusVisible": false,
+    "overflow": false,
+    "keyboardTarget": {
+      "tag": "A",
+      "label": "Digari Studio, inicio",
+      "focusVisible": true,
+      "outline": "solid",
+      "outlineWidth": "3px"
+    }
+  },
+  {
+    "view": "desktop",
+    "route": "/tienda",
+    "viewport": 1440,
+    "selectCount": 3,
+    "selectSurface": {
+      "color": "rgb(240, 232, 218)",
+      "background": "rgb(25, 24, 23)",
+      "colorScheme": "dark",
+      "minHeight": "48px"
+    },
+    "focused": "A",
+    "focusVisible": false,
+    "overflow": false,
+    "keyboardTarget": {
+      "tag": "A",
+      "label": "Digari Studio, inicio",
+      "focusVisible": true,
+      "outline": "solid",
+      "outlineWidth": "3px"
+    }
+  },
+  {
+    "view": "desktop",
+    "route": "/productos/acustica-luz",
+    "viewport": 1440,
+    "selectCount": 1,
+    "selectSurface": {
+      "color": "rgb(240, 232, 218)",
+      "background": "rgb(25, 24, 23)",
+      "colorScheme": "dark",
+      "minHeight": "48px"
+    },
+    "focused": "A",
+    "focusVisible": false,
+    "overflow": false,
+    "keyboardTarget": {
+      "tag": "A",
+      "label": "Digari Studio, inicio",
+      "focusVisible": true,
+      "outline": "solid",
+      "outlineWidth": "3px"
+    }
+  },
+  {
+    "view": "desktop",
+    "route": "/estudio",
+    "viewport": 1440,
+    "selectCount": 1,
+    "selectSurface": {
+      "color": "rgb(240, 232, 218)",
+      "background": "rgb(25, 24, 23)",
+      "colorScheme": "dark",
+      "minHeight": "50px"
+    },
+    "focused": "A",
+    "focusVisible": false,
+    "overflow": false,
+    "keyboardTarget": {
+      "tag": "A",
+      "label": "Digari Studio, inicio",
+      "focusVisible": true,
+      "outline": "solid",
+      "outlineWidth": "3px"
+    }
+  },
+  {
+    "view": "desktop",
+    "route": "/asesoria",
+    "viewport": 1440,
+    "selectCount": 3,
+    "selectSurface": {
+      "color": "rgb(240, 232, 218)",
+      "background": "rgb(25, 24, 23)",
+      "colorScheme": "dark",
+      "minHeight": "48px"
+    },
+    "focused": "A",
+    "focusVisible": false,
+    "overflow": false,
+    "keyboardTarget": {
+      "tag": "A",
+      "label": "Digari Studio, inicio",
+      "focusVisible": true,
+      "outline": "solid",
+      "outlineWidth": "3px"
+    }
+  },
+  {
+    "view": "desktop",
+    "menu": {
+      "open": true,
+      "links": 7,
+      "withinViewport": true,
+      "scrollHeight": 386,
+      "clientHeight": 386
+    }
+  },
+  {
+    "view": "movil",
+    "route": "/",
+    "viewport": 390,
+    "selectCount": 0,
+    "selectSurface": null,
+    "focused": "A",
+    "focusVisible": false,
+    "overflow": false,
+    "keyboardTarget": {
+      "tag": "A",
+      "label": "Digari Studio, inicio",
+      "focusVisible": true,
+      "outline": "solid",
+      "outlineWidth": "3px"
+    }
+  },
+  {
+    "view": "movil",
+    "route": "/tienda",
+    "viewport": 390,
+    "selectCount": 3,
+    "selectSurface": {
+      "color": "rgb(240, 232, 218)",
+      "background": "rgb(25, 24, 23)",
+      "colorScheme": "dark",
+      "minHeight": "48px"
+    },
+    "focused": "A",
+    "focusVisible": false,
+    "overflow": false,
+    "keyboardTarget": {
+      "tag": "A",
+      "label": "Digari Studio, inicio",
+      "focusVisible": true,
+      "outline": "solid",
+      "outlineWidth": "3px"
+    }
+  },
+  {
+    "view": "movil",
+    "route": "/productos/acustica-luz",
+    "viewport": 390,
+    "selectCount": 1,
+    "selectSurface": {
+      "color": "rgb(240, 232, 218)",
+      "background": "rgb(25, 24, 23)",
+      "colorScheme": "dark",
+      "minHeight": "48px"
+    },
+    "focused": "A",
+    "focusVisible": false,
+    "overflow": false,
+    "keyboardTarget": {
+      "tag": "A",
+      "label": "Digari Studio, inicio",
+      "focusVisible": true,
+      "outline": "solid",
+      "outlineWidth": "3px"
+    }
+  },
+  {
+    "view": "movil",
+    "route": "/estudio",
+    "viewport": 390,
+    "selectCount": 1,
+    "selectSurface": {
+      "color": "rgb(240, 232, 218)",
+      "background": "rgb(25, 24, 23)",
+      "colorScheme": "dark",
+      "minHeight": "50px"
+    },
+    "focused": "A",
+    "focusVisible": false,
+    "overflow": false,
+    "keyboardTarget": {
+      "tag": "A",
+      "label": "Digari Studio, inicio",
+      "focusVisible": true,
+      "outline": "solid",
+      "outlineWidth": "3px"
+    }
+  },
+  {
+    "view": "movil",
+    "route": "/asesoria",
+    "viewport": 390,
+    "selectCount": 3,
+    "selectSurface": {
+      "color": "rgb(240, 232, 218)",
+      "background": "rgb(25, 24, 23)",
+      "colorScheme": "dark",
+      "minHeight": "48px"
+    },
+    "focused": "A",
+    "focusVisible": false,
+    "overflow": false,
+    "keyboardTarget": {
+      "tag": "A",
+      "label": "Digari Studio, inicio",
+      "focusVisible": true,
+      "outline": "solid",
+      "outlineWidth": "3px"
+    }
+  },
+  {
+    "view": "movil",
+    "menu": {
+      "open": true,
+      "links": 15,
+      "withinViewport": true,
+      "scrollHeight": 798,
+      "clientHeight": 750
+    }
+  }
+]

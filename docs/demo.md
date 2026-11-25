@@ -1,52 +1,48 @@
-# Guion de demostración de Digari Studio
+# Guion de entrega: Digari Studio
 
-Duración: **12 minutos de operación y 3 minutos de preguntas**. No requiere diapositivas. Usa el servidor local, la semilla sintética y una pantalla compartida. La demo no se ha presentado a público; este archivo es un guion y la revisión del estudiante queda pendiente.
+Duración objetivo: **12 minutos de operación y 3 minutos de preguntas**. La demostración en vivo es la entrega central indicada por la consigna CENFOTEC; este documento es un guion, no constancia de que el estudiante ya lo ensayó o presentó. No se requieren diapositivas.
 
-## Preparación antes de iniciar el cronómetro
+## Caso y datos que se mostrarán
 
-1. En PowerShell, desde la raíz: `npm ci`, `npm run build`.
-2. En una terminal del servidor:
+Una persona principiante quiere una guitarra para practicar en casa; compara una acústica con una eléctrica y dispone de **₡120 000** para el instrumento (accesorios fuera del presupuesto). El catálogo demo contiene [Yamaha F310 · guitarra acústica](/productos/acustica-luz), **₡84 900**, y [Squier Affinity Strat roja · guitarra eléctrica](/productos/electrica-bruma), **₡109 900**. Ambas están bajo el tope y aparecen con stock demo. Los importes y existencias son sintéticos, no una cotización de Digari. Elegirá la acústica para el pedido demostrativo; en Estudio puede revisar también la eléctrica. No se mostrará una compra real.
 
-   ```powershell
-   $env:DIGARI_DB_PATH = Join-Path $env:TEMP 'digari-p4-demo.sqlite'
-   $env:DIGARI_DEMO_OPERATOR_TOKEN = 'local-demo-only'
-   $env:GEMINI_API_KEY = ''
-   npm run start
-   ```
+## Preparación y cronometrado del ensayo del estudiante
 
-3. Confirmar `http://localhost:3000/` y `/estudio` responden. La primera carga crea 15 fichas de datos demo en SQLite. No reutilizar una base con información de terceros.
-4. Segunda terminal: definir el mismo `DIGARI_DB_PATH` y token; ejecutar `npm run test:api`. Confirmar la suite automática antes de mostrar el recorrido.
-5. Tener Chrome/Edge con WebGL disponible para la vista 3D. Si no lo está, usar la vista alternativa; si no hay salida de audio, mostrar las etiquetas y ejecutar `npm test`. No afirmar escucha física.
+1. En una copia limpia del repositorio, desde PowerShell: `npm ci`, `npm test`, `npm run lint`. Para build con SQLite vacía, usa el paso de inicialización temporal del README y después `npm run build`.
+2. Abre una terminal para el servidor y otra para el smoke API. En ambas define la misma ruta SQLite temporal y el token local según los comandos de README; no apuntes a `data/digari.sqlite` ni compartas códigos reales.
+3. Inicia `npm run start`; abre Chrome normal en `http://localhost:3000`. Verifica `/`, `/asesoria`, `/tienda`, `/estudio` y `/seguimiento`. Selecciona modo local en las condiciones de ensayo: no hace falta ni se debe exponer una clave.
+4. Antes de compartir pantalla, confirma que el carrito esté vacío y que la DB sea temporal. El reset se hace eliminando **solo ese archivo temporal antes de iniciar**. No borres la base habitual.
+5. Para tu ensayo, inicia un cronómetro al comenzar la narración del caso; detén el tiempo de operación en 12:00. Reserva 3:00 para preguntas. Registra duración real, pasos completados, errores/retrocesos y si necesitaste ayuda. No marques este ensayo como hecho hasta realizarlo tú.
 
-## Recorrido cronometrado
+## Recorrido en vivo: 12 minutos
 
-| Tiempo | Acción | Evidencia y narración |
+| Tiempo | Acción | Qué comprobar y explicar |
 |---|---|---|
-| 0:00–1:00 | Inicio y caso | “Una persona principiante busca guitarra para practicar en casa y dispone de ₡180,000 para el instrumento; accesorios quedan fuera del caso.” Aclarar empresa real, prototipo independiente y datos sintéticos. |
-| 1:00–3:00 | Catálogo y comparación | En Tienda, buscar guitarra, filtrar por presupuesto/uso; comparar Guitarra acústica Luz (₡74,900) y Guitarra eléctrica Bruma (₡169,900), ambas dentro del límite. Explicar compatibilidad, diferencias de uso, existencias y precio demo. El catálogo inicial no descarga Three.js ni muestras. |
-| 3:00–5:30 | Estudio 3D/audio | Abrir Estudio 3D, activar modelo, girar, ajustar vista, restablecer. Activar audio con una acción y reproducir una nota. Mostrar el timbre sintético etiquetado y aclarar que no es grabación ni reproducción exacta. Si falla WebGL, mostrar la alternativa. |
-| 5:30–7:30 | Pedido de prueba | Añadir la opción al carrito, revisar total y condición de retiro/envío ilustrativa; confirmar “Pedido de demostración”. No hay tarjeta ni pago. Copiar el código privado de prueba. |
-| 7:30–9:00 | Seguimiento tras recargar | Recargar `/seguimiento?code=...`, consultar pedido y mostrar estado/eventos que siguen en SQLite. Aclarar que no es una orden real. |
-| 9:00–10:30 | Servicio | Registrar solicitud demo de afinación con descripción ficticia; consultar el código, abrir operador local y moverla a diagnóstico. Mostrar historial. |
-| 10:30–11:30 | Asesoría y error | Mostrar asesoría en modo local con la clave vacía. Enviar monto inválido o presupuesto insuficiente y mostrar validación/pregunta. No activar Gemini ni usar una clave ajena. |
-| 11:30–12:00 | Evidencia y límites | Mostrar README, spec, plan, uso de IA, negocio, auditoría y validación P4. Indicar revisión humana y escucha/tacto físico pendientes. |
-
-## Comprobaciones automatizadas relacionadas
-
-- `npm test`: compatibilidad declarada, stock/cantidad, precio de servidor, idempotencia, persistencia tras abrir SQLite en un proceso nuevo, órdenes/servicios/transiciones, perfiles de audio, fallback asesor local y modelos 3D.
-- `npm run lint`, `npm run build`, `npm run test:api`: errores de entrada/rango, variante, token operador inválido, repetición de confirmación, stock, consulta privada y transiciones.
-- Medición de navegación de `/tienda` y activación 3D, comprobación de carga diferida, emulación móvil, estado de AudioContext, giro y alternativa WebGL: resultados y límites en `docs/validacion-p4.md` y `docs/medicion-p2.1.md`.
+| 0:00–1:00 | Presentar el caso desde Inicio | Tope de ₡120 000, guitarra para practicar en casa. Aclarar empresa real, prototipo independiente y datos demo. |
+| 1:00–2:30 | Asesoría desde texto libre | Escribir una consulta sin completar preferencias previas. Mostrar modo local y opciones del catálogo con foto, nombre, precio y enlace. No afirmar Gemini online. |
+| 2:30–4:00 | Tienda y comparación | Abrir guitarra, comprobar Yamaha F310 ₡84 900 y Squier Affinity Strat ₡109 900; seleccionar ambas y revisar comparación y compatibilidad. Enlaces directos arriba. |
+| 4:00–6:00 | Estudio | Abrir la acústica, activar visor bajo demanda, girar/zoom/restablecer. Activar una nota con clic y leer etiqueta de audio sintético. Seleccionar la eléctrica y comprobar que cambia el perfil. |
+| 6:00–8:00 | Pedido de demostración | Añadir Yamaha F310, verificar precio y total, confirmar el mensaje “Pedido de demostración”. Sin tarjeta ni pago. Copiar el código solo para esta sesión. |
+| 8:00–9:15 | Recarga y seguimiento | Abrir Seguimiento, introducir el código recién emitido y mostrar estado/eventos tras recargar. No guardar el código en capturas ni documentos. |
+| 9:15–10:30 | Regla y entrada inválida | En una sesión limpia/fixture, demostrar cantidad inválida o stock insuficiente y el rechazo del servidor. Explicar que el servidor recalcula precio y stock. No contaminar el caso del pedido mostrado. |
+| 10:30–11:30 | Servicios | Crear solicitud ficticia de afinación y consultar el estado. Mostrar actualización demo solo si el token local está configurado; no presentarlo como operación real. |
+| 11:30–12:00 | Evidencia y límites | Abrir README, spec, plan, uso IA, negocio, validación y CI. Separar comprobaciones automáticas de ensayo/aprobación aún pendientes. |
 
 ## Preguntas: 3 minutos
 
-- ¿Qué datos son demo y qué requeriría acceso autorizado de Digari?
-- ¿Cómo se evita que una respuesta de Gemini decida precio o estado?
-- ¿Qué sigue pendiente para validar el caso de negocio y hacer un piloto seguro?
+1. ¿Qué impide interpretar los precios, existencias o estados demo como oferta/inventario oficial?
+2. ¿Qué decide el servidor y qué aporta Gemini cuando está disponible?
+3. ¿Qué evidencia falta antes de proponer un piloto con Digari?
 
 ## Contingencias
 
-- **Sin Internet / Gemini:** continuar con la asesoría local determinista.
-- **WebGL no disponible:** usar la vista alternativa; no describirla como modelo 3D.
-- **Audio bloqueado o sin parlantes:** no reproducir automáticamente; mostrar que la salida es una simulación y omitir la escucha física.
-- **SQLite/servidor no inicia:** reiniciar con ruta de DB temporal; si persiste, mostrar el resultado de `npm test` y registrar el bloqueo. No borrar la base del usuario.
-- **Código privado perdido:** consultar solo con el código entregado al crear el registro; no hay recuperación de cuenta real.
+- **Gemini no disponible o sin Internet:** seguir en modo local; mostrar la etiqueta de modo. No pedir ni mostrar una clave.
+- **WebGL no disponible:** usar la vista alternativa y nombrarla como imagen/alternativa, no como modelo 3D.
+- **Audio bloqueado o sin salida:** dejar que las etiquetas y las pruebas unitarias demuestren la síntesis; no afirmar escucha.
+- **Servidor o SQLite:** iniciar con DB temporal vacía y revisar los logs sin borrar los datos habituales. Si no se recupera, mostrar resultados de tests y registrar el fallo.
+- **Código de seguimiento perdido:** crear un caso de demostración nuevo en la DB temporal. No se puede recuperar una cuenta real porque no existe.
+- **Falta tiempo:** priorizar consulta → comparación → estudio → pedido → recarga/seguimiento; explicar servicios y error con la evidencia de smoke si es necesario, sin declarar pasos no vistos como hechos en vivo.
+
+## Evidencia y estado
+
+Los comandos y resultados automáticos por SHA están en [`validacion-entrega.md`](validacion-entrega.md). El registro histórico de 100 perfiles simulados está en [`qa/informe-usabilidad.md`](qa/informe-usabilidad.md) y no equivale a repetir el flujo en el candidato. Ensayo del estudiante, presentación oral, escucha con equipo real, tacto físico, prueba con participantes y revisión/aprobación final: **pendientes hasta realizarlos**.
