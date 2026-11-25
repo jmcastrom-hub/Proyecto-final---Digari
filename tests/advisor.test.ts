@@ -10,6 +10,25 @@ const styles = [...new Set(products.flatMap((product) => product.style))];
 const completeInput = { budgetCrc: 90000, family: 'Guitarra acústica', style: 'folk', use: 'iniciacion', question: '¿Cuál es la diferencia?' };
 
 describe('asesoría determinista y privacidad', () => {
+  it('responde disponibilidad por categoría sin exigir presupuesto, estilo o uso', async () => {
+    const parsed = parseAdviceInput({ question: '¿Tienen bajos?', family: 'Bajo' }, styles, products.map((item) => item.id));
+    const result = await buildAdvice(parsed, products);
+    assert.equal(result.mode, 'local');
+    assert.equal(result.recommendations[0]?.productId, 'bajo-marea');
+    assert.match(result.message, /Asesoría local/);
+  });
+  it('aclara que piano y teclado son familias distintas cuando no hay pianos demo', async () => {
+    const parsed = parseAdviceInput({ question: 'Busco un piano por ₡200 000', family: 'Piano', budgetCrc: 200000 }, styles, products.map((item) => item.id));
+    const result = await buildAdvice(parsed, products);
+    assert.equal(result.recommendations.length, 0);
+    assert.match(result.message, /pianos digitales.*teclados.*familia distinta/i);
+  });
+  it('permite guitarra acústica y eléctrica dentro del presupuesto solicitado', async () => {
+    const parsed = parseAdviceInput({ question: 'Busco una guitarra por ₡150 000', family: 'Guitarra', budgetCrc: 150000 }, styles, products.map((item) => item.id));
+    const result = await buildAdvice(parsed, products);
+    assert.deepEqual(new Set(result.recommendations.map((item) => item.family)), new Set(['Guitarra acústica', 'Guitarra eléctrica']));
+    assert.ok(result.recommendations.every((item) => item.priceCrc <= 150000));
+  });
   it('corrige texto UTF-8 legado en conversaciones ya guardadas', () => {
     assert.equal(repairLegacyUtf8('Pr\u00c3\u00a1ctica de guitarra'), 'Práctica de guitarra');
     assert.equal(repairLegacyUtf8('Guitarra acústica'), 'Guitarra acústica');
@@ -27,7 +46,7 @@ describe('asesoría determinista y privacidad', () => {
     assert.throws(() => parseAdviceInput({ ...completeInput, budgetCrc: '80 mil' }, styles), AdviceInputError);
     assert.throws(() => parseAdviceInput({ ...completeInput, style: 'inexistente' }, styles), AdviceInputError);
     const parsed = parseAdviceInput({ question: 'Busco algo' }, styles);
-    return buildAdvice(parsed, products).then((result) => { assert.equal(result.mode, 'local'); assert.match(result.question ?? '', /presupuesto.*tipo.*uso o estilo/i); });
+    return buildAdvice(parsed, products).then((result) => { assert.equal(result.mode, 'local'); assert.match(result.question ?? '', /tipo de equipo/i); });
   });
   it('devuelve seguimiento local cuando el presupuesto no alcanza', async () => {
     const result = await buildAdvice({ ...completeInput, budgetCrc: 1000 }, products);

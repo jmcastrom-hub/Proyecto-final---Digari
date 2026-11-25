@@ -13,7 +13,7 @@ export const USE_OPTIONS = [
 
 export type AdviceInput = { budgetCrc?: number; family?: string; style?: string; use?: string; question?: string; conversationId?: string; previousRecommendationIds?: string[] };
 export type GeminiContext = {
-  preferences: { budgetCrc: number; family: string; style: string | null; use: string; intent: 'compare' | 'alternatives' | 'recommend' };
+  preferences: { budgetCrc?: number; family?: string; style: string | null; use: string | null; intent: 'compare' | 'alternatives' | 'recommend' };
   candidates: Array<Pick<Product, 'id' | 'name' | 'family' | 'priceCrc' | 'stock' | 'style' | 'compatible' | 'summary'>>;
 };
 export type Recommendation = { productId: string; name: string; family: string; priceCrc: number; stockDemo: number; style: string[]; compatible: string[]; reason: string; href: string; compareHref: string };
@@ -55,7 +55,7 @@ export function parseAdviceInput(value: unknown, styles: string[], productIds?: 
   };
   const family = textField('family', 60); const style = textField('style', 40); const use = textField('use', 32); const question = textField('question', 240);
   const conversationId = raw.conversationId === undefined ? undefined : typeof raw.conversationId === 'string' && /^[a-f0-9-]{36}$/i.test(raw.conversationId) ? raw.conversationId : (() => { throw new AdviceInputError('El identificador de conversación no es válido.'); })();
-  if (family && !families.includes(family)) throw new AdviceInputError('Selecciona un tipo disponible en el catálogo demo.');
+  if (family && !families.includes(family) && !['Guitarra', 'Piano'].includes(family)) throw new AdviceInputError('Selecciona un tipo disponible en el catálogo demo.');
   if (style && !styles.includes(style)) throw new AdviceInputError('Selecciona un estilo disponible en el catálogo demo.');
   if (use && !USE_OPTIONS.some((option) => option.id === use)) throw new AdviceInputError('Selecciona un uso de la lista disponible.');
   let previousRecommendationIds: string[] = [];
@@ -79,12 +79,14 @@ function classifyIntent(question = ''): GeminiContext['preferences']['intent'] {
   return 'recommend';
 }
 function missingQuestion(input: AdviceInput) {
-  const missing: string[] = [];
-  if (input.budgetCrc === undefined) missing.push('un presupuesto aproximado en CRC');
-  if (!input.family) missing.push('el tipo de producto');
-  if (!input.use && !input.style) missing.push('el uso o estilo que prefieres');
-  if (!missing.length) return null;
-  return `Para recomendarte con criterio, dime ${missing.join(', ')}.`;
+  return input.family ? null : '¿Qué tipo de equipo estás buscando? Podés decirme una categoría, por ejemplo bajos, guitarras o pianos.';
+}
+function familyMatches(product: Product, family?: string) {
+  if (!family) return true;
+  const value = normalize(family);
+  if (value === 'guitarra') return ['Guitarra acústica', 'Guitarra eléctrica'].includes(product.family);
+  if (value === 'piano') return normalize(product.family) === 'piano digital';
+  return normalize(product.family) === normalize(family);
 }
 function matchesUse(product: Product, useId: string) {
   const option = USE_OPTIONS.find((item) => item.id === useId); if (!option) return true;
@@ -115,20 +117,24 @@ export async function buildAdvice(input: AdviceInput, catalog: Product[], provid
   const prior = new Set(input.previousRecommendationIds ?? []);
   const priorProducts = catalog.filter((item) => prior.has(item.id));
   const previousFloor = priorProducts.length ? Math.max(...priorProducts.map((item) => item.priceCrc)) : undefined;
-  const pool = catalog.filter((product) => product.stock > 0 && product.priceCrc <= input.budgetCrc! && product.family === input.family && (!input.style || product.style.includes(input.style)) && (!input.use || matchesUse(product, input.use)) && (!cheaper || previousFloor === undefined || product.priceCrc < previousFloor) && (!cheaper || !prior.has(product.id)));
+  const priceCeiling = cheaper && previousFloor !== undefined ? Math.min(input.budgetCrc ?? Number.MAX_SAFE_INTEGER, previousFloor - 1) : (input.budgetCrc ?? Number.MAX_SAFE_INTEGER);
+  const pool = catalog.filter((product) => product.stock > 0 && product.priceCrc <= priceCeiling && familyMatches(product, input.family) && (!input.style || product.style.includes(input.style)) && (!input.use || matchesUse(product, input.use)) && (!cheaper || previousFloor === undefined || product.priceCrc < previousFloor) && (!cheaper || !prior.has(product.id)));
   const ranked = pool.map((product) => ({ product, score: (input.style && product.style.includes(input.style) ? 2 : 0) + (input.use && matchesUse(product, input.use) ? 1 : 0) })).sort((a, b) => b.score - a.score || a.product.priceCrc - b.product.priceCrc || a.product.name.localeCompare(b.product.name, 'es')).slice(0, 3).map(({ product }) => product);
   if (!ranked.length) {
     if (cheaper && priorProducts.length) return { mode: 'local', message: 'No encuentro otra ficha de esta categoría con existencias y precio inferior a la opción que ya vimos. Podés cambiar el tipo o ampliar el presupuesto.', question: null, recommendations: [] };
-    const amount = input.budgetCrc === 0 ? '₡0' : `₡${input.budgetCrc!.toLocaleString('es-CR')}`;
-    const message = input.budgetCrc === 0
+    const amount = input.budgetCrc === 0 ? '₡0' : input.budgetCrc === undefined ? 'sin presupuesto definido' : `₡${input.budgetCrc.toLocaleString('es-CR')}`;
+    const message = cheaper && previousFloor !== undefined
+      ? 'No encuentro una alternativa más barata dentro de esta categoría con existencias demo. Podés cambiar de tipo o revisar el catálogo completo.'
+      : input.budgetCrc === 0
       ? 'Con ₡0 no hay una ficha demo disponible dentro de ese monto. Cuando querás, podés flexibilizar el presupuesto o probar otro tipo de equipo.'
-      : `No encontré una ficha demo con existencias dentro de ${amount} para esos criterios. Si te parece, podés flexibilizar un poco el monto o ajustar el uso/estilo.`;
+      : input.family === 'Piano' ? 'En el catálogo demo no hay pianos acústicos ni pianos digitales todavía; sí hay teclados, que son una familia distinta. Puedo mostrarte teclados si te sirven.'
+      : input.budgetCrc !== undefined ? `No encontré una ficha demo con existencias dentro de ${amount} para esos criterios. Si te parece, podés flexibilizar un poco el monto o ajustar el uso/estilo.` : 'No encontré opciones con existencias demo para este tipo de equipo.';
     return { mode: 'local', message, question: null, recommendations: [] };
   }
   const localRecommendations = ranked.map((product) => recommendation(product, deterministicReason(product, input)));
   if (!provider) return { mode: 'local', message: 'Asesoría local: filtré el catálogo demo con los mismos criterios, sin conectar con Gemini.', question: null, recommendations: localRecommendations };
   const context: GeminiContext = {
-    preferences: { budgetCrc: input.budgetCrc!, family: input.family!, style: input.style ?? null, use: input.use!, intent: classifyIntent(input.question) },
+    preferences: { budgetCrc: input.budgetCrc, family: input.family, style: input.style ?? null, use: input.use ?? null, intent: classifyIntent(input.question) },
     candidates: ranked.map(({ id, name, family, priceCrc, stock, style, compatible, summary }) => ({ id, name, family, priceCrc, stock, style, compatible, summary })),
   };
   try {

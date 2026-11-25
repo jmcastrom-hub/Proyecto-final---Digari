@@ -29,10 +29,15 @@ function repairTurn(turn: Turn): Turn {
 
 function inferPreferences(question: string, current: Preferences, families: string[], styles: string[]): Preferences {
   const normalized = normalize(question);
-  const result = { ...current };
+  const newSearch = /\b(busco|buscamos|quiero|necesito|ando buscando)\b/i.test(normalized);
+  const result = newSearch ? { ...initialPreferences } : { ...current };
   const budget = /(?:₡\s*|\bcrc\s*|(?:presupuesto(?:\s+(?:de|a|hasta))?|monto(?:\s+de)?|por|hasta|tope(?:\s+de)?|maximo(?:\s+de)?)\s*₡?\s*)(\d[\d.,' ]*)/i.exec(question);
   if (budget) result.budgetCrc = budget[1].trim();
-  const family = families.find((item) => normalized.includes(normalize(item)));
+  const family = /\bpiano(?:s)?\b/.test(normalized) ? 'Piano'
+    : /\bbajo(?:s)?\b/.test(normalized) ? 'Bajo'
+    : /\bguitarra(?:s)?\b/.test(normalized) ? 'Guitarra'
+    : /\bteclado(?:s)?\b/.test(normalized) ? 'Teclado'
+    : families.find((item) => normalized.includes(normalize(item)));
   if (family) result.family = family;
   const style = styles.find((item) => new RegExp(`(?:^|[^\\p{L}\\p{N}])${normalize(item).replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}(?:$|[^\\p{L}\\p{N}])`, 'u').test(normalized));
   if (style) result.style = style;
@@ -172,7 +177,7 @@ export default function AdviceChat({ families, styles }: Props) {
         <summary>Preferencias aprendidas <span>Opcionales · se aplican al próximo mensaje</span></summary>
         <div className="advice-fields">
           <label htmlFor="advice-budget">Presupuesto máximo (CRC)<input id="advice-budget" type="text" inputMode="numeric" autoComplete="off" maxLength={16} placeholder="Ej. 120 000" aria-invalid={Boolean(budgetError)} aria-describedby="advice-budget-help advice-budget-error" value={preferences.budgetCrc} onChange={(event) => change('budgetCrc', event.target.value)} /></label>
-          <label htmlFor="advice-family">Tipo de equipo<select id="advice-family" value={preferences.family} onChange={(event) => change('family', event.target.value)}><option value="">Sin preferencia</option>{families.map((family) => <option key={family} value={family}>{family}</option>)}</select></label>
+          <label htmlFor="advice-family">Tipo de equipo<select id="advice-family" value={preferences.family} onChange={(event) => change('family', event.target.value)}><option value="">Sin preferencia</option><option value="Guitarra">Guitarra acústica o eléctrica</option><option value="Piano">Piano (acústico o digital)</option>{families.map((family) => <option key={family} value={family}>{family}</option>)}</select></label>
           <label htmlFor="advice-use">Uso principal<select id="advice-use" value={preferences.use} onChange={(event) => change('use', event.target.value)}><option value="">Sin preferencia</option>{USE_OPTIONS.map((option) => <option value={option.id} key={option.id}>{option.label}</option>)}</select></label>
           <label htmlFor="advice-style">Estilo musical<select id="advice-style" value={preferences.style} onChange={(event) => change('style', event.target.value)}><option value="">Cualquier estilo</option>{styles.map((style) => <option value={style} key={style}>{style}</option>)}</select></label>
         </div>
