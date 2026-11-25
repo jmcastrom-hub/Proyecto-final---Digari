@@ -33,11 +33,12 @@ function inferPreferences(question: string, current: Preferences, families: stri
   const result = newSearch ? { ...initialPreferences } : { ...current };
   const budget = /(?:₡\s*|\bcrc\s*|(?:presupuesto(?:\s+(?:de|a|hasta))?|monto(?:\s+de)?|por|hasta|tope(?:\s+de)?|maximo(?:\s+de)?)\s*₡?\s*)(\d[\d.,' ]*)/i.exec(question);
   if (budget) result.budgetCrc = budget[1].trim();
-  const family = /\bpiano(?:s)?\b/.test(normalized) ? 'Piano'
+  const specificFamily = families.find((item) => normalized.includes(normalize(item)));
+  const family = specificFamily ?? (/\bpiano(?:s)?\b/.test(normalized) ? 'Piano'
     : /\bbajo(?:s)?\b/.test(normalized) ? 'Bajo'
     : /\bguitarra(?:s)?\b/.test(normalized) ? 'Guitarra'
     : /\bteclado(?:s)?\b/.test(normalized) ? 'Teclado'
-    : families.find((item) => normalized.includes(normalize(item)));
+    : undefined);
   if (family) result.family = family;
   const style = styles.find((item) => new RegExp(`(?:^|[^\\p{L}\\p{N}])${normalize(item).replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}(?:$|[^\\p{L}\\p{N}])`, 'u').test(normalized));
   if (style) result.style = style;
