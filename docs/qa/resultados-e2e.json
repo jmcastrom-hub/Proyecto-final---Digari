@@ -1,5 +1,5 @@
 {
-  "sha": "90ee345fa2aeeb38bcf524f3ad24e6941438694a",
+  "sha": "957149a4e735a74efc81339e2fcc33f41cef1991",
   "branch": "refactor/experiencia-digari",
   "profiles": [
     {
@@ -377,7 +377,7 @@
     },
     {
       "id": "U003",
-      "url": "http://127.0.0.1:3181/",
+      "url": "http://127.0.0.1:3180/",
       "viewport": {
         "width": 1520,
         "height": 900
@@ -747,7 +747,7 @@
     },
     {
       "id": "U005",
-      "url": "http://127.0.0.1:3182/",
+      "url": "http://127.0.0.1:3180/",
       "viewport": {
         "width": 1360,
         "height": 900
@@ -1117,7 +1117,7 @@
     },
     {
       "id": "U007",
-      "url": "http://127.0.0.1:3181/",
+      "url": "http://127.0.0.1:3180/",
       "viewport": {
         "width": 1520,
         "height": 900
@@ -1302,7 +1302,7 @@
     },
     {
       "id": "U008",
-      "url": "http://127.0.0.1:3182/",
+      "url": "http://127.0.0.1:3180/",
       "viewport": {
         "width": 1280,
         "height": 900
@@ -1487,7 +1487,7 @@
     },
     {
       "id": "U009",
-      "url": "http://127.0.0.1:3181/",
+      "url": "http://127.0.0.1:3180/",
       "viewport": {
         "width": 1360,
         "height": 900
@@ -1857,7 +1857,7 @@
     },
     {
       "id": "U011",
-      "url": "http://127.0.0.1:3182/",
+      "url": "http://127.0.0.1:3180/",
       "viewport": {
         "width": 1520,
         "height": 900
@@ -2045,7 +2045,7 @@
     },
     {
       "id": "U012",
-      "url": "http://127.0.0.1:3181/",
+      "url": "http://127.0.0.1:3180/",
       "viewport": {
         "width": 1280,
         "height": 900
@@ -2093,8 +2093,8 @@
             },
             {
               "paso": "fotografía",
-              "estado": "fallido",
-              "detalle": "ILUSTRACIÓN DEMO · FOTOGRAFÍA PENDIENTE"
+              "estado": "completado",
+              "detalle": "FOTOGRAFÍA DE REFERENCIA · DATOS Y EXISTENCIAS DEMO"
             },
             {
               "paso": "Promos abre categoría",
@@ -2102,7 +2102,7 @@
               "detalle": true
             }
           ],
-          "estado": "fallido"
+          "estado": "completado"
         },
         "comparacion_favoritos": {
           "pasos": [
@@ -2230,7 +2230,7 @@
     },
     {
       "id": "U013",
-      "url": "http://127.0.0.1:3180/",
+      "url": "http://127.0.0.1:3181/",
       "viewport": {
         "width": 1360,
         "height": 900
@@ -2415,7 +2415,7 @@
     },
     {
       "id": "U014",
-      "url": "http://127.0.0.1:3182/",
+      "url": "http://127.0.0.1:3180/",
       "viewport": {
         "width": 1440,
         "height": 900
@@ -2600,7 +2600,7 @@
     },
     {
       "id": "U015",
-      "url": "http://127.0.0.1:3180/",
+      "url": "http://127.0.0.1:3182/",
       "viewport": {
         "width": 1520,
         "height": 900
@@ -2648,8 +2648,8 @@
             },
             {
               "paso": "fotografía",
-              "estado": "fallido",
-              "detalle": "ILUSTRACIÓN DEMO · FOTOGRAFÍA PENDIENTE"
+              "estado": "completado",
+              "detalle": "FOTOGRAFÍA DE REFERENCIA · DATOS Y EXISTENCIAS DEMO"
             },
             {
               "paso": "Promos abre categoría",
@@ -2657,7 +2657,7 @@
               "detalle": true
             }
           ],
-          "estado": "fallido"
+          "estado": "completado"
         },
         "comparacion_favoritos": {
           "pasos": [
@@ -2970,7 +2970,7 @@
     },
     {
       "id": "U017",
-      "url": "http://127.0.0.1:3182/",
+      "url": "http://127.0.0.1:3180/",
       "viewport": {
         "width": 1360,
         "height": 900
@@ -3155,7 +3155,7 @@
     },
     {
       "id": "U018",
-      "url": "http://127.0.0.1:3180/",
+      "url": "http://127.0.0.1:3182/",
       "viewport": {
         "width": 1440,
         "height": 900
@@ -3203,8 +3203,8 @@
             },
             {
               "paso": "fotografía",
-              "estado": "fallido",
-              "detalle": "ILUSTRACIÓN DEMO · FOTOGRAFÍA PENDIENTE"
+              "estado": "completado",
+              "detalle": "FOTOGRAFÍA DE REFERENCIA · DATOS Y EXISTENCIAS DEMO"
             },
             {
               "paso": "Promos abre categoría",
@@ -3212,7 +3212,7 @@
               "detalle": true
             }
           ],
-          "estado": "fallido"
+          "estado": "completado"
         },
         "comparacion_favoritos": {
           "pasos": [
@@ -3525,7 +3525,7 @@
     },
     {
       "id": "U020",
-      "url": "http://127.0.0.1:3182/",
+      "url": "http://127.0.0.1:3180/",
       "viewport": {
         "width": 1280,
         "height": 900
@@ -3710,7 +3710,7 @@
     },
     {
       "id": "U021",
-      "url": "http://127.0.0.1:3180/",
+      "url": "http://127.0.0.1:3182/",
       "viewport": {
         "width": 1360,
         "height": 900
@@ -4083,7 +4083,7 @@
     },
     {
       "id": "U023",
-      "url": "http://127.0.0.1:3182/",
+      "url": "http://127.0.0.1:3180/",
       "viewport": {
         "width": 1520,
         "height": 900
@@ -4124,15 +4124,15 @@
               "paso": "modelo, precio y stock",
               "estado": "completado",
               "detalle": {
-                "nombre": "D’Addario EXL110-7 · juego de 7 cuerdas",
+                "nombre": "Ernie Ball Cobalt Slinky 10–52 · seis cuerdas",
                 "precio": 5900,
                 "stock": "12 unidades de demostración · No representa inventario comercial"
               }
             },
             {
               "paso": "fotografía",
-              "estado": "fallido",
-              "detalle": "ILUSTRACIÓN DEMO · FOTOGRAFÍA PENDIENTE"
+              "estado": "completado",
+              "detalle": "FOTOGRAFÍA DE REFERENCIA · DATOS Y EXISTENCIAS DEMO"
             },
             {
               "paso": "Promos abre categoría",
@@ -4140,7 +4140,7 @@
               "detalle": true
             }
           ],
-          "estado": "fallido"
+          "estado": "completado"
         },
         "comparacion_favoritos": {
           "pasos": [
@@ -4149,7 +4149,7 @@
               "estado": "completado",
               "detalle": [
                 "Cable de audio TS · referencia genérica",
-                "D’Addario EXL110-7 · juego de 7 cuerdas"
+                "Ernie Ball Cobalt Slinky 10–52 · seis cuerdas"
               ]
             },
             {
@@ -4268,7 +4268,7 @@
     },
     {
       "id": "U024",
-      "url": "http://127.0.0.1:3180/",
+      "url": "http://127.0.0.1:3182/",
       "viewport": {
         "width": 1280,
         "height": 900
@@ -4334,7 +4334,7 @@
               "estado": "completado",
               "detalle": [
                 "Cable de audio TS · referencia genérica",
-                "D’Addario EXL110-7 · juego de 7 cuerdas"
+                "Ernie Ball Cobalt Slinky 10–52 · seis cuerdas"
               ]
             },
             {
@@ -4638,7 +4638,7 @@
     },
     {
       "id": "U026",
-      "url": "http://127.0.0.1:3182/",
+      "url": "http://127.0.0.1:3180/",
       "viewport": {
         "width": 1440,
         "height": 900
@@ -4823,7 +4823,7 @@
     },
     {
       "id": "U027",
-      "url": "http://127.0.0.1:3180/",
+      "url": "http://127.0.0.1:3182/",
       "viewport": {
         "width": 1520,
         "height": 900
@@ -4864,15 +4864,15 @@
               "paso": "modelo, precio y stock",
               "estado": "completado",
               "detalle": {
-                "nombre": "D’Addario EXL110-7 · juego de 7 cuerdas",
+                "nombre": "Ernie Ball Cobalt Slinky 10–52 · seis cuerdas",
                 "precio": 5900,
                 "stock": "12 unidades de demostración · No representa inventario comercial"
               }
             },
             {
               "paso": "fotografía",
-              "estado": "fallido",
-              "detalle": "ILUSTRACIÓN DEMO · FOTOGRAFÍA PENDIENTE"
+              "estado": "completado",
+              "detalle": "FOTOGRAFÍA DE REFERENCIA · DATOS Y EXISTENCIAS DEMO"
             },
             {
               "paso": "Promos abre categoría",
@@ -4880,7 +4880,7 @@
               "detalle": true
             }
           ],
-          "estado": "fallido"
+          "estado": "completado"
         },
         "comparacion_favoritos": {
           "pasos": [
@@ -4889,7 +4889,7 @@
               "estado": "completado",
               "detalle": [
                 "Cable de audio TS · referencia genérica",
-                "D’Addario EXL110-7 · juego de 7 cuerdas"
+                "Ernie Ball Cobalt Slinky 10–52 · seis cuerdas"
               ]
             },
             {
@@ -5008,7 +5008,7 @@
     },
     {
       "id": "U028",
-      "url": "http://127.0.0.1:3182/",
+      "url": "http://127.0.0.1:3181/",
       "viewport": {
         "width": 1280,
         "height": 900
@@ -5074,7 +5074,7 @@
               "estado": "completado",
               "detalle": [
                 "Cable de audio TS · referencia genérica",
-                "D’Addario EXL110-7 · juego de 7 cuerdas"
+                "Ernie Ball Cobalt Slinky 10–52 · seis cuerdas"
               ]
             },
             {
@@ -5193,7 +5193,7 @@
     },
     {
       "id": "U029",
-      "url": "http://127.0.0.1:3181/",
+      "url": "http://127.0.0.1:3180/",
       "viewport": {
         "width": 1360,
         "height": 900
@@ -5563,7 +5563,7 @@
     },
     {
       "id": "U031",
-      "url": "http://127.0.0.1:3182/",
+      "url": "http://127.0.0.1:3180/",
       "viewport": {
         "width": 1520,
         "height": 900
@@ -5751,7 +5751,7 @@
     },
     {
       "id": "U032",
-      "url": "http://127.0.0.1:3181/",
+      "url": "http://127.0.0.1:3180/",
       "viewport": {
         "width": 1280,
         "height": 900
@@ -5936,7 +5936,7 @@
     },
     {
       "id": "U033",
-      "url": "http://127.0.0.1:3180/",
+      "url": "http://127.0.0.1:3182/",
       "viewport": {
         "width": 1360,
         "height": 900
@@ -6121,7 +6121,7 @@
     },
     {
       "id": "U034",
-      "url": "http://127.0.0.1:3182/",
+      "url": "http://127.0.0.1:3181/",
       "viewport": {
         "width": 1440,
         "height": 900
@@ -6306,7 +6306,7 @@
     },
     {
       "id": "U035",
-      "url": "http://127.0.0.1:3181/",
+      "url": "http://127.0.0.1:3180/",
       "viewport": {
         "width": 1520,
         "height": 900
@@ -6676,7 +6676,7 @@
     },
     {
       "id": "U037",
-      "url": "http://127.0.0.1:3182/",
+      "url": "http://127.0.0.1:3181/",
       "viewport": {
         "width": 1360,
         "height": 900
@@ -6861,7 +6861,7 @@
     },
     {
       "id": "U038",
-      "url": "http://127.0.0.1:3181/",
+      "url": "http://127.0.0.1:3180/",
       "viewport": {
         "width": 1440,
         "height": 900
@@ -7046,7 +7046,7 @@
     },
     {
       "id": "U039",
-      "url": "http://127.0.0.1:3180/",
+      "url": "http://127.0.0.1:3182/",
       "viewport": {
         "width": 1520,
         "height": 900
@@ -7231,7 +7231,7 @@
     },
     {
       "id": "U040",
-      "url": "http://127.0.0.1:3182/",
+      "url": "http://127.0.0.1:3181/",
       "viewport": {
         "width": 1280,
         "height": 900
@@ -7464,8 +7464,8 @@
             },
             {
               "paso": "fotografía",
-              "estado": "fallido",
-              "detalle": "ILUSTRACIÓN DEMO · FOTOGRAFÍA PENDIENTE"
+              "estado": "completado",
+              "detalle": "FOTOGRAFÍA DE REFERENCIA · DATOS Y EXISTENCIAS DEMO"
             },
             {
               "paso": "Promos abre categoría",
@@ -7473,7 +7473,7 @@
               "detalle": true
             }
           ],
-          "estado": "fallido"
+          "estado": "completado"
         },
         "comparacion_favoritos": {
           "pasos": [
@@ -7604,7 +7604,7 @@
     },
     {
       "id": "U042",
-      "url": "http://127.0.0.1:3181/",
+      "url": "http://127.0.0.1:3182/",
       "viewport": {
         "width": 1440,
         "height": 900
@@ -7652,8 +7652,8 @@
             },
             {
               "paso": "fotografía",
-              "estado": "fallido",
-              "detalle": "ILUSTRACIÓN DEMO · FOTOGRAFÍA PENDIENTE"
+              "estado": "completado",
+              "detalle": "FOTOGRAFÍA DE REFERENCIA · DATOS Y EXISTENCIAS DEMO"
             },
             {
               "paso": "Promos abre categoría",
@@ -7661,7 +7661,7 @@
               "detalle": true
             }
           ],
-          "estado": "fallido"
+          "estado": "completado"
         },
         "comparacion_favoritos": {
           "pasos": [
@@ -7789,7 +7789,7 @@
     },
     {
       "id": "U043",
-      "url": "http://127.0.0.1:3182/",
+      "url": "http://127.0.0.1:3181/",
       "viewport": {
         "width": 1520,
         "height": 900
@@ -7837,8 +7837,8 @@
             },
             {
               "paso": "fotografía",
-              "estado": "fallido",
-              "detalle": "ILUSTRACIÓN DEMO · FOTOGRAFÍA PENDIENTE"
+              "estado": "completado",
+              "detalle": "FOTOGRAFÍA DE REFERENCIA · DATOS Y EXISTENCIAS DEMO"
             },
             {
               "paso": "Promos abre categoría",
@@ -7846,7 +7846,7 @@
               "detalle": true
             }
           ],
-          "estado": "fallido"
+          "estado": "completado"
         },
         "comparacion_favoritos": {
           "pasos": [
@@ -8022,8 +8022,8 @@
             },
             {
               "paso": "fotografía",
-              "estado": "fallido",
-              "detalle": "ILUSTRACIÓN DEMO · FOTOGRAFÍA PENDIENTE"
+              "estado": "completado",
+              "detalle": "FOTOGRAFÍA DE REFERENCIA · DATOS Y EXISTENCIAS DEMO"
             },
             {
               "paso": "Promos abre categoría",
@@ -8031,7 +8031,7 @@
               "detalle": true
             }
           ],
-          "estado": "fallido"
+          "estado": "completado"
         },
         "comparacion_favoritos": {
           "pasos": [
@@ -8159,7 +8159,7 @@
     },
     {
       "id": "U045",
-      "url": "http://127.0.0.1:3181/",
+      "url": "http://127.0.0.1:3182/",
       "viewport": {
         "width": 1360,
         "height": 900
@@ -8207,8 +8207,8 @@
             },
             {
               "paso": "fotografía",
-              "estado": "fallido",
-              "detalle": "ILUSTRACIÓN DEMO · FOTOGRAFÍA PENDIENTE"
+              "estado": "completado",
+              "detalle": "FOTOGRAFÍA DE REFERENCIA · DATOS Y EXISTENCIAS DEMO"
             },
             {
               "paso": "Promos abre categoría",
@@ -8216,7 +8216,7 @@
               "detalle": true
             }
           ],
-          "estado": "fallido"
+          "estado": "completado"
         },
         "comparacion_favoritos": {
           "pasos": [
@@ -8344,7 +8344,7 @@
     },
     {
       "id": "U046",
-      "url": "http://127.0.0.1:3182/",
+      "url": "http://127.0.0.1:3181/",
       "viewport": {
         "width": 1440,
         "height": 900
@@ -8392,8 +8392,8 @@
             },
             {
               "paso": "fotografía",
-              "estado": "fallido",
-              "detalle": "ILUSTRACIÓN DEMO · FOTOGRAFÍA PENDIENTE"
+              "estado": "completado",
+              "detalle": "FOTOGRAFÍA DE REFERENCIA · DATOS Y EXISTENCIAS DEMO"
             },
             {
               "paso": "Promos abre categoría",
@@ -8401,7 +8401,7 @@
               "detalle": true
             }
           ],
-          "estado": "fallido"
+          "estado": "completado"
         },
         "comparacion_favoritos": {
           "pasos": [
@@ -8577,8 +8577,8 @@
             },
             {
               "paso": "fotografía",
-              "estado": "fallido",
-              "detalle": "ILUSTRACIÓN DEMO · FOTOGRAFÍA PENDIENTE"
+              "estado": "completado",
+              "detalle": "FOTOGRAFÍA DE REFERENCIA · DATOS Y EXISTENCIAS DEMO"
             },
             {
               "paso": "Promos abre categoría",
@@ -8586,7 +8586,7 @@
               "detalle": true
             }
           ],
-          "estado": "fallido"
+          "estado": "completado"
         },
         "comparacion_favoritos": {
           "pasos": [
@@ -8714,7 +8714,7 @@
     },
     {
       "id": "U048",
-      "url": "http://127.0.0.1:3181/",
+      "url": "http://127.0.0.1:3182/",
       "viewport": {
         "width": 1280,
         "height": 900
@@ -8762,8 +8762,8 @@
             },
             {
               "paso": "fotografía",
-              "estado": "fallido",
-              "detalle": "ILUSTRACIÓN DEMO · FOTOGRAFÍA PENDIENTE"
+              "estado": "completado",
+              "detalle": "FOTOGRAFÍA DE REFERENCIA · DATOS Y EXISTENCIAS DEMO"
             },
             {
               "paso": "Promos abre categoría",
@@ -8771,7 +8771,7 @@
               "detalle": true
             }
           ],
-          "estado": "fallido"
+          "estado": "completado"
         },
         "comparacion_favoritos": {
           "pasos": [
@@ -8899,7 +8899,7 @@
     },
     {
       "id": "U049",
-      "url": "http://127.0.0.1:3182/",
+      "url": "http://127.0.0.1:3181/",
       "viewport": {
         "width": 1360,
         "height": 900
@@ -8947,8 +8947,8 @@
             },
             {
               "paso": "fotografía",
-              "estado": "fallido",
-              "detalle": "ILUSTRACIÓN DEMO · FOTOGRAFÍA PENDIENTE"
+              "estado": "completado",
+              "detalle": "FOTOGRAFÍA DE REFERENCIA · DATOS Y EXISTENCIAS DEMO"
             },
             {
               "paso": "Promos abre categoría",
@@ -8956,7 +8956,7 @@
               "detalle": true
             }
           ],
-          "estado": "fallido"
+          "estado": "completado"
         },
         "comparacion_favoritos": {
           "pasos": [
@@ -9084,7 +9084,7 @@
     },
     {
       "id": "U050",
-      "url": "http://127.0.0.1:3181/",
+      "url": "http://127.0.0.1:3180/",
       "viewport": {
         "width": 1440,
         "height": 900
@@ -9132,8 +9132,8 @@
             },
             {
               "paso": "fotografía",
-              "estado": "fallido",
-              "detalle": "ILUSTRACIÓN DEMO · FOTOGRAFÍA PENDIENTE"
+              "estado": "completado",
+              "detalle": "FOTOGRAFÍA DE REFERENCIA · DATOS Y EXISTENCIAS DEMO"
             },
             {
               "paso": "Promos abre categoría",
@@ -9141,7 +9141,7 @@
               "detalle": true
             }
           ],
-          "estado": "fallido"
+          "estado": "completado"
         },
         "comparacion_favoritos": {
           "pasos": [
@@ -9269,7 +9269,7 @@
     },
     {
       "id": "U051",
-      "url": "http://127.0.0.1:3180/",
+      "url": "http://127.0.0.1:3182/",
       "viewport": {
         "width": 1520,
         "height": 900
@@ -9317,8 +9317,8 @@
             },
             {
               "paso": "fotografía",
-              "estado": "fallido",
-              "detalle": "ILUSTRACIÓN DEMO · FOTOGRAFÍA PENDIENTE"
+              "estado": "completado",
+              "detalle": "FOTOGRAFÍA DE REFERENCIA · DATOS Y EXISTENCIAS DEMO"
             },
             {
               "paso": "Promos abre categoría",
@@ -9326,7 +9326,7 @@
               "detalle": true
             }
           ],
-          "estado": "fallido"
+          "estado": "completado"
         },
         "comparacion_favoritos": {
           "pasos": [
@@ -9457,7 +9457,7 @@
     },
     {
       "id": "U052",
-      "url": "http://127.0.0.1:3182/",
+      "url": "http://127.0.0.1:3181/",
       "viewport": {
         "width": 1280,
         "height": 900
@@ -9505,8 +9505,8 @@
             },
             {
               "paso": "fotografía",
-              "estado": "fallido",
-              "detalle": "ILUSTRACIÓN DEMO · FOTOGRAFÍA PENDIENTE"
+              "estado": "completado",
+              "detalle": "FOTOGRAFÍA DE REFERENCIA · DATOS Y EXISTENCIAS DEMO"
             },
             {
               "paso": "Promos abre categoría",
@@ -9514,7 +9514,7 @@
               "detalle": true
             }
           ],
-          "estado": "fallido"
+          "estado": "completado"
         },
         "comparacion_favoritos": {
           "pasos": [
@@ -9642,7 +9642,7 @@
     },
     {
       "id": "U053",
-      "url": "http://127.0.0.1:3181/",
+      "url": "http://127.0.0.1:3182/",
       "viewport": {
         "width": 1360,
         "height": 900
@@ -9690,8 +9690,8 @@
             },
             {
               "paso": "fotografía",
-              "estado": "fallido",
-              "detalle": "ILUSTRACIÓN DEMO · FOTOGRAFÍA PENDIENTE"
+              "estado": "completado",
+              "detalle": "FOTOGRAFÍA DE REFERENCIA · DATOS Y EXISTENCIAS DEMO"
             },
             {
               "paso": "Promos abre categoría",
@@ -9699,7 +9699,7 @@
               "detalle": true
             }
           ],
-          "estado": "fallido"
+          "estado": "completado"
         },
         "comparacion_favoritos": {
           "pasos": [
@@ -9893,7 +9893,7 @@
               "estado": "completado",
               "detalle": [
                 "Cable de audio TS · referencia genérica",
-                "D’Addario EXL110-7 · juego de 7 cuerdas"
+                "Ernie Ball Cobalt Slinky 10–52 · seis cuerdas"
               ]
             },
             {
@@ -10012,7 +10012,7 @@
     },
     {
       "id": "U055",
-      "url": "http://127.0.0.1:3182/",
+      "url": "http://127.0.0.1:3181/",
       "viewport": {
         "width": 1520,
         "height": 900
@@ -10060,8 +10060,8 @@
             },
             {
               "paso": "fotografía",
-              "estado": "fallido",
-              "detalle": "ILUSTRACIÓN DEMO · FOTOGRAFÍA PENDIENTE"
+              "estado": "completado",
+              "detalle": "FOTOGRAFÍA DE REFERENCIA · DATOS Y EXISTENCIAS DEMO"
             },
             {
               "paso": "Promos abre categoría",
@@ -10069,7 +10069,7 @@
               "detalle": true
             }
           ],
-          "estado": "fallido"
+          "estado": "completado"
         },
         "comparacion_favoritos": {
           "pasos": [
@@ -10197,7 +10197,7 @@
     },
     {
       "id": "U056",
-      "url": "http://127.0.0.1:3181/",
+      "url": "http://127.0.0.1:3180/",
       "viewport": {
         "width": 1280,
         "height": 900
@@ -10245,8 +10245,8 @@
             },
             {
               "paso": "fotografía",
-              "estado": "fallido",
-              "detalle": "ILUSTRACIÓN DEMO · FOTOGRAFÍA PENDIENTE"
+              "estado": "completado",
+              "detalle": "FOTOGRAFÍA DE REFERENCIA · DATOS Y EXISTENCIAS DEMO"
             },
             {
               "paso": "Promos abre categoría",
@@ -10254,7 +10254,7 @@
               "detalle": true
             }
           ],
-          "estado": "fallido"
+          "estado": "completado"
         },
         "comparacion_favoritos": {
           "pasos": [
@@ -10430,8 +10430,8 @@
             },
             {
               "paso": "fotografía",
-              "estado": "fallido",
-              "detalle": "ILUSTRACIÓN DEMO · FOTOGRAFÍA PENDIENTE"
+              "estado": "completado",
+              "detalle": "FOTOGRAFÍA DE REFERENCIA · DATOS Y EXISTENCIAS DEMO"
             },
             {
               "paso": "Promos abre categoría",
@@ -10439,7 +10439,7 @@
               "detalle": true
             }
           ],
-          "estado": "fallido"
+          "estado": "completado"
         },
         "comparacion_favoritos": {
           "pasos": [
@@ -10567,7 +10567,7 @@
     },
     {
       "id": "U058",
-      "url": "http://127.0.0.1:3182/",
+      "url": "http://127.0.0.1:3181/",
       "viewport": {
         "width": 1440,
         "height": 900
@@ -10633,7 +10633,7 @@
               "estado": "completado",
               "detalle": [
                 "Cable de audio TS · referencia genérica",
-                "D’Addario EXL110-7 · juego de 7 cuerdas"
+                "Ernie Ball Cobalt Slinky 10–52 · seis cuerdas"
               ]
             },
             {
@@ -10752,7 +10752,7 @@
     },
     {
       "id": "U059",
-      "url": "http://127.0.0.1:3181/",
+      "url": "http://127.0.0.1:3180/",
       "viewport": {
         "width": 1520,
         "height": 900
@@ -10800,8 +10800,8 @@
             },
             {
               "paso": "fotografía",
-              "estado": "fallido",
-              "detalle": "ILUSTRACIÓN DEMO · FOTOGRAFÍA PENDIENTE"
+              "estado": "completado",
+              "detalle": "FOTOGRAFÍA DE REFERENCIA · DATOS Y EXISTENCIAS DEMO"
             },
             {
               "paso": "Promos abre categoría",
@@ -10809,7 +10809,7 @@
               "detalle": true
             }
           ],
-          "estado": "fallido"
+          "estado": "completado"
         },
         "comparacion_favoritos": {
           "pasos": [
@@ -10985,8 +10985,8 @@
             },
             {
               "paso": "fotografía",
-              "estado": "fallido",
-              "detalle": "ILUSTRACIÓN DEMO · FOTOGRAFÍA PENDIENTE"
+              "estado": "completado",
+              "detalle": "FOTOGRAFÍA DE REFERENCIA · DATOS Y EXISTENCIAS DEMO"
             },
             {
               "paso": "Promos abre categoría",
@@ -10994,7 +10994,7 @@
               "detalle": true
             }
           ],
-          "estado": "fallido"
+          "estado": "completado"
         },
         "comparacion_favoritos": {
           "pasos": [
@@ -11122,7 +11122,7 @@
     },
     {
       "id": "U061",
-      "url": "http://127.0.0.1:3182/",
+      "url": "http://127.0.0.1:3180/",
       "viewport": {
         "width": 1360,
         "height": 900
@@ -11163,15 +11163,15 @@
               "paso": "modelo, precio y stock",
               "estado": "completado",
               "detalle": {
-                "nombre": "Numark Mixtrack Pro · controlador DJ",
+                "nombre": "Numark Mixtrack · controlador DJ",
                 "precio": 89900,
                 "stock": "4 unidades de demostración · No representa inventario comercial"
               }
             },
             {
               "paso": "fotografía",
-              "estado": "fallido",
-              "detalle": "ILUSTRACIÓN DEMO · FOTOGRAFÍA PENDIENTE"
+              "estado": "completado",
+              "detalle": "FOTOGRAFÍA DE REFERENCIA · DATOS Y EXISTENCIAS DEMO"
             },
             {
               "paso": "Promos abre categoría",
@@ -11179,7 +11179,7 @@
               "detalle": true
             }
           ],
-          "estado": "fallido"
+          "estado": "completado"
         },
         "comparacion_favoritos": {
           "pasos": [
@@ -11188,7 +11188,7 @@
               "estado": "completado",
               "detalle": [
                 "Cable de audio TS · referencia genérica",
-                "Numark Mixtrack Pro · controlador DJ"
+                "Numark Mixtrack · controlador DJ"
               ]
             },
             {
@@ -11310,7 +11310,7 @@
     },
     {
       "id": "U062",
-      "url": "http://127.0.0.1:3181/",
+      "url": "http://127.0.0.1:3180/",
       "viewport": {
         "width": 1440,
         "height": 900
@@ -11358,8 +11358,8 @@
             },
             {
               "paso": "fotografía",
-              "estado": "fallido",
-              "detalle": "ILUSTRACIÓN DEMO · FOTOGRAFÍA PENDIENTE"
+              "estado": "completado",
+              "detalle": "FOTOGRAFÍA DE REFERENCIA · DATOS Y EXISTENCIAS DEMO"
             },
             {
               "paso": "Promos abre categoría",
@@ -11367,7 +11367,7 @@
               "detalle": true
             }
           ],
-          "estado": "fallido"
+          "estado": "completado"
         },
         "comparacion_favoritos": {
           "pasos": [
@@ -11495,7 +11495,7 @@
     },
     {
       "id": "U063",
-      "url": "http://127.0.0.1:3180/",
+      "url": "http://127.0.0.1:3182/",
       "viewport": {
         "width": 1520,
         "height": 900
@@ -11561,7 +11561,7 @@
               "estado": "completado",
               "detalle": [
                 "Cable de audio TS · referencia genérica",
-                "D’Addario EXL110-7 · juego de 7 cuerdas"
+                "Ernie Ball Cobalt Slinky 10–52 · seis cuerdas"
               ]
             },
             {
@@ -11680,7 +11680,7 @@
     },
     {
       "id": "U064",
-      "url": "http://127.0.0.1:3182/",
+      "url": "http://127.0.0.1:3180/",
       "viewport": {
         "width": 1280,
         "height": 900
@@ -11721,15 +11721,15 @@
               "paso": "modelo, precio y stock",
               "estado": "completado",
               "detalle": {
-                "nombre": "Numark Mixtrack Pro · controlador DJ",
+                "nombre": "Numark Mixtrack · controlador DJ",
                 "precio": 89900,
                 "stock": "4 unidades de demostración · No representa inventario comercial"
               }
             },
             {
               "paso": "fotografía",
-              "estado": "fallido",
-              "detalle": "ILUSTRACIÓN DEMO · FOTOGRAFÍA PENDIENTE"
+              "estado": "completado",
+              "detalle": "FOTOGRAFÍA DE REFERENCIA · DATOS Y EXISTENCIAS DEMO"
             },
             {
               "paso": "Promos abre categoría",
@@ -11737,7 +11737,7 @@
               "detalle": true
             }
           ],
-          "estado": "fallido"
+          "estado": "completado"
         },
         "comparacion_favoritos": {
           "pasos": [
@@ -11746,7 +11746,7 @@
               "estado": "completado",
               "detalle": [
                 "Cable de audio TS · referencia genérica",
-                "Numark Mixtrack Pro · controlador DJ"
+                "Numark Mixtrack · controlador DJ"
               ]
             },
             {
@@ -11913,8 +11913,8 @@
             },
             {
               "paso": "fotografía",
-              "estado": "fallido",
-              "detalle": "ILUSTRACIÓN DEMO · FOTOGRAFÍA PENDIENTE"
+              "estado": "completado",
+              "detalle": "FOTOGRAFÍA DE REFERENCIA · DATOS Y EXISTENCIAS DEMO"
             },
             {
               "paso": "Promos abre categoría",
@@ -11922,7 +11922,7 @@
               "detalle": true
             }
           ],
-          "estado": "fallido"
+          "estado": "completado"
         },
         "comparacion_favoritos": {
           "pasos": [
@@ -12050,7 +12050,7 @@
     },
     {
       "id": "U066",
-      "url": "http://127.0.0.1:3180/",
+      "url": "http://127.0.0.1:3182/",
       "viewport": {
         "width": 1440,
         "height": 900
@@ -12116,7 +12116,7 @@
               "estado": "completado",
               "detalle": [
                 "Cable de audio TS · referencia genérica",
-                "D’Addario EXL110-7 · juego de 7 cuerdas"
+                "Ernie Ball Cobalt Slinky 10–52 · seis cuerdas"
               ]
             },
             {
@@ -12235,7 +12235,7 @@
     },
     {
       "id": "U067",
-      "url": "http://127.0.0.1:3182/",
+      "url": "http://127.0.0.1:3180/",
       "viewport": {
         "width": 1520,
         "height": 900
@@ -12276,15 +12276,15 @@
               "paso": "modelo, precio y stock",
               "estado": "completado",
               "detalle": {
-                "nombre": "Numark Mixtrack Pro · controlador DJ",
+                "nombre": "Numark Mixtrack · controlador DJ",
                 "precio": 89900,
                 "stock": "4 unidades de demostración · No representa inventario comercial"
               }
             },
             {
               "paso": "fotografía",
-              "estado": "fallido",
-              "detalle": "ILUSTRACIÓN DEMO · FOTOGRAFÍA PENDIENTE"
+              "estado": "completado",
+              "detalle": "FOTOGRAFÍA DE REFERENCIA · DATOS Y EXISTENCIAS DEMO"
             },
             {
               "paso": "Promos abre categoría",
@@ -12292,7 +12292,7 @@
               "detalle": true
             }
           ],
-          "estado": "fallido"
+          "estado": "completado"
         },
         "comparacion_favoritos": {
           "pasos": [
@@ -12301,7 +12301,7 @@
               "estado": "completado",
               "detalle": [
                 "Cable de audio TS · referencia genérica",
-                "Numark Mixtrack Pro · controlador DJ"
+                "Numark Mixtrack · controlador DJ"
               ]
             },
             {
@@ -12468,8 +12468,8 @@
             },
             {
               "paso": "fotografía",
-              "estado": "fallido",
-              "detalle": "ILUSTRACIÓN DEMO · FOTOGRAFÍA PENDIENTE"
+              "estado": "completado",
+              "detalle": "FOTOGRAFÍA DE REFERENCIA · DATOS Y EXISTENCIAS DEMO"
             },
             {
               "paso": "Promos abre categoría",
@@ -12477,7 +12477,7 @@
               "detalle": true
             }
           ],
-          "estado": "fallido"
+          "estado": "completado"
         },
         "comparacion_favoritos": {
           "pasos": [
@@ -12605,7 +12605,7 @@
     },
     {
       "id": "U069",
-      "url": "http://127.0.0.1:3180/",
+      "url": "http://127.0.0.1:3182/",
       "viewport": {
         "width": 1360,
         "height": 900
@@ -12671,7 +12671,7 @@
               "estado": "completado",
               "detalle": [
                 "Cable de audio TS · referencia genérica",
-                "D’Addario EXL110-7 · juego de 7 cuerdas"
+                "Ernie Ball Cobalt Slinky 10–52 · seis cuerdas"
               ]
             },
             {
@@ -12790,7 +12790,7 @@
     },
     {
       "id": "U070",
-      "url": "http://127.0.0.1:3182/",
+      "url": "http://127.0.0.1:3180/",
       "viewport": {
         "width": 1440,
         "height": 900
@@ -12831,15 +12831,15 @@
               "paso": "modelo, precio y stock",
               "estado": "completado",
               "detalle": {
-                "nombre": "Numark Mixtrack Pro · controlador DJ",
+                "nombre": "Numark Mixtrack · controlador DJ",
                 "precio": 89900,
                 "stock": "4 unidades de demostración · No representa inventario comercial"
               }
             },
             {
               "paso": "fotografía",
-              "estado": "fallido",
-              "detalle": "ILUSTRACIÓN DEMO · FOTOGRAFÍA PENDIENTE"
+              "estado": "completado",
+              "detalle": "FOTOGRAFÍA DE REFERENCIA · DATOS Y EXISTENCIAS DEMO"
             },
             {
               "paso": "Promos abre categoría",
@@ -12847,7 +12847,7 @@
               "detalle": true
             }
           ],
-          "estado": "fallido"
+          "estado": "completado"
         },
         "comparacion_favoritos": {
           "pasos": [
@@ -12856,7 +12856,7 @@
               "estado": "completado",
               "detalle": [
                 "Cable de audio TS · referencia genérica",
-                "Numark Mixtrack Pro · controlador DJ"
+                "Numark Mixtrack · controlador DJ"
               ]
             },
             {
@@ -12975,7 +12975,7 @@
     },
     {
       "id": "U071",
-      "url": "http://127.0.0.1:3181/",
+      "url": "http://127.0.0.1:3180/",
       "viewport": {
         "width": 1520,
         "height": 900
@@ -13163,7 +13163,7 @@
     },
     {
       "id": "U072",
-      "url": "http://127.0.0.1:3180/",
+      "url": "http://127.0.0.1:3182/",
       "viewport": {
         "width": 1280,
         "height": 900
@@ -13348,7 +13348,7 @@
     },
     {
       "id": "U073",
-      "url": "http://127.0.0.1:3182/",
+      "url": "http://127.0.0.1:3180/",
       "viewport": {
         "width": 1360,
         "height": 900
@@ -13389,15 +13389,15 @@
               "paso": "modelo, precio y stock",
               "estado": "completado",
               "detalle": {
-                "nombre": "D’Addario EXL110-7 · juego de 7 cuerdas",
+                "nombre": "Ernie Ball Cobalt Slinky 10–52 · seis cuerdas",
                 "precio": 5900,
                 "stock": "12 unidades de demostración · No representa inventario comercial"
               }
             },
             {
               "paso": "fotografía",
-              "estado": "fallido",
-              "detalle": "ILUSTRACIÓN DEMO · FOTOGRAFÍA PENDIENTE"
+              "estado": "completado",
+              "detalle": "FOTOGRAFÍA DE REFERENCIA · DATOS Y EXISTENCIAS DEMO"
             },
             {
               "paso": "Promos abre categoría",
@@ -13405,7 +13405,7 @@
               "detalle": true
             }
           ],
-          "estado": "fallido"
+          "estado": "completado"
         },
         "comparacion_favoritos": {
           "pasos": [
@@ -13414,7 +13414,7 @@
               "estado": "completado",
               "detalle": [
                 "Cable de audio TS · referencia genérica",
-                "D’Addario EXL110-7 · juego de 7 cuerdas"
+                "Ernie Ball Cobalt Slinky 10–52 · seis cuerdas"
               ]
             },
             {
@@ -13599,7 +13599,7 @@
               "estado": "completado",
               "detalle": [
                 "Cable de audio TS · referencia genérica",
-                "D’Addario EXL110-7 · juego de 7 cuerdas"
+                "Ernie Ball Cobalt Slinky 10–52 · seis cuerdas"
               ]
             },
             {
@@ -13903,7 +13903,7 @@
     },
     {
       "id": "U076",
-      "url": "http://127.0.0.1:3182/",
+      "url": "http://127.0.0.1:3180/",
       "viewport": {
         "width": 1280,
         "height": 900
@@ -14273,7 +14273,7 @@
     },
     {
       "id": "U078",
-      "url": "http://127.0.0.1:3180/",
+      "url": "http://127.0.0.1:3182/",
       "viewport": {
         "width": 1440,
         "height": 900
@@ -14314,15 +14314,15 @@
               "paso": "modelo, precio y stock",
               "estado": "completado",
               "detalle": {
-                "nombre": "D’Addario EXL110-7 · juego de 7 cuerdas",
+                "nombre": "Ernie Ball Cobalt Slinky 10–52 · seis cuerdas",
                 "precio": 5900,
                 "stock": "12 unidades de demostración · No representa inventario comercial"
               }
             },
             {
               "paso": "fotografía",
-              "estado": "fallido",
-              "detalle": "ILUSTRACIÓN DEMO · FOTOGRAFÍA PENDIENTE"
+              "estado": "completado",
+              "detalle": "FOTOGRAFÍA DE REFERENCIA · DATOS Y EXISTENCIAS DEMO"
             },
             {
               "paso": "Promos abre categoría",
@@ -14330,7 +14330,7 @@
               "detalle": true
             }
           ],
-          "estado": "fallido"
+          "estado": "completado"
         },
         "comparacion_favoritos": {
           "pasos": [
@@ -14339,7 +14339,7 @@
               "estado": "completado",
               "detalle": [
                 "Cable de audio TS · referencia genérica",
-                "D’Addario EXL110-7 · juego de 7 cuerdas"
+                "Ernie Ball Cobalt Slinky 10–52 · seis cuerdas"
               ]
             },
             {
@@ -14458,7 +14458,7 @@
     },
     {
       "id": "U079",
-      "url": "http://127.0.0.1:3182/",
+      "url": "http://127.0.0.1:3180/",
       "viewport": {
         "width": 1520,
         "height": 900
@@ -14524,7 +14524,7 @@
               "estado": "completado",
               "detalle": [
                 "Cable de audio TS · referencia genérica",
-                "D’Addario EXL110-7 · juego de 7 cuerdas"
+                "Ernie Ball Cobalt Slinky 10–52 · seis cuerdas"
               ]
             },
             {
@@ -15016,7 +15016,7 @@
     },
     {
       "id": "U082",
-      "url": "http://127.0.0.1:3182/",
+      "url": "http://127.0.0.1:3180/",
       "viewport": {
         "width": 1440,
         "height": 900
@@ -15386,7 +15386,7 @@
     },
     {
       "id": "U084",
-      "url": "http://127.0.0.1:3182/",
+      "url": "http://127.0.0.1:3180/",
       "viewport": {
         "width": 1280,
         "height": 900
@@ -15571,7 +15571,7 @@
     },
     {
       "id": "U085",
-      "url": "http://127.0.0.1:3180/",
+      "url": "http://127.0.0.1:3182/",
       "viewport": {
         "width": 1360,
         "height": 900
@@ -15941,7 +15941,7 @@
     },
     {
       "id": "U087",
-      "url": "http://127.0.0.1:3182/",
+      "url": "http://127.0.0.1:3180/",
       "viewport": {
         "width": 1520,
         "height": 900
@@ -16126,7 +16126,7 @@
     },
     {
       "id": "U088",
-      "url": "http://127.0.0.1:3180/",
+      "url": "http://127.0.0.1:3182/",
       "viewport": {
         "width": 1280,
         "height": 900
@@ -16496,7 +16496,7 @@
     },
     {
       "id": "U090",
-      "url": "http://127.0.0.1:3182/",
+      "url": "http://127.0.0.1:3180/",
       "viewport": {
         "width": 1440,
         "height": 900
@@ -16681,7 +16681,7 @@
     },
     {
       "id": "U091",
-      "url": "http://127.0.0.1:3180/",
+      "url": "http://127.0.0.1:3182/",
       "viewport": {
         "width": 1520,
         "height": 900
@@ -16917,8 +16917,8 @@
             },
             {
               "paso": "fotografía",
-              "estado": "fallido",
-              "detalle": "ILUSTRACIÓN DEMO · FOTOGRAFÍA PENDIENTE"
+              "estado": "completado",
+              "detalle": "FOTOGRAFÍA DE REFERENCIA · DATOS Y EXISTENCIAS DEMO"
             },
             {
               "paso": "Promos abre categoría",
@@ -16926,7 +16926,7 @@
               "detalle": true
             }
           ],
-          "estado": "fallido"
+          "estado": "completado"
         },
         "comparacion_favoritos": {
           "pasos": [
@@ -17102,8 +17102,8 @@
             },
             {
               "paso": "fotografía",
-              "estado": "fallido",
-              "detalle": "ILUSTRACIÓN DEMO · FOTOGRAFÍA PENDIENTE"
+              "estado": "completado",
+              "detalle": "FOTOGRAFÍA DE REFERENCIA · DATOS Y EXISTENCIAS DEMO"
             },
             {
               "paso": "Promos abre categoría",
@@ -17111,7 +17111,7 @@
               "detalle": true
             }
           ],
-          "estado": "fallido"
+          "estado": "completado"
         },
         "comparacion_favoritos": {
           "pasos": [
@@ -17472,8 +17472,8 @@
             },
             {
               "paso": "fotografía",
-              "estado": "fallido",
-              "detalle": "ILUSTRACIÓN DEMO · FOTOGRAFÍA PENDIENTE"
+              "estado": "completado",
+              "detalle": "FOTOGRAFÍA DE REFERENCIA · DATOS Y EXISTENCIAS DEMO"
             },
             {
               "paso": "Promos abre categoría",
@@ -17481,7 +17481,7 @@
               "detalle": true
             }
           ],
-          "estado": "fallido"
+          "estado": "completado"
         },
         "comparacion_favoritos": {
           "pasos": [
@@ -17657,8 +17657,8 @@
             },
             {
               "paso": "fotografía",
-              "estado": "fallido",
-              "detalle": "ILUSTRACIÓN DEMO · FOTOGRAFÍA PENDIENTE"
+              "estado": "completado",
+              "detalle": "FOTOGRAFÍA DE REFERENCIA · DATOS Y EXISTENCIAS DEMO"
             },
             {
               "paso": "Promos abre categoría",
@@ -17666,7 +17666,7 @@
               "detalle": true
             }
           ],
-          "estado": "fallido"
+          "estado": "completado"
         },
         "comparacion_favoritos": {
           "pasos": [
@@ -17979,7 +17979,7 @@
     },
     {
       "id": "U098",
-      "url": "http://127.0.0.1:3181/",
+      "url": "http://127.0.0.1:3182/",
       "viewport": {
         "width": 720,
         "height": 450
@@ -18027,8 +18027,8 @@
             },
             {
               "paso": "fotografía",
-              "estado": "fallido",
-              "detalle": "ILUSTRACIÓN DEMO · FOTOGRAFÍA PENDIENTE"
+              "estado": "completado",
+              "detalle": "FOTOGRAFÍA DE REFERENCIA · DATOS Y EXISTENCIAS DEMO"
             },
             {
               "paso": "Promos abre categoría",
@@ -18036,7 +18036,7 @@
               "detalle": true
             }
           ],
-          "estado": "fallido"
+          "estado": "completado"
         },
         "comparacion_favoritos": {
           "pasos": [
@@ -18164,7 +18164,7 @@
     },
     {
       "id": "U099",
-      "url": "http://127.0.0.1:3182/",
+      "url": "http://127.0.0.1:3181/",
       "viewport": {
         "width": 1520,
         "height": 900
@@ -18212,8 +18212,8 @@
             },
             {
               "paso": "fotografía",
-              "estado": "fallido",
-              "detalle": "ILUSTRACIÓN DEMO · FOTOGRAFÍA PENDIENTE"
+              "estado": "completado",
+              "detalle": "FOTOGRAFÍA DE REFERENCIA · DATOS Y EXISTENCIAS DEMO"
             },
             {
               "paso": "Promos abre categoría",
@@ -18221,7 +18221,7 @@
               "detalle": true
             }
           ],
-          "estado": "fallido"
+          "estado": "completado"
         },
         "comparacion_favoritos": {
           "pasos": [
@@ -18535,19 +18535,27 @@
   ],
   "browser": "157.0.8103.80",
   "compilacionesVerificadas": [
-    "2Eg0ezvRcNdK-C7LK90BB"
+    "ET_ICZJ6nz1mLHmF-iqtJ"
   ],
   "diagnostico": {
     "perfil": "U001",
     "url": "http://127.0.0.1:3180/",
-    "filasAlVolverParaComparar": 0,
+    "filasAlVolverParaComparar": 1,
     "filtrosAlVolver": {
+      "categoria": "Instrumentos",
+      "presupuesto": "100000"
+    },
+    "rutaAtras": "/productos/acustica-luz",
+    "filtrosBorrados": {
       "categoria": "",
       "presupuesto": ""
     },
-    "tipoDesdeEnlaceDeServicio": "pedido",
-    "consultaDirectaDeServicio": "error visible",
-    "totalMientrasCarga": "₡0",
-    "totalAlCargar": "₡84 900"
+    "tipoDesdeEnlaceDeServicio": "servicio",
+    "consultaDirectaDeServicio": "estado visible",
+    "cargaVisible": true,
+    "totalMientrasCarga": "₡84 900",
+    "totalAlCargar": "₡84 900",
+    "totalTrasRecargar": "₡84 900",
+    "vacioTrasRecargar": "Tu carrito está vacío."
   }
 }

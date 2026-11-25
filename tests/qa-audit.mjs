@@ -41,7 +41,7 @@ async function run(u,port,diagnostic=false){
  const mobile=u.dispositivo.includes('móvil'),keyboard=u.dispositivo==='teclado',zoom=u.dispositivo.includes('zoom');
  const viewport={width:mobile?390:zoom?720:1280+80*(num%4),height:mobile?844:zoom?450:900};
  context=await browser.newContext({baseURL:base,viewport,hasTouch:mobile,isMobile:mobile,deviceScaleFactor:zoom?2:1});
- const page=await context.newPage();page.setDefaultTimeout(5000);
+ const page=await context.newPage();page.setDefaultTimeout(15000);
  if(diagnostic){
    const findings={perfil:u.id,url:base+'/',...await probes(page)};
    if(process.argv.includes('--diagnostic-only'))console.log(JSON.stringify(findings));
@@ -113,8 +113,12 @@ if(process.argv.includes('--diagnostic-only')){
  try{await run(users[0],3184,true)}finally{await browser.close()}
  process.exit(0);
 }
+if(process.argv.includes('--retry-failed')) {
+  result.profiles=result.profiles.filter(p=>Object.values(p.tareas).every(task=>task.estado==='completado'));
+  save();
+}
 const pending=users.filter(u=>!result.profiles.some(r=>r.id===u.id));
 try{if(pending[0]?.id==='U001')await run(pending.shift(),3180);
-if(!process.argv.includes('--pilot'))await Promise.all(Array.from({length:3},async(_,i)=>{while(pending.length)await run(pending.shift(),3180+i)}));
+if(!process.argv.includes('--pilot'))await Promise.all(Array.from({length:process.argv.includes('--retry-failed')?1:3},async(_,i)=>{while(pending.length)await run(pending.shift(),3180+i)}));
 if(result.profiles.length===100)await run(users[0],3180,true);
 }finally{await browser.close()}

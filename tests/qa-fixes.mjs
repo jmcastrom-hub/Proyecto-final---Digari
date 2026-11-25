@@ -31,6 +31,26 @@ try {
     assert.equal(source.searchParams.get('url') || source.pathname, `/product-photos/${item.id}.webp`);
     assert.match(await page.locator('.detail-art small').innerText(), /FOTOGRAFÍA/);
   }
+  await page.goto('/tienda');
+  await page.locator('.product-card').first().waitFor();
+  assert.equal(await page.locator('.product-card .product-image').count(), 15);
+  await page.locator('.product-card').first().locator('.favorite-button').click();
+  await page.locator('.product-card').first().locator('input[type=checkbox]').check();
+  await page.locator('.product-card').nth(1).locator('input[type=checkbox]').check();
+  assert.equal(await page.locator('.compare-item .product-image').count(), 2);
+  await page.goto('/favoritos');
+  await page.locator('.product-card .product-image').first().waitFor();
+  assert.equal(await page.locator('.product-card .product-image').count(), 1);
+  await page.goto('/productos/acustica-luz');
+  await page.locator('.product-actions button').click();
+  await page.goto('/carrito');
+  await page.locator('.cart-art .product-image').waitFor();
+  await page.goto('/estudio?product=acustica-luz');
+  assert.match(await page.locator('.studio-product-summary h2').innerText(), /Yamaha F310/);
+  await page.goto('/asesoria');
+  await page.locator('#advice-message').fill('Busco una guitarra acústica para pop por ₡100000');
+  await page.locator('#advice-message').press('Enter');
+  await page.locator('.advice-recommendation .product-image').first().waitFor();
   console.log('Cinco regresiones y 15 fotos verificadas en ficha', findings);
 } finally {
   await browser.close();
